@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精確な読解につなげる古典文法</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --paper: #f7f3ec;
+    --paper-dark: #ede7d9;
+    --accent: #8b1a1a;
+    --accent-light: #c0392b;
+    --accent-pale: #f5e6e6;
+    --blue: #1a3a6b;
+    --blue-pale: #e8eef8;
+    --gold: #b8860b;
+    --border: #c8b89a;
+    --muted: #6b5c48;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Serif JP', serif;
+    line-height: 1.9;
+    font-size: 15px;
+  }
+
+  /* ヘッダー */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      90deg, transparent, transparent 40px,
+      rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 41px
+    );
+  }
+  .header-meta {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 0.5rem;
+  }
+  header h1 {
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    line-height: 1.4;
+  }
+  header h1 span {
+    color: #e8c87a;
+  }
+
+  /* ナビゲーション */
+  nav {
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 0 2rem;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.78rem;
+    padding: 0.8rem 1rem;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  nav a:hover { color: #e8c87a; border-bottom-color: #e8c87a; }
+
+  /* メインレイアウト */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* セクション */
+  section {
+    margin-bottom: 3rem;
+  }
+
+  /* セクション見出し */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--accent);
+  }
+  .section-num {
+    background: var(--accent);
+    color: white;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    letter-spacing: 0.1em;
+  }
+  .section-header h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* h3 */
+  h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--blue);
+    margin: 1.5rem 0 0.7rem;
+    padding-left: 0.7rem;
+    border-left: 3px solid var(--blue);
+  }
+
+  /* 本文 */
+  p { margin-bottom: 0.85rem; }
+
+  /* イントロ強調ボックス */
+  .intro-box {
+    background: var(--paper-dark);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1.2rem;
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* 注釈 */
+  .note {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.82rem;
+    color: var(--muted);
+    padding-left: 1rem;
+    border-left: 2px solid var(--border);
+    margin: 0.5rem 0;
+  }
+
+  /* 活用形テーブル */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 1rem 0 1.5rem;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.88rem;
+  }
+  th {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0.5rem 0.8rem;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 0.45rem 0.8rem;
+    text-align: center;
+    background: white;
+  }
+  tr:nth-child(even) td { background: var(--paper); }
+  td.label {
+    background: var(--paper-dark);
+    font-weight: 600;
+    color: var(--ink);
+    text-align: left;
+  }
+  td.accent { color: var(--accent); font-weight: 700; }
+  td.blue { color: var(--blue); font-weight: 700; }
+
+  /* 活用形リスト */
+  .katsuyou-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.7rem;
+    margin: 1rem 0;
+  }
+  .katsuyou-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+  .katsuyou-num {
+    background: var(--accent);
+    color: white;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 1.4rem;
+    height: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 2px;
+  }
+  .katsuyou-name {
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 0.95rem;
+  }
+  .katsuyou-desc {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.78rem;
+    color: var(--muted);
+    flex: 1;
+  }
+
+  /* 活用タイプ */
+  .type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  .type-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .type-card-header {
+    padding: 0.5rem 1rem;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .type-card-header.t1 { background: var(--blue); color: white; }
+  .type-card-header.t2 { background: var(--gold); color: white; }
+  .type-card-header.t3 { background: var(--accent); color: white; }
+  .type-card-body {
+    padding: 0.7rem 1rem;
+    background: white;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.85rem;
+  }
+  .type-card-body li { list-style: none; padding: 0.15rem 0; }
+  .type-card-body li::before { content: '・'; color: var(--muted); }
+  .badge-special {
+    display: inline-block;
+    background: var(--accent-pale);
+    color: var(--accent);
+    font-size: 0.65rem;
+    padding: 0 0.3rem;
+    border-radius: 2px;
+    margin-left: 0.3rem;
+    vertical-align: middle;
+  }
+
+  /* 判別法ステップ */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin: 1rem 0;
+  }
+  .step {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.8rem 1rem;
+  }
+  .step-badge {
+    background: var(--blue);
+    color: white;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    white-space: nowrap;
+    border-radius: 2px;
+    margin-top: 0.1rem;
+  }
+  .step-content { flex: 1; }
+  .step-content strong { color: var(--blue); }
+  .step ul { margin: 0.4rem 0 0 1rem; }
+  .step li { font-family: 'Noto Sans JP', sans-serif; font-size: 0.85rem; }
+
+  /* 反復練習 */
+  .drill-list {
+    counter-reset: drill;
+  }
+  .drill-item {
+    counter-increment: drill;
+    display: grid;
+    grid-template-columns: 1.8rem 1fr auto;
+    gap: 0.5rem 0.8rem;
+    align-items: start;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--paper-dark);
+  }
+  .drill-item:last-child { border-bottom: none; }
+  .drill-item::before {
+    content: counter(drill);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    background: var(--paper-dark);
+    width: 1.8rem;
+    height: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .drill-q { font-size: 0.88rem; color: var(--ink); }
+  .drill-a {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.82rem;
+    color: var(--accent);
+    font-weight: 600;
+    text-align: right;
+  }
+
+  /* 例文ボックス */
+  .example-box {
+    background: var(--blue-pale);
+    border: 1px solid #b0c4e0;
+    border-left: 4px solid var(--blue);
+    padding: 0.8rem 1.2rem;
+    margin: 0.8rem 0;
+    border-radius: 0 4px 4px 0;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.88rem;
+  }
+  .example-box .label {
+    font-size: 0.7rem;
+    color: var(--blue);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+  }
+
+  /* フッター */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 1.5rem;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 1.5rem 1.2rem; }
+    main { padding: 1.2rem 1rem 3rem; }
+    .drill-item { grid-template-columns: 1.5rem 1fr; }
+    .drill-a { grid-column: 2; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-meta">大阪桐蔭中学校　国語（古典）　授業プリント</div>
+  <h1>精確な読解につなげる<span>古典文法</span></h1>
+</header>
+
+<nav>
+  <a href="#intro">はじめに</a>
+  <a href="#katsuyou">活用とは</a>
+  <a href="#setsugo">下接語と活用形</a>
+  <a href="#types">活用のタイプ・種類</a>
+  <a href="#type1">母音交替タイプ</a>
+  <a href="#type2">接辞付加タイプ</a>
+  <a href="#type3">混合タイプ</a>
+  <a href="#hanbetsu">判別法</a>
+  <a href="#drill">反復練習</a>
+</nav>
+
+<main>
+
+<!-- はじめに -->
+<section id="intro">
+  <div class="section-header">
+    <span class="section-num">001</span>
+    <h2>◆ はじめに</h2>
+  </div>
+
+  <div class="intro-box">
+    文法というのはおもしろくない。文法なんてものを喜んでやれるのは磯本先生ぐらいのものである。
+  </div>
+
+  <p>母語である日本語、みんなは「文法」を介さずに身につけてきた（ごめん、日本語が母語じゃない人）。その背景には、圧倒的な量の力がある。</p>
+
+  <p>まだ物心つかないころから、日本語でいっぱい話しかけてもらい、絵本を読み聞かせてもらってきた。身の回りには日本語があふれている。そうやって圧倒的な量の日本語を浴び、自分自身も使ってきたからこそ「文法」なんてものを必要とせずとも日本語を身につけることができたのである。</p>
+
+  <p>古文を考えてみる。誰も古文で話しかけてはくれない（「すゑひろがりず」ぐらいのものである）。日常に古文はあふれていない。触れるのはまあ、この授業のときぐらいである。そんな環境で、古文が母語と同じように身につくかと言われれば、まあ身につかない。</p>
+
+  <div class="intro-box">
+    <strong>文法というのは、言ってみればゲームの攻略本みたいなもんである。</strong><br>
+    たくさんプレイして身につけていく知恵が、「あ、この道具ってこういうときに役に立つんか」という感覚を、攻略本を見れば「この道具はこういうときに役立ちます！」と書いてある。それがわかれば時短になる。
+  </div>
+
+  <p>文法というのは、そういうもんである。がんばって身につけていけば、母語を学んだときよりも少ない量で古文が読めるようになっていく。おもしろくないと思う。睡魔との戦いになると思う。そんな中でも、できるだけ「言葉っておもしろいな」と思ってもらえるように工夫するつもりなので、一緒にがんばろう。</p>
+</section>
+
+<!-- 活用という現象 -->
+<section id="katsuyou">
+  <div class="section-header">
+    <span class="section-num">002</span>
+    <h2>◆「活用」という現象</h2>
+  </div>
+
+  <p>日本語には、「<strong>活用</strong>」という現象がある。1年生のときに学習したことを思い出そう。</p>
+
+  <p><strong>「活用」とは、後ろにくっつく言葉（下接語）の影響で、語の形が変化することである。</strong></p>
+
+  <div class="example-box">
+    <div class="label">現代日本語の例</div>
+    動詞「切る」「食べる」「サボる」に「ない」「ます」「とき」「ば」「う／よう」がくっつくと…<br><br>
+    「切る」と「サボる」は同じように活用しているが、「食べる」は別の種類。
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>下接語</th>
+          <th>切る</th>
+          <th>見る</th>
+          <th>食べる</th>
+          <th>する</th>
+          <th>サボる</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="label">〜ない</td><td>切<span class="accent">a</span>ない</td><td>iない</td><td>食<span class="accent">e</span>ない</td><td>iない</td><td>サボ<span class="accent">a</span>ない</td></tr>
+        <tr><td class="label">〜ます</td><td>切<span class="accent">i</span>ます</td><td>iます</td><td>食<span class="accent">e</span>ます</td><td>iます</td><td>サボ<span class="accent">i</span>ます</td></tr>
+        <tr><td class="label">〜。</td><td>切<span class="accent">u</span>。</td><td>i<span class="accent">る</span>。</td><td>食<span class="accent">e</span><span class="accent">る</span>。</td><td><span class="accent">u</span>る。</td><td>サボ<span class="accent">u</span>。</td></tr>
+        <tr><td class="label">〜とき</td><td>切<span class="accent">u</span>とき</td><td>i<span class="accent">る</span>とき</td><td>食<span class="accent">e</span><span class="accent">る</span>とき</td><td><span class="accent">u</span>るとき</td><td>サボ<span class="accent">u</span>とき</td></tr>
+        <tr><td class="label">〜ば</td><td>切<span class="accent">e</span>ば</td><td>i<span class="accent">れ</span>ば</td><td>食<span class="accent">e</span><span class="accent">れ</span>ば</td><td><span class="accent">u</span>れば</td><td>サボ<span class="accent">e</span>ば</td></tr>
+        <tr><td class="label">〜！</td><td>切<span class="accent">e</span>！</td><td>i<span class="accent">ろ</span>！</td><td>食<span class="accent">e</span><span class="accent">ろ</span>！</td><td>i<span class="accent">ろ</span>！</td><td>サボ<span class="accent">e</span>！</td></tr>
+        <tr><td class="label">〜う/よう</td><td>切<span class="accent">o</span>う</td><td>iよう</td><td>食<span class="accent">e</span>よう</td><td>iよう</td><td>サボ<span class="accent">o</span>う</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>下接語をいろいろつけてみたときの活用のしかたによって動詞の種類を分けることにした。<strong>古文（古典文法）では、動詞は9種類に分かれることになっている。</strong></p>
+</section>
+
+<!-- 下接語の整理と活用形 -->
+<section id="setsugo">
+  <div class="section-header">
+    <span class="section-num">003</span>
+    <h2>◆ 下接語の整理と活用形</h2>
+  </div>
+
+  <p>古文では、動詞の種類の前に、下接語を整理しておく必要がある。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>現代語</th><th>古文の下接語</th><th>例</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>〜ない（打消）</td><td class="accent">ず</td><td>書かない→<strong>書かず</strong></td></tr>
+        <tr><td>〜だろう（推量）</td><td class="accent">む</td><td>書くだろう→<strong>書かむ</strong></td></tr>
+        <tr><td>〜た（過去）</td><td class="accent">けり</td><td>書いた→<strong>書きけり</strong></td></tr>
+        <tr><td>〜ている（存続）</td><td class="accent">たり</td><td>書いている→<strong>書きたり</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>どんな動詞でも「〜ず」が下接するときの形と「〜む」が下接するときの形は同じっぽい。また「〜けり」が下接するときの形と「〜たり」が下接するときの形も同じっぽい。</p>
+
+  <p>こうやって、常に同じ形になる下接語をグループ分けしていった結果、6つの「○○形」が生まれた。この「○○形」のことを<strong>「活用形」</strong>と呼ぶ。</p>
+
+  <div class="katsuyou-list">
+    <div class="katsuyou-item">
+      <div class="katsuyou-num">①</div>
+      <div class="katsuyou-name">未然形</div>
+      <div class="katsuyou-desc">「〜ず」「〜む」などが下接するときの形</div>
+    </div>
+    <div class="katsuyou-item">
+      <div class="katsuyou-num">②</div>
+      <div class="katsuyou-name">連用形</div>
+      <div class="katsuyou-desc">「〜けり」「〜たり」などが下接するときの形</div>
+    </div>
+    <div class="katsuyou-item">
+      <div class="katsuyou-num">③</div>
+      <div class="katsuyou-name">終止形</div>
+      <div class="katsuyou-desc">句点（〜。）が下接するときの形（基本形とも呼ぶ）</div>
+    </div>
+    <div class="katsuyou-item">
+      <div class="katsuyou-num">④</div>
+      <div class="katsuyou-name">連体形</div>
+      <div class="katsuyou-desc">「〜とき」「〜こと」などの体言が下接するときの形</div>
+    </div>
+    <div class="katsuyou-item">
+      <div class="katsuyou-num">⑤</div>
+      <div class="katsuyou-name">已然形</div>
+      <div class="katsuyou-desc">「〜ど」「〜ども」などが下接するときの形</div>
+    </div>
+    <div class="katsuyou-item">
+      <div class="katsuyou-num">⑥</div>
+      <div class="katsuyou-name">命令形</div>
+      <div class="katsuyou-desc">命令するときの形</div>
+    </div>
+  </div>
+</section>
+
+<!-- 活用のタイプ・種類 -->
+<section id="types">
+  <div class="section-header">
+    <span class="section-num">004</span>
+    <h2>◆ 動詞の活用のタイプ・種類</h2>
+  </div>
+
+  <p>古文における動詞は、活用によって3タイプ・9種類に分けられる。</p>
+
+  <div class="type-grid">
+    <div class="type-card">
+      <div class="type-card-header t1">❶ 母音交替タイプ</div>
+      <div class="type-card-body">
+        <ul>
+          <li>四段活用</li>
+          <li>ラ行変格活用 <span class="badge-special">※</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="type-card">
+      <div class="type-card-header t2">❷ 接辞付加タイプ</div>
+      <div class="type-card-body">
+        <ul>
+          <li>上一段活用 <span class="badge-special">※</span></li>
+          <li>下一段活用 <span class="badge-special">※</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="type-card">
+      <div class="type-card-header t3">❸ 接辞付加＋母音交替タイプ</div>
+      <div class="type-card-body">
+        <ul>
+          <li>上二段活用</li>
+          <li>下二段活用</li>
+          <li>カ行変格活用 <span class="badge-special">※</span></li>
+          <li>サ行変格活用 <span class="badge-special">※</span></li>
+          <li>ナ行変格活用 <span class="badge-special">※</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p class="note">※ 所属する動詞が少ないため、個別に覚えることになる。</p>
+</section>
+
+<!-- 母音交替タイプ -->
+<section id="type1">
+  <div class="section-header">
+    <span class="section-num">005</span>
+    <h2>◆ 母音交替タイプ（四段活用・ラ行変格活用）</h2>
+  </div>
+
+  <p>活用語尾が a・i・u・e の四段にわたって活用される。この種類を<strong>「四段活用」</strong>と呼ぶ。四段活用の動詞はすべての動詞の過半数を占める。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>主な下接語</th><th colspan="2">咲く（カ行四段）</th><th colspan="2">散る（ラ行四段）</th></tr>
+        <tr><th></th><th>語幹</th><th>語尾</th><th>語幹</th><th>語尾</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="label">〜ず（未然形）</td><td>咲</td><td class="accent">か</td><td>散</td><td class="accent">ら</td></tr>
+        <tr><td class="label">〜けり（連用形）</td><td>咲</td><td class="accent">き</td><td>散</td><td class="accent">り</td></tr>
+        <tr><td class="label">〜。（終止形）</td><td>咲</td><td class="accent">く</td><td>散</td><td class="accent">る</td></tr>
+        <tr><td class="label">〜とき（連体形）</td><td>咲</td><td class="accent">く</td><td>散</td><td class="accent">る</td></tr>
+        <tr><td class="label">〜ども（已然形）</td><td>咲</td><td class="accent">け</td><td>散</td><td class="accent">れ</td></tr>
+        <tr><td class="label">命令形</td><td>咲</td><td class="accent">け</td><td>散</td><td class="accent">れ</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>ラ行変格活用</h3>
+  <p>「あり」も母音交替によって活用するが、終止形が「ある」ではなく「あり」とｉ段になっており、四段活用とは異なっている。この種類は変則的な活用とみなされ<strong>「ラ行変格活用」</strong>と呼ばれる。<strong>すべての活用の種類の中で、終止形がｕ段ではないのはラ行変格活用だけである。</strong></p>
+
+  <div class="example-box">
+    <div class="label">ラ変に属する動詞（4つだけ）</div>
+    あり　／　居（ゐ）り　／　侍（はべ）り　／　いまそがり
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>主な下接語</th><th>あり（ラ変）</th></tr></thead>
+      <tbody>
+        <tr><td class="label">〜ず（未然形）</td><td>あら</td></tr>
+        <tr><td class="label">〜けり（連用形）</td><td>あり</td></tr>
+        <tr><td class="label">〜。（終止形）</td><td class="accent">あり（←ｉ段！）</td></tr>
+        <tr><td class="label">〜とき（連体形）</td><td>ある</td></tr>
+        <tr><td class="label">〜ども（已然形）</td><td>あれ</td></tr>
+        <tr><td class="label">命令形</td><td>あれ</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 接辞付加タイプ -->
+<section id="type2">
+  <div class="section-header">
+    <span class="section-num">006</span>
+    <h2>◆ 接辞付加タイプ（上一段活用・下一段活用）</h2>
+  </div>
+
+  <p>終止形以下に「〜る」「〜れ」「〜よ」という接辞が付加されながら活用していく。語幹がない（「○」はその部分に入るものがないことを表す）。</p>
+  <p>「見る」はｉ段のみ → <strong>上一段活用</strong>、「蹴る」はｅ段のみ → <strong>下一段活用</strong>と呼ぶ。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>主な下接語</th><th>見る（マ行上一段）</th><th>蹴る（カ行下一段）</th></tr></thead>
+      <tbody>
+        <tr><td class="label">〜ず（未然形）</td><td>見</td><td>蹴</td></tr>
+        <tr><td class="label">〜けり（連用形）</td><td>見</td><td>蹴</td></tr>
+        <tr><td class="label">〜。（終止形）</td><td>見<span class="blue">る</span></td><td>蹴<span class="blue">る</span></td></tr>
+        <tr><td class="label">〜とき（連体形）</td><td>見<span class="blue">る</span></td><td>蹴<span class="blue">る</span></td></tr>
+        <tr><td class="label">〜ども（已然形）</td><td>見<span class="blue">れ</span></td><td>蹴<span class="blue">れ</span></td></tr>
+        <tr><td class="label">命令形</td><td>見<span class="blue">よ</span></td><td>蹴<span class="blue">よ</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>上一段に属する動詞</h3>
+  <div class="example-box">
+    <div class="label">行の順</div>
+    カ行：着る　／　ナ行：似る・煮る　／　ハ行：干（ひ）る　／　マ行：見る<br>
+    ヤ行：射（い）る・鋳（い）る　／　ワ行：居（ゐ）る・率（ゐ）る
+  </div>
+  <p class="note">下一段の動詞は「蹴る」のみ。</p>
+</section>
+
+<!-- 混合タイプ -->
+<section id="type3">
+  <div class="section-header">
+    <span class="section-num">007–008</span>
+    <h2>◆ 母音交替＋接辞付加タイプ（上二段・下二段・カ変・サ変・ナ変）</h2>
+  </div>
+
+  <p>母音交替と接辞付加とが混合したもの。いずれも変則的な活用とみなされており、所属する動詞が少ない。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>主な下接語</th>
+          <th>来（カ変）</th>
+          <th>す（サ変）</th>
+          <th>往ぬ（ナ変）</th>
+          <th>落つ（上二段）</th>
+          <th>棄つ（下二段）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="label">未然形</td><td>こ</td><td>せ</td><td>な</td><td>ち</td><td>て</td></tr>
+        <tr><td class="label">連用形</td><td>き</td><td>し</td><td>に</td><td>ち</td><td>て</td></tr>
+        <tr><td class="label">終止形</td><td>く</td><td>す</td><td>ぬ</td><td>つ</td><td>つ</td></tr>
+        <tr><td class="label">連体形</td><td>くる</td><td>する</td><td>ぬる</td><td>つる</td><td>つる</td></tr>
+        <tr><td class="label">已然形</td><td>くれ</td><td>すれ</td><td>ぬれ</td><td>つれ</td><td>つれ</td></tr>
+        <tr><td class="label">命令形</td><td>こよ</td><td>せよ</td><td>ね</td><td>ちよ</td><td>てよ</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="example-box">
+    <div class="label">覚えるべき動詞</div>
+    カ変：来（く）とその複合語<br>
+    サ変：す・おはす とその複合語（複合語は多数）<br>
+    ナ変：死ぬ・去ぬ（往ぬ）
+  </div>
+
+  <h3>上二段・下二段の違い</h3>
+  <p>「落つ」→ 接辞でない部分にｕ段とｉ段 → <strong>上二段活用</strong><br>
+  「棄つ」→ 接辞でない部分にｕ段とｅ段 → <strong>下二段活用</strong></p>
+  <p>下二段活用の動詞は四段活用についで数が多く、全体の3割程度を占めると言われる。すべての動詞の中で、ア行活用なのは「得（う）」とその複合語のみ。1音節の動詞「得・寝・経」に注意。</p>
+
+  <h3>全9種類まとめ表</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>タイプ</th><th>種類</th><th>語例</th>
+          <th>未然形</th><th>連用形</th><th>終止形</th>
+          <th>連体形</th><th>已然形</th><th>命令形</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td rowspan="2" class="label blue">❶母音交替</td><td>四段</td><td>咲く</td><td>a</td><td>i</td><td>u</td><td>u</td><td>e</td><td>e</td></tr>
+        <tr><td>ラ変</td><td>あり</td><td>ら</td><td>り</td><td class="accent">り</td><td>る</td><td>れ</td><td>れ</td></tr>
+        <tr><td rowspan="2" class="label" style="color:var(--gold)">❷接辞付加</td><td>上一段</td><td>見る</td><td>i</td><td>i</td><td>i・る</td><td>i・る</td><td>i・れ</td><td>i・よ</td></tr>
+        <tr><td>下一段</td><td>蹴る</td><td>e</td><td>e</td><td>e・る</td><td>e・る</td><td>e・れ</td><td>e・よ</td></tr>
+        <tr><td rowspan="5" class="label accent">❸混合</td><td>上二段</td><td>落つ</td><td>i</td><td>i</td><td>u</td><td>u・る</td><td>u・れ</td><td>i・よ</td></tr>
+        <tr><td>下二段</td><td>棄つ</td><td>e</td><td>e</td><td>u</td><td>u・る</td><td>u・れ</td><td>e・よ</td></tr>
+        <tr><td>カ変</td><td>来</td><td>こ</td><td>き</td><td>く</td><td>くる</td><td>くれ</td><td>こよ</td></tr>
+        <tr><td>サ変</td><td>す</td><td>せ</td><td>し</td><td>す</td><td>する</td><td>すれ</td><td>せよ</td></tr>
+        <tr><td>ナ変</td><td>往ぬ</td><td>な</td><td>に</td><td>ぬ</td><td>ぬる</td><td>ぬれ</td><td>ね</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-family:'Noto Sans JP',sans-serif;font-size:0.85rem;color:var(--accent);font-weight:700;margin-top:0.5rem;">★ この表をすぐに書けるようになっておくことが必須である</p>
+</section>
+
+<!-- 判別法 -->
+<section id="hanbetsu">
+  <div class="section-header">
+    <span class="section-num">009</span>
+    <h2>◆ 活用の種類の判別法</h2>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-badge">Step 1</div>
+      <div class="step-content">
+        <strong>まず覚えておくべき種類に属する語でないか確認する</strong>
+        <ul>
+          <li>ラ変・上一段・下一段・カ変・サ変・ナ変</li>
+          <li>残っているのは：四段・上二段・下二段</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-badge">Step 2</div>
+      <div class="step-content">
+        <strong>「ず」（「ない」でもよい）が下接するときの形を考える</strong>
+        <ul>
+          <li>〜<strong class="accent">a</strong>ず → 四段</li>
+          <li>〜<strong class="accent">i</strong>ず → 上二段</li>
+          <li>〜<strong class="accent">e</strong>ず → 下二段</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-badge">Step 2+</div>
+      <div class="step-content">
+        <strong>自信が持てない場合は命令するときの形も考える</strong>
+        <ul>
+          <li>〜<strong class="accent">e</strong>！ → 四段</li>
+          <li>〜<strong class="accent">i</strong>よ！ → 上二段</li>
+          <li>〜<strong class="accent">e</strong>よ！ → 下二段</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="label">例：「過ぐ」の活用の種類は？</div>
+    ❶ 覚えておくべき種類ではない<br>
+    ❷ 「過がず」or「過ぎず」or「過げず」→「過ぎず」が自然（i段）<br>
+    ❷+ 「過ぎよ！」or「過げよ！」→「過ぎよ！」が自然<br>
+    <strong>答：上二段活用</strong>
+  </div>
+
+  <p class="note">※ 文章の中の動詞を判別するときには、そのときそのときの下接語との整合性を優先する。</p>
+</section>
+
+<!-- 反復練習 -->
+<section id="drill">
+  <div class="section-header">
+    <span class="section-num">010</span>
+    <h2>◆ 古典文法（動詞）徹底反復練習</h2>
+  </div>
+  <p style="font-family:'Noto Sans JP',sans-serif;font-size:0.85rem;color:var(--muted);margin-bottom:1rem;">とにかく何度も問いと答えを声に出して読む！</p>
+
+  <div class="drill-list">
+    <div class="drill-item"><div class="drill-q">活用形の6つは？（順番通りに）</div><div class="drill-a">未然・連用・終止・連体・已然・命令</div></div>
+    <div class="drill-item"><div class="drill-q">未然形の主な下接語は？</div><div class="drill-a">「ず」「む」</div></div>
+    <div class="drill-item"><div class="drill-q">連用形の主な下接語は？</div><div class="drill-a">「けり」「たり」</div></div>
+    <div class="drill-item"><div class="drill-q">終止形の主な下接語は？</div><div class="drill-a">句点（。）</div></div>
+    <div class="drill-item"><div class="drill-q">連体形の主な下接語は？</div><div class="drill-a">「とき」「こと」（体言）</div></div>
+    <div class="drill-item"><div class="drill-q">已然形の主な下接語は？</div><div class="drill-a">「ど」「ども」</div></div>
+    <div class="drill-item"><div class="drill-q">活用形の3タイプは？</div><div class="drill-a">母音交替・接辞付加・接辞付加＋母音交替</div></div>
+    <div class="drill-item"><div class="drill-q">母音交替タイプに属する活用の種類は？</div><div class="drill-a">四段・ラ変</div></div>
+    <div class="drill-item"><div class="drill-q">接辞付加タイプに属する活用の種類は？</div><div class="drill-a">上一段・下一段</div></div>
+    <div class="drill-item"><div class="drill-q">接辞付加で付加される接辞は？</div><div class="drill-a">「る」「れ」「よ」</div></div>
+    <div class="drill-item"><div class="drill-q">接辞付加＋母音交替タイプに属する活用の種類は？</div><div class="drill-a">上二段・下二段・カ変・サ変・ナ変</div></div>
+    <div class="drill-item"><div class="drill-q">四段動詞「咲く」の活用表は？</div><div class="drill-a">咲かず・咲きけり・咲く。・咲くとき・咲けども・咲け！</div></div>
+    <div class="drill-item"><div class="drill-q">ラ変動詞「あり」の活用表は？</div><div class="drill-a">あらず・ありけり・あり。・あるとき・あれども・あれ！</div></div>
+    <div class="drill-item"><div class="drill-q">ラ変に属する動詞は？</div><div class="drill-a">あり・居（ゐ）り・侍（はべ）り・いまそがり</div></div>
+    <div class="drill-item"><div class="drill-q">上一段動詞「見る」の活用表は？</div><div class="drill-a">見ず・見けり・見る。・見るとき・見れども・見よ！</div></div>
+    <div class="drill-item"><div class="drill-q">上一段に属する動詞は？</div><div class="drill-a">着る・似る・煮る・干（ひ）る・見る・射（い）る・鋳（い）る・居（ゐ）る・率（ゐ）る</div></div>
+    <div class="drill-item"><div class="drill-q">下一段動詞「蹴る」の活用表は？</div><div class="drill-a">蹴ず・蹴けり・蹴る。・蹴るとき・蹴れども・蹴よ！</div></div>
+    <div class="drill-item"><div class="drill-q">カ変動詞「来」の活用表は？</div><div class="drill-a">こず・きけり・く。・くるとき・くれども・こよ！</div></div>
+    <div class="drill-item"><div class="drill-q">サ変動詞「す」の活用表は？</div><div class="drill-a">せず・しけり・す。・するとき・すれども・せよ！</div></div>
+    <div class="drill-item"><div class="drill-q">サ変に属する動詞は？</div><div class="drill-a">す・おはす（とその複合語）</div></div>
+    <div class="drill-item"><div class="drill-q">ナ変動詞「往ぬ」の活用表は？</div><div class="drill-a">往なず・往にけり・往ぬ。・往ぬるとき・往ぬれども・往ね！</div></div>
+    <div class="drill-item"><div class="drill-q">上二段動詞「落つ」の活用表は？</div><div class="drill-a">落ちず・落ちけり・落つ。・落つるとき・落つれども・落ちよ！</div></div>
+    <div class="drill-item"><div class="drill-q">下二段動詞「棄つ」の活用表は？</div><div class="drill-a">棄てず・棄てけり・棄つ。・棄つるとき・棄つれども・棄てよ！</div></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  大阪桐蔭中学校　国語（古典）　授業プリント ／ 精確な読解につなげる古典文法
+</footer>
+
+</body>
+</html>
