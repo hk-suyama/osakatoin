@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>古文単語　語源・意味解説集 | OSAKA TOIN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;700&family=Shippori+Mincho+B1:wght@400;500;600;800&family=Zen+Old+Mincho:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --paper: #f5efe4;
+    --paper-dark: #ede3d0;
+    --red: #9b2a2a;
+    --red-light: #c94040;
+    --gold: #a07830;
+    --gold-light: #c9a050;
+    --line: #c8b89a;
+    --muted: #7a6a54;
+    --accent-bg: #e8dcc8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--paper-dark);
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 31px, var(--line) 31px, var(--line) 32px);
+    font-family: 'Noto Serif JP', 'Yu Mincho', serif;
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    text-align: center;
+    padding: 2.8rem 2rem 2.2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(
+        45deg,
+        transparent, transparent 18px,
+        rgba(255,255,255,.03) 18px, rgba(255,255,255,.03) 19px
+      );
+  }
+
+  header::after {
+    content: '';
+    display: block;
+    width: 120px; height: 3px;
+    background: var(--gold-light);
+    margin: .9rem auto 0;
+  }
+
+  .header-kana {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: .72rem;
+    letter-spacing: .5em;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    margin-bottom: .45rem;
+  }
+
+  header h1 {
+    font-family: 'Zen Old Mincho', serif;
+    font-weight: 900;
+    font-size: 2.6rem;
+    letter-spacing: .22em;
+    line-height: 1.2;
+    position: relative;
+  }
+
+  .header-sub {
+    margin-top: .6rem;
+    font-size: .78rem;
+    letter-spacing: .35em;
+    color: #b0a090;
+    font-family: 'Shippori Mincho B1', serif;
+  }
+
+  /* ── SEARCH / FILTER ── */
+  .controls {
+    max-width: 860px;
+    margin: 1.8rem auto .6rem;
+    padding: 0 1.2rem;
+    display: flex;
+    gap: .7rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .search-wrap {
+    flex: 1 1 240px;
+    position: relative;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    padding: .55rem 1rem .55rem 2.4rem;
+    border: 1.5px solid var(--line);
+    border-radius: 2px;
+    background: var(--paper);
+    font-family: inherit;
+    font-size: .88rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color .2s;
+  }
+
+  .search-wrap input:focus { border-color: var(--gold); }
+
+  .search-wrap::before {
+    content: '🔍';
+    position: absolute; left: .65rem; top: 50%; transform: translateY(-50%);
+    font-size: .8rem; pointer-events: none;
+  }
+
+  .filter-btns {
+    display: flex; gap: .4rem; flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: .38rem .75rem;
+    border: 1.5px solid var(--line);
+    border-radius: 2px;
+    background: var(--paper);
+    font-family: inherit;
+    font-size: .78rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .18s;
+  }
+
+  .filter-btn.active,
+  .filter-btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  /* ── COUNT LINE ── */
+  .count-line {
+    max-width: 860px;
+    margin: 0 auto .5rem;
+    padding: 0 1.2rem;
+    font-size: .75rem;
+    color: var(--muted);
+    letter-spacing: .05em;
+  }
+
+  /* ── MAIN GRID ── */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1.2rem 3rem;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--paper);
+    border-left: 4px solid var(--gold);
+    margin-bottom: 1.1rem;
+    padding: 0;
+    box-shadow: 2px 2px 6px rgba(0,0,0,.08);
+    transition: box-shadow .2s, transform .15s;
+    position: relative;
+  }
+
+  .card:hover {
+    box-shadow: 3px 4px 14px rgba(0,0,0,.14);
+    transform: translateY(-1px);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: baseline;
+    gap: .7rem;
+    padding: .75rem 1.1rem .55rem;
+    border-bottom: 1px solid var(--accent-bg);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .card-num {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: .7rem;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: .05em;
+    min-width: 1.8rem;
+  }
+
+  .card-word {
+    font-family: 'Zen Old Mincho', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    color: var(--ink);
+    flex: 0 0 auto;
+  }
+
+  .card-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .3rem .55rem;
+    align-items: center;
+  }
+
+  .card-pos {
+    font-size: .7rem;
+    background: var(--accent-bg);
+    color: var(--muted);
+    padding: .1rem .45rem;
+    border-radius: 2px;
+    letter-spacing: .03em;
+    font-family: 'Shippori Mincho B1', serif;
+  }
+
+  .card-kanji {
+    font-size: .78rem;
+    color: var(--red);
+    letter-spacing: .04em;
+    font-family: 'Shippori Mincho B1', serif;
+  }
+
+  .card-toggle {
+    margin-left: auto;
+    font-size: .65rem;
+    color: var(--muted);
+    transition: transform .2s;
+    flex-shrink: 0;
+  }
+
+  .card.open .card-toggle { transform: rotate(180deg); }
+
+  .card-body {
+    padding: 0 1.1rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease, padding .25s;
+  }
+
+  .card.open .card-body {
+    max-height: 9999px;
+    padding: .65rem 1.1rem 1rem;
+  }
+
+  .card-body p {
+    font-size: .88rem;
+    line-height: 2.05;
+    color: #2a220e;
+    margin-bottom: .55rem;
+  }
+
+  .card-body p:last-child { margin-bottom: 0; }
+
+  /* paragraph separator within a card */
+  .card-body .para-sep {
+    display: block;
+    width: 28px; height: 1.5px;
+    background: var(--line);
+    margin: .55rem 0 .6rem;
+  }
+
+  /* ── CATEGORY CHIPS ── */
+  .cat-verb    { border-left-color: #5b8c5a; }
+  .cat-adj     { border-left-color: #5a6b9c; }
+  .cat-adj-dyn { border-left-color: #9c6b5a; }
+  .cat-adv     { border-left-color: #7a5a9c; }
+  .cat-noun    { border-left-color: #9c8a3a; }
+
+  .cat-verb    .card-pos { background: #e6f0e6; color: #3a6a38; }
+  .cat-adj     .card-pos { background: #e6eaf5; color: #3a4a7c; }
+  .cat-adj-dyn .card-pos { background: #f5ebe6; color: #7c4a3a; }
+  .cat-adv     .card-pos { background: #ede6f5; color: #5a3a7c; }
+  .cat-noun    .card-pos { background: #f5f0e0; color: #7c6a1a; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 1.2rem;
+    font-size: .72rem;
+    color: var(--muted);
+    letter-spacing: .12em;
+    border-top: 1px solid var(--line);
+    margin-top: 1rem;
+  }
+
+  /* ── HIDDEN ── */
+  .card.hidden { display: none; }
+
+  /* ── OPEN ALL BUTTON ── */
+  .open-all-btn {
+    padding: .38rem .85rem;
+    border: 1.5px solid var(--line);
+    border-radius: 2px;
+    background: var(--paper);
+    font-family: inherit;
+    font-size: .78rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .18s;
+  }
+  .open-all-btn:hover { background: var(--accent-bg); }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.9rem; }
+    .card-word { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-kana">OSAKA TOIN</div>
+  <h1>古文単語　語源・意味解説集</h1>
+  <div class="header-sub">Basic 50 words</div>
+</header>
+
+<div class="controls">
+  <div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="単語・説明文を検索…">
+  </div>
+  <div class="filter-btns">
+    <button class="filter-btn active" data-cat="all">すべて</button>
+    <button class="filter-btn" data-cat="verb">動詞</button>
+    <button class="filter-btn" data-cat="adj">形容詞</button>
+    <button class="filter-btn" data-cat="adj-dyn">形容動詞</button>
+    <button class="filter-btn" data-cat="adv">副詞</button>
+    <button class="filter-btn" data-cat="noun">名詞</button>
+  </div>
+  <button class="open-all-btn" id="openAllBtn">すべて開く</button>
+</div>
+
+<div class="count-line" id="countLine">50語を表示中</div>
+
+<main id="cardList"></main>
+
+<footer>古文単語　語源・意味解説集　｜　OSAKA TOIN</footer>
+
+<script>
+const words = [
+  {
+    num: 1, word: "おどろく", pos: "動　カ四", kanji: null, cat: "verb",
+    paras: [
+      "「オド」の部分は「オノ」の変化した形。「オノ」は感動詞「アナ」の母音交替形。現代語で言えば「アナ」が「ああ」、「オノ」が「おお」のようなもの。「オノ」は物事に気づいて驚くときなどに使う。",
+      "その「オノ」と通底する「オドロク」は、「おお」と声を出してしまうような出来事や夢によってはっと目が覚める意。そこから、大事なことに「おお」と気づいたり、予期せぬ重大事に直面したりして「おお」とびっくりしたりする意にもなった。"
+    ]
+  },
+  {
+    num: 2, word: "ののしる", pos: "動　ラ四", kanji: null, cat: "verb",
+    paras: [
+      "中古における「ノノシル」は、多く大声で騒いだり読経したり、大音量で楽器などを演奏したりすることをいう。また、「言ひののしる」などのように動詞の連用形の下に付いて「大声で～する」「さかんに～する」の意で用いられることも多い。"
+    ]
+  },
+  {
+    num: 3, word: "念ず", pos: "動　サ変", kanji: null, cat: "verb",
+    paras: [
+      "「念」は心にかたくとめ置いた思いを意味する漢語。それにサ変動詞「ス」がついて動詞化した語。対象から心をそらさず、心の中で強く思い続ける意。",
+      "心を集中して物事を強く思うことから、こうあってほしいと真剣に思ったり祈ったりする意味のほかに、その他の感情を押さえてじっと我慢する意も生じた。"
+    ]
+  },
+  {
+    num: 4, word: "おぼゆ", pos: "動　サ変", kanji: null, cat: "verb",
+    paras: [
+      "動詞「オモホユ」が転じたもの。「ユ」は自然に動作が成立することを表す上代の助動詞。すなわち「オモフ」という動作が自然に成立する意。",
+      "「オボユ」には、「自然に思われる」「思い出される」などのほか「似ている」の意もあるが、これはあるもの（Ｘ）を見たときに自然と他のもの（Ｙ）が思い浮かぶというところから、「ＸとＹがそっくりだと感じられる」となって生まれたものとされる。",
+      "なお、この「オボユ」の類義語に「ニル（似る）」がある。こちらはどちらかと言えば客観的に外見が同じように見えるという類似を表すが、「オボユ」はもっと主観的な感覚的類似を表し、外見の似ていない両者の間で使われることが少なくない。このときは、「なんとなく雰囲気が似ている気がする」と、両者の血縁関係を示唆することが多い。",
+      "なお、「ユ」は受身で用いられることもあり、それは「思われる」の意に表われている。"
+    ]
+  },
+  {
+    num: 5, word: "しのぶ", pos: "動　バ上二・バ四", kanji: "【忍ぶ・偲ぶ】", cat: "verb",
+    paras: [
+      "本来、「忍ぶ」と「偲ぶ」は全くの別物。",
+      "もともと「シノブ（忍ぶ）」は「耐えて隠す」という意のバ行下二段動詞、「シノフ（偲ぶ）」は「ひそかに思い慕う」という意のハ行四段動詞であった。それが、中古に入って「シノブ（忍ぶ）」の「隠す」意と「シノフ（偲ふ）」の「ひそかに」のニュアンスが近似していることから、両者が混同して使われるようになり、次第に上二段と下二段の区別も崩れていったものとされる。",
+      "よって、バ行上二段にもバ行四段にも「耐える」の意と「ひそかに思い慕う」の意との両方がある。",
+      "「シノブ（忍ぶ）」は副詞「エ」と助動詞「ズ」をともなった「え忍ばず」の形で、「こらえきれない」の意で使われることが多い。",
+      "また、「隠す」の意が強く出ているときは、「シノブ（忍ぶ）」は「忍び出づ」「忍び通ふ」のように複合動詞化して「こっそり～する」の意で用いられることが多く、中古ごろの貴族社会では様々な行動が秘密裏になされていたことの一端があらわれている。"
+    ]
+  },
+  {
+    num: 6, word: "ながむ", pos: "動　マ下二", kanji: null, cat: "verb",
+    paras: [
+      "じっと長い時間、同じ場所に目をやる「長目」が動詞化したものかとされる。何らかの関心をもって凝視しているのではなく、焦点が合っていない感じで、実際には別の物事を思い浮かべているニュアンスで用いられることが多く、「物思いに沈む」の意となる。"
+    ]
+  },
+  {
+    num: 7, word: "見ゆ", pos: "動　ヤ下二", kanji: null, cat: "verb",
+    paras: [
+      "動詞「ミル（見る）」と、自然に動作が成立することを表す上代の助動詞「ユ」が結びついたもの。よって、「見る」という動作が自然のなりゆきで成立する「目に入る」が基本。そこから派生して、その人を視界に捉えるところから「人が来る」などの意も生じた。",
+      "また、「ユ」は受身で用いられることもあり、その表われとして「見られる」の意もある。派生的に「人に会う」の意にもなる。"
+    ]
+  },
+  {
+    num: 8, word: "あふ", pos: "動　ハ四", kanji: null, cat: "verb",
+    paras: [
+      "もともとは二つのものが近寄って、しっくりと調和し一つになることをいい、「うまく重なる」「符合する」が原義に近い。そこから、二人の心がうまく重なるニュアンスで「結婚する」の意が生じた。",
+      "また、二つのものが互いに近づいて一つになるところから、「出会う」「ぶつかる」「衝突する」の意まで発展した。",
+      "なお、「相見る」などで使われる接頭語「アヒ（相）」はもともと「合ひ見る」のように「合ふ」の連用形から生じた複合動詞であったものが、接頭語として用いられるようになっていったものとされる。"
+    ]
+  },
+  {
+    num: 9, word: "ゐる", pos: "動　ワ上一", kanji: "【居る】", cat: "verb",
+    paras: [
+      "同じところにじっと座って動かない意が原義。「タツ（立つ）」の対義語。「座る」の意味からの派生で「地位に就く」などの意が生じ、「じっと動かない」からの派生で「住む」「滞在する」などの意が生じた。",
+      "単に人や動物に限って用いられるわけではなく、「じっと動かない」からの派生で「風や波がおさまる」などのように本来動きがあるものが静かに動かない状態を表すこともある。",
+      "また、さらにそこから補助動詞としての働きも生まれ、動詞について「じっと～している」「～しつづける」の意も表す。"
+    ]
+  },
+  {
+    num: 10, word: "ありく", pos: "動　カ四", kanji: "【歩く】", cat: "verb",
+    paras: [
+      "原義はあちこち動き回ること。人に限らず、犬猫などの生き物や、車や船などについても用いる。",
+      "ほかの動詞に下接して補助動詞として用いられることが多く、その場合には「動き回る」のニュアンスから「あちこちで～してまわる」「しきりに～する」の意となる。",
+      "また、連用形で名詞となった「アリキ（歩き）」が、「あちこち」のニュアンスから、男性が正妻でない女性のもとに行くことを指すこともある。"
+    ]
+  },
+  {
+    num: 11, word: "あく", pos: "動　カ四", kanji: "【飽く】", cat: "verb",
+    paras: [
+      "物事や人への関心が高まり深まっていき、頂点に達し、満足すること。また、もうこれで十分だとして気持ちが離れること。",
+      "打消の助動詞「ズ」を伴った「飽かず」は、「満足する」を否定して「物足りない」となることもあれば、「気持ちが離れる」を否定して「いつまでも気持ちが離れない＝すばらしい」の意となることもある。どちらかと言えば後者が多い。"
+    ]
+  },
+  {
+    num: 12, word: "うつくし", pos: "形　シク", kanji: "【美し・愛し】", cat: "adj",
+    paras: [
+      "親子の間の（主に親から子への）、また夫婦や恋人の間の、肉親的な非常に親密な感情をいうのが最も古い意味。そのため、動詞化した「ウツクシム（慈しむ）」「ウツクシブ」は仁・慈・恵・愛の行為をする意。中古になると、自分の子や孫のことをかわいく思う気持ちも表現する。",
+      "そこから、形容詞「ウツクシ」は主に子どもや若い女性に対する可憐の感情やそのかわいらしさをいう。",
+      "なお、『枕草子』では人間以外のものを「うつくし」と表現しているが、これは『枕草子』に独特の意外性の表出であって、人間以外に使われるのは本来まれである。"
+    ]
+  },
+  {
+    num: 13, word: "かなし", pos: "形　シク", kanji: "【悲し・哀し・愛し】", cat: "adj",
+    paras: [
+      "「見かねる」「待ちかねる」などで見られる「～することができない」という意味の接尾辞「カヌ」と同根。愛着するものを死や別れなどで喪失するときのなすすべのない気持ちが原義。",
+      "別れる相手に対して何もできない無力感や大切な人を失うかもしれないという恐れを核として、いっそうその対象を大切に愛おしむ気持ちへも派生する。",
+      "また、自然の風景や物事のあまりの見事さなどに触れて、それに対して自分の無力が痛感されるばかりに心打たれる気持ちも指す。",
+      "なお、これと似た語に「アハレ」があるが、概念は全く異なる。「カナシ」では対象に対して自分が無力な自覚を持つのに対して、「アハレ」は対象を外から見つつも心の底に共感も覚えている。"
+    ]
+  },
+  {
+    num: 14, word: "いみじ", pos: "形　シク", kanji: "【忌みじ】", cat: "adj",
+    paras: [
+      "動詞「イム（忌む）」の形容詞形。「イ」は身体を清浄に保つ上で触れてはならない禁忌や穢れなどのタブーを意味し、「ム」は「ウラム（恨む）」や「ネタム（妬む）」、「ニクム（憎む）」などのように心情を表す動詞の活用語尾に多く見られるもので、「思う」を意味する。よって、「イム」は「禁忌だと思う」の意が核だと考えられる。",
+      "その形容詞形なので、「禁忌だと思われる様子」が基礎にあり、そこから意味が広く派生していったとされる。",
+      "「イミジ」は「イミジク」の形で、強調や程度の大きさを表す副詞として用いられることが多かった。これは、現代語の「非常に」「大変」と同じである。「非常」「大変」は、字面からわかるように、常ではないこと、一大変事（戦争など）を表す。しかし、副詞として用いられる時は単に強調や程度の大きさを表しているのである。"
+    ]
+  },
+  {
+    num: 15, word: "をかし", pos: "形　シク", kanji: null, cat: "adj",
+    paras: [
+      "「ヲカシ」は平安時代の文学に盛んに使われた語で、大きく二つの意味に分けられる。",
+      "Ａとして「滑稽だ」「笑ってしまう」などのマイナスの観念を表し、相手や対象に優越の意識を持つ場合に使われる。",
+      "Ｂとしては「興味をひく」「おもしろい」「かわいい」「気が利いている」のようにプラスの観念を表す。",
+      "まずＡについては、「愚か」「馬鹿」という意味の「ヲコ（痴）」を形容詞化したものとされる。",
+      "Ｂもここからの流れで捉えられる。相手を見下した感じの「興味をひかれる」「おもしろい」から、やがて相手・対象に対して「気が利いている」「評価に値する」ことへと広がり、さらに「興味をひかれる」が派生して「美しい」のような意味まで持つようになっていったと考えられる。すなわち、ＡもＢももともとは相手や対象に対する優越で通底しているのである。",
+      "『枕草子』は「をかしの文学」とも呼ばれ、明るさを伴う美意識と言われているが、実際には自分を高みに置いて、世の中の様々な対象を批評的に鋭い角度から取り上げるのが筆者の基本姿勢であろうと考えられる。"
+    ]
+  },
+  {
+    num: 16, word: "よし", pos: "形　ク", kanji: "【良し・善し・好し・吉し】", cat: "adj",
+    paras: [
+      "シク活用形容詞「アシ（悪し）」の対義語。状態を客観的に表現し、人や物事の良否や善悪、優劣などを「悪」ではなく「良」であるとするときに用い、広く一般にすぐれた状態であることをいう。",
+      "類義語「ヨロシ（宜し）」が対象のほうに近寄りたいことを原義とし、それほど悪くはないという少し生ぬるい判断を示すのに対し、「ヨシ」はもっとはっきりした判断である。",
+      "動詞の連用形について、その動作が容易に行えることを表すことも多い。そのとき、単に「～しやすい」だけでなく、少し派生的に「～するのが快適だ」の意も示す。例えば「見よし」は、単に「見やすい」ということもあれば、容易に見ることができるニュアンスから、見苦しい・見ていられないの対義として「見ていて快適だ」の意になることもある。"
+    ]
+  },
+  {
+    num: 17, word: "あやし", pos: "形　シク", kanji: "【怪し・賤し】", cat: "adj",
+    paras: [
+      "「アヤ」は「アヤマル（誤る）」や「アヤマチ（過ち）」と同根とされる。不可思議で解釈し得ない物事や、合理的な理由や根拠がわからない事柄、あるいは合理性に反する不可解な事柄に接したときの感情をいう。古くは人知の及ばない物事に対する率直な感嘆の気持ちで神秘的な対象に多く用いられた。",
+      "そこから、それらを究明したいがうまくいかないもどかしさから「納得できない」の意となり、さらに物事の合理的な筋道から逸脱していることに対する否定的な判断を示すのに用いられるようになった。",
+      "また、特に中古の文章では、宮廷貴族の立場から下層の人や物事に対して理解しがたいと見下すニュアンスにより、「粗末だ」などの意に派生していった。"
+    ]
+  },
+  {
+    num: 18, word: "おとなし", pos: "形　シク", kanji: "【大人し】", cat: "adj",
+    paras: [
+      "「オトナ（大人）」の形容詞形。成人しているかどうかではなく、肉体的または精神的に一人前の大人のように見える様子をいう。ここから思慮分別があることにつながり、単に「大人のように見える」だけでなく、「ある集団の中で主となる立場にある」の意へも派生していった。"
+    ]
+  },
+  {
+    num: 19, word: "ゆかし", pos: "形　シク", kanji: "【行かし】", cat: "adj",
+    paras: [
+      "動詞「ユク（行く）」の形容詞形。心がひかれ、自分で実際にそっちへ行きたいと思う意が原義。未知の部分のある対象について、それに価値があるとみなして、それを直接知りたいとする好奇心や興味を抱く感情をいう。",
+      "「ユカシ」は未知の部分を知りたいと望む気持ちをいうが、平安時代中期ごろまでは眼前にない物事を対象とすることが多く、そこから派生して平安末期ごろからは離れている人や物事に対する思慕、過去のことに対する懐旧の感情などに用いられるようになっていった。"
+    ]
+  },
+  {
+    num: 20, word: "おぼつかなし", pos: "形　ク", kanji: null, cat: "adj",
+    paras: [
+      "「オボ」は「オボロ（朧）」などと同根で、明瞭でなくはっきりしない状態を表す。「ナシ」は「無し」ではなく、そのような状態にあることを示す接尾辞。それらが組み合わさって、対象がはっきりと認識できない状態をいう。つかみどころがなく不確かなさまや、眼前にない対象について、気にかかるものの様子や動向がわからないことを表す。また、そこから、それを確かにしたいという気持ちにも転じた。"
+    ]
+  },
+  {
+    num: 21, word: "ありがたし", pos: "形　ク", kanji: "【有り難し】", cat: "adj",
+    paras: [
+      "存在を示す動詞「アリ（有り）」と困難性を示す形容詞「カタシ（難し）」との複合語。存在そのものを困難・希少と見ると、存在の希少性を強調することになり、それに高い価値をおけば、存在そのものを尊崇することになる。",
+      "現在のように感謝の意味に転じるのは近世になってからで、それまでは感謝には「カタジケナシ（辱し・忝し）」が用いられていた。"
+    ]
+  },
+  {
+    num: 22, word: "めでたし", pos: "形　ク", kanji: "【愛で甚し】", cat: "adj",
+    paras: [
+      "対象をきわめて価値の高いものと感じて賞賛する意を表す動詞「メヅ（愛づ）」の連用形に形容詞「イタシ（甚し）」の付いた「メデイタシ」がつづまった語。根源的に、対象を社会的に公認された価値のある結構なもの、ありがたい立派なものとして崇め、慶賀し、賞賛する気持ちを言う。神仏に関わるものに用いられる例も多い。また、平安時代ごろには特に、繁栄や幸福のさま、人や物事の様子や状態などについて優れているという意で用いられた。"
+    ]
+  },
+  {
+    num: 23, word: "くちをし", pos: "形　シク", kanji: "【口惜し・朽ち惜し】", cat: "adj",
+    paras: [
+      "ものが朽ちる（悪い状態になる）ことを惜しむ意の「朽ち惜し」が原義だとする説もある。",
+      "類義語である「クヤシ」が、動詞「クユ（悔ゆ）」の形容詞化した語で、自己の行った行為についてその失敗を自ら認め、行うべきではなかったと嘆く気持ちをいうのに対して、「クチヲシ」は、自分の運命や事のなりゆき、他人の行為などについて、予期に反した時に失望し落胆する意を表す。",
+      "中世ごろからは、自分自身の行為についての用例も増え、「クヤシ」との区別が曖昧になっていった。"
+    ]
+  },
+  {
+    num: 24, word: "うし", pos: "形　ク", kanji: "【憂し】", cat: "adj",
+    paras: [
+      "「ウ」は、「嫌になる」という意味の「ウム（倦む）」における「ウ」と同根。",
+      "「ウシ（憂し）」は一般に心情を表す語とされているが、本来は状態を表す語で、ある人や事柄に対した際、それが自分の思い通りに進まないことから陥る困惑や疲労の状態を客観的に示したものである。さらに、出世や恋愛がうまく進まない際に生じる鬱屈した感情も表すようになっていった。"
+    ]
+  },
+  {
+    num: 25, word: "わびし", pos: "形　シク", kanji: "【侘びし】", cat: "adj",
+    paras: [
+      "自分の無力さによって思い通りにいかず、失望する意を表す「ワブ（侘ぶ・詫ぶ）」が形容詞化したもの。しみじみと、自分自身に力がないことを感じ、気落ちする気持ちや失意を表す。また、そこから派生して貧乏なさまの意にもなった。"
+    ]
+  },
+  {
+    num: 26, word: "あはれなり", pos: "形動　ナリ", kanji: null, cat: "adj-dyn",
+    paras: [
+      "事柄を傍らから見てしみじみと感じ入る気持ちを言う。アハレの対象は非常に広く、ふと目に入った空の景色、相手から受けた心遣い、さらには道ばたで見つけた死体などにも及ぶ。アハレに近似しながら異なる概念を持つ語が「カナシ（悲し）である。「アハレ」は対象を外から見て、その対象に向かって心の底で共感を抱く意識があるのに対し、「カナシ」は対象に対しての自らの無力感がある。"
+    ]
+  },
+  {
+    num: 27, word: "おろかなり", pos: "形動　ナリ", kanji: "【疎か・粗か】", cat: "adj-dyn",
+    paras: [
+      "「オロ」は「アラ（粗）」の母音交替形で、隙間が多く粗雑である意。「カ」は見た目の形や状態を表す接尾辞。",
+      "心の働き方についていえば、隙間が多く大雑把である意で、対象への関心や愛情、敬意などが中途半端である意。表現についていえば、十分言い尽くしておらず不十分であるさまをいう。",
+      "そこから派生して、能力として隙間の多い状態をいい、頭の働きが鈍いさまや未熟なさま、品質が悪いさまにも用いられるようになり、現代語の「愚か」へとつながっていった。"
+    ]
+  },
+  {
+    num: 28, word: "ねんごろなり", pos: "形動　ナリ", kanji: "【懇ろ】", cat: "adj-dyn",
+    paras: [
+      "「ネンゴロ」は「ネモコロ」が転じた形。「ネモコロ」は「根も凝ろ」で、地中でこまかい根がぎっしりからみあうのが原義。そこから、そのように緻密に心配りが行き届いているさまをいうようになった。"
+    ]
+  },
+  {
+    num: 29, word: "つれづれなり", pos: "形動　ナリ", kanji: "【徒然】", cat: "adj-dyn",
+    paras: [
+      "一線に続く、つながる意の動詞「連る」の連用形「ツレ」が重なったもので、長く続くが原義。そこから、これ以上続いてほしくないと思うような状態が単調に続いていて、そこから脱却したいと思ってもなかなかできず、心が晴れないさまをいう。"
+    ]
+  },
+  {
+    num: 30, word: "いたづらなり", pos: "形動　ナリ", kanji: "【徒ら】", cat: "adj-dyn",
+    paras: [
+      "価値ある何かが期待されていたのに、それが実現されず、無用・無駄になっている状態をいうのが原義。たとえば『源氏物語』では、昇進できないこと、願っていた入内が望めなくなること、また死去などに用いられる。",
+      "また、用がなく暇な状態や、土地や部屋などが使用されず飽いている状態などの意も表す。"
+    ]
+  },
+  {
+    num: 31, word: "としごろ", pos: "名", kanji: "【年頃】", cat: "noun",
+    paras: [
+      "上代では今を基準とした幅のある時間の範囲を表したが、中古以後は今ではなくある時やある季節を中心とした幅のある時間の範囲を表すようになった。",
+      "よって、今に近い期間だけでなく、過去のことについても用いられる。実際の期間は十年以上の場合も一年未満の場合もある。"
+    ]
+  },
+  {
+    num: 32, word: "かたち", pos: "名", kanji: "【形・貌】", cat: "noun",
+    paras: [
+      "「カタ」は「型」で、一定のものを作るための枠のこと。『源氏物語』では儀式や宴などの決まった手順もいう。「チ」は霊力や生命力など、内にある活力のこと。「イカヅチ（雷）」「イノチ（命）」「チカラ（力）」などの「チ」と同じ。",
+      "したがって、内に活力を持つものの外形のことを「カタチ」という。たとえば神仏の顕現した姿や、人の顔、生活の様子など。"
+    ]
+  },
+  {
+    num: 33, word: "かげ", pos: "名", kanji: "【影・陰】", cat: "noun",
+    paras: [
+      "「カギロヒ（陽炎）」や「カガミ（鏡）」などの語根kagと同根。太陽・月・灯火などの時々刻々と変化する光や、それによって生じる明るい像や暗い像をいう。",
+      "明るい像の場合は、光そのものや光のような輝かしい存在、その恩恵などをいい、暗い像の場合は、光が物にあたって遮られた結果として暗くなるところや、光源と反対方向にできる黒い像をいう。",
+      "また、そこから転じて風雨を遮るところも表すようになった。"
+    ]
+  },
+  {
+    num: 34, word: "ほい", pos: "名", kanji: "【本意】", cat: "noun",
+    paras: [
+      "「ホンイ（本意）」の発音ンが無表記になったもの。中古にはホンイと発音されていたと推測される。",
+      "かねてから抱いているものの容易に実現できない志の意。『源氏物語』では出家の志をいう例が最も多く、ついで娘を宮仕えさせたい、高貴な人と結婚させたいなどの意で使われている。",
+      "また、物事の本来の意味やありかたをいうこともあり、歌論などで用いられる「本意」はこの意で用いられることが多い。"
+    ]
+  },
+  {
+    num: 35, word: "ものがたり", pos: "名", kanji: "【物語】", cat: "noun",
+    paras: [
+      "「モノガタリ」は「モノ」と、動詞「カタル」の連用形名詞「カタリ」の複合語。「モノ」は運命や動かしがたい事実、世間的制約などの意味を持っていた。「カタリ」は内密なことを相手に打ち明けること、相手の知らない情報の報告、事の成り行きを順序立てて相手に話すこと、作為的な話（虚構＝フィクション）を表す。",
+      "「モノガタリ」の持つ意味は様々であり、現代のように「虚構作品」の意や、「現状報告」の意などがあるが、「ものがたりす」「ものがたり聞こゆ」などで動詞と複合して用いられる際には、主に打ち解けた気持ちで言葉を交わす意を表す。",
+      "これは、「カタリ」に内密なことを打ち明けるというニュアンスが含まれていて、ある程度の信頼関係があってこそそういう話を交換することができるということから考えればよい。実際、「モノガタリ」には「隔てなく」とか「うちとけて」とかの形容詞が付いている例が多い。"
+    ]
+  },
+  {
+    num: 36, word: "ふみ", pos: "名", kanji: "【文】", cat: "noun",
+    paras: [
+      "漢語「文」の漢音にiがついたfuni（フニ）が転じた語。「フミ」はもともと「模様」や「文字」の意であるが、やがてその「文字」で書き記したものも表すようになった。日本では古くは「文字」といえば漢字であったので、基本的には「漢詩」を指した。",
+      "そこから時代が進み、漢字をくずした仮名が日常的に用いられ始めると、「手紙」の意となる。平安期の女流文学においてはほとんどがこの意で用いられている。",
+      "さらに「フミ」は文書や書物の意も表すが、そこから派生して広く「学問」の意でも用いられるようになった。"
+    ]
+  },
+  {
+    num: 37, word: "ほど", pos: "名", kanji: "【程】", cat: "noun",
+    paras: [
+      "何かが行われたり、何かの状態が推移したりするときに経過する時間の範囲。また、その時間のうちに移動する動作に伴う道のり・距離・広さなどの空間的な意味も表した。",
+      "さらに中古になると、身分・年齢・技量や、さまざまに変化するありさまや数量などの程度や物事のでき具合について用いられるようになった。",
+      "中世では、時間の経過よりもその到達点のほうに重点がおかれるようになり、到達点と捉えられる高い程度を表す用法も出現した。",
+      "類義語に「コロ（頃）」があるが、これは単にある時点を中心にその前後も含めて切り取った時間の範囲であり、「ホド」が時間の範囲内での物事の推移や経過の意味合いを含むことと差異がある。"
+    ]
+  },
+  {
+    num: 38, word: "なさけ", pos: "名", kanji: "【情け・為さけ】", cat: "noun",
+    paras: [
+      "「ナサケ」の「ナサ」は、動詞「ナス（為す）」が名詞化したもので、「ツク（築く）」から「ツカ（塚）」が、「ナフ（綯う）」から「ナハ（縄）」が生まれたのと同じ形式である。「ケ」は「カナシゲ（悲しげ）」や「オソロシゲ（恐ろしげ）」の「ゲ」と同じで、そういうふうに見える、そういう様子であると示す接尾辞。よって、「ナサケ」は相手に対してなにかを為す、外見上の様子という意味となる。",
+      "中古では、「ナサケ」は一般に「思いやり」「人情」などを表すとされるが、たとえば『源氏物語』ではそれとは異なる例が多く見られる。「うはべのなさけ」などの表現も見られるように、「ナサケ」がうわべのものである用例である。",
+      "これはむしろ語源と合致する。すなわち「ナサケ」は相手になにかを為すときの外見上の様子であり、心からの思いというよりも、表面上の愛想であり、作為と努力によって作り出される相手への配慮を意味するのが本来的な意味なのである。",
+      "それは、「ナサケ」という語が親子や姉妹などの間では使われないことも理解される。あくまで「ナサケ」は表面的な配慮であって、遠慮のいらない打ち解けた関係では必要がなかったのである。",
+      "また、「ナサケナシ（情けなし）」の形で使われる際にも、『源氏物語』における用例はほとんどすべてが「相手に対する配慮に欠ける」「礼儀に欠ける」「薄情だ」などの意で使われている。",
+      "「ナサケ」を表面的なものとせず「心の底にもつ人間的な感情」という意味で捉えるようになったのは漢文訓読の影響とされる。漢文における「情」がそのような意味で、それに「ナサケ」という読みをつけたところから、意味に変化が起こっていったようである。",
+      "鎌倉時代に入ると、「うわべの」「表面上の」といった意味合いがどんどん薄れていき、「広く深い人間愛」といった意味に近づいていった。"
+    ]
+  },
+  {
+    num: 39, word: "ちぎり", pos: "名", kanji: "【契り】", cat: "noun",
+    paras: [
+      "固く約束する意の動詞「チギル（契る）」の連用形名詞。特に男女の間の末永い愛情の約束を表す。また、前世からの宿命的な約束事の意もある。"
+    ]
+  },
+  {
+    num: 40, word: "けしき", pos: "名", kanji: "【気色】", cat: "noun",
+    paras: [
+      "漢語「気色」を呉音で読んだ語。中古のはじめから和文の中でもよく用いられ、和語のようにとらえる意識が強かった。視覚で捉えた具体的な様子を指す語で、自然界については、それと見てとれる自然の動き、人間については、その場その場の感情が外に出て見えた具体的な様子をいう。そこから、「意向」「機嫌」「寵愛」などの意が派生して生まれた。",
+      "また、自然の様子や人の気持ちがはっきり目に見えて表われる意の「ケシキダツ（気色立つ）」や、思いが見えるようにふるまう意の「ケシキバム（気色ばむ）」のように動詞化されて使用される例も多い。",
+      "なお、中世以降は「気色」の漢音読みである「キショク」が人間の気持ちに限定して使われるようになってきて、「ケシキ」はもっぱら自然の様子に用いられるようになっていく。このときに「景色」という当て字でも書かれるようになったとされる。"
+    ]
+  },
+  {
+    num: 41, word: "いと", pos: "副", kanji: "【甚・最】", cat: "adv",
+    paras: [
+      "頂点や極限を意味し、「イタダキ」などにも見られる「イタ」の母音交替形。程度のはだはだしいさまについていい、「非常に」の意味を表すのが用例の八割以上を占める。",
+      "そのほか、程度の高さに対する詠嘆や強調の気持ちを表して、「ほんとうに」の意。",
+      "打消の語を伴う場合には、この「いと」の程度の甚だしさが否定されて、「非常に～というわけではない」となり、「たいして～ない」の意を表すことが多い。"
+    ]
+  },
+  {
+    num: 42, word: "あまた", pos: "副", kanji: "【数多】", cat: "adv",
+    paras: [
+      "動詞「アマル（余る）」「アマス（余す）」の語幹「アマ」に、状態の意を表す接尾語「タ」が付いた語。主に数量が多いことを表す。用例は大半が人を対象としているが、年月・日数・絵・着物・建物・場所などについていう例もある。",
+      "なお、「アマタ」で表される数量は、実際にはそれほど多い数ではなく、三から五程度の容易に数えられる数であることが多い。"
+    ]
+  },
+  {
+    num: 43, word: "げに", pos: "副", kanji: "【現に・実に】", cat: "adv",
+    paras: [
+      "「ゲンニ（現に）」の字音が短縮した語。以前から思っていたことが、実際にそのとおりであるとわかったり、人から聞いたことが、いかにもそのとおりだと納得したときに発する語。「実際に」の意味を表す。",
+      "やがて、必ずしも現実に思っていたり聞いていたりしたことではなくても、単に感動を込めて「本当に」の意味で使われるようにもなった。"
+    ]
+  },
+  {
+    num: 44, word: "なほ", pos: "副", kanji: "【猶・尚】", cat: "adv",
+    paras: [
+      "物事が変わらずに持続していくさまをいうのが原義。上代では、時間が経過しても、状態がもとのまま変わらないことについていい、「依然として」の意を表した。また、持続の状態が変わらないだけでなく、程度がより進んでいるときに「もっと」の意を表すこともある。",
+      "中古によく用いられた「やはり」の意は、いろいろ考え、改めて見直してみた結果、依然として前の状態が持続していると判断するところから生まれたものとされる。"
+    ]
+  },
+  {
+    num: 45, word: "やがて", pos: "副", kanji: "【軈て】", cat: "adv",
+    paras: [
+      "中古以降に発生したと考えられている語。二つの動作や事態の間に、変化や時間的隔たりがない意。状態的に変化がなければ「そのまま」の意となり、時間的隔たりがない場合には「すぐさま」の意となる。"
+    ]
+  },
+  {
+    num: 46, word: "やうやう", pos: "副", kanji: "【漸う】", cat: "adv",
+    paras: [
+      "「ヤウヤク（漸く）」の第四音節がウ音便化した形。もともとの意味はある事態や物事が成立する際の時間の経過について、「しだいに」の意味を表す。次に、その経過の仕方がゆっくりしている場合をとりあげ、「そろそろ」の意が生じる。そこからさらに、なかなか成立しにくかった事態が時間の経過とともになんとか成立した場合にも「やっと」の意で用いるようになった。この「やっと」の意の用例が増えていくのは中世以降である。"
+    ]
+  },
+  {
+    num: 47, word: "え", pos: "副", kanji: "【得】", cat: "adv",
+    paras: [
+      "動詞「ウ（得）」の連用形を副詞として用いたもの。もともとは肯定表現を伴って「よく～できる」「うまく～する」という可能の意を示した。これは、漢文における「得」と一致している。",
+      "やがて、あとの否定表現と呼応して、「とても～できない」の意で用いられるようになった。これも漢文の「不得」と一致している。",
+      "中古以降の用例はほとんどがこの否定表現と呼応したものである。"
+    ]
+  },
+  {
+    num: 48, word: "な", pos: "副", kanji: null, cat: "adv",
+    paras: [
+      "活用語の連用形（カ変・サ変は未然形）を下に伴い、禁止の意を表す。特に「ナ～ソ」の形で使われることも多く、この場合にはやさしく禁止を表す言い方となる。",
+      "語源については、形容詞「ナシ（無し）」の語幹にあたる「ナ」であるとする説などがあるが定まっていない。",
+      "時代が進んでいくにつれて、この「ナ」が文末にも使われるようになり、現代語にも「ふざけるな」などに見られる厳しい禁止の意も表すようになっていった。",
+      "また、中古の末ごろからは、「ナ～ソ」の「ナ」が省略されて文末の「ソ」だけで禁止を表す形も出現した。"
+    ]
+  },
+  {
+    num: 49, word: "さらに", pos: "副", kanji: "【更に】", cat: "adv",
+    paras: [
+      "「サラ（更）」は、もともと、一度行われた物事を新しく改めてする意。関西弁で新品のことを指す「さら」はここからだと考えられる。「サラニ（更に）」はもともと、形容動詞「サラナリ（更なり）」の連用形が副詞化した語。",
+      "もともとは「新しく改めて」の意であったが、特に新しくならなくても、前にあった物事が重なったり類似の物事が加わったりしたときにも用いられるようになった。これが「重ねて」の意である。この意味から派生し、時間が経過して程度や回数が増すことも表すようになると、「ますます」の意にもなる。",
+      "また、下に打消の語を伴うと、「新しく改めて」の意から展開して、「まったく」「決して」などの意を表す陳述の副詞となる。"
+    ]
+  },
+  {
+    num: 50, word: "いかで", pos: "副", kanji: "【如何で】", cat: "adv",
+    paras: [
+      "形容動詞「イカナリ」の連用形「イカニ」に接続助詞「テ」がついた「イカニテ」が撥音便化した形。",
+      "「イカ（如何）」の「イ」は「イツ（何時）」や「イヅク（何処）」と同根で、疑問・不明の意や物事の状態・状況・経過などが不分明である意を表す。",
+      "よって、「イカデ」は手段・方法・理由などについて「どのようにして」「どういうわけで」と疑い問うのが原義。ここから派生して、「どうして～か、いやそんなことはない」という反語としても使われるようになった。これらの用法の場合、文末に推量表現を伴うことが多い。",
+      "一方、文末に願望や意志を表す語を伴う場合には、「どうにかして」という願望の意を表す。中古では特にこの用法が多い。",
+      "中世に入ると、係助詞「カ」を伴った「イカデカ」の形で使われる例が増えていった。"
+    ]
+  }
+];
+
+const catLabels = {
+  verb: "動詞", adj: "形容詞", "adj-dyn": "形容動詞", adv: "副詞", noun: "名詞"
+};
+
+let currentCat = "all";
+let allOpen = false;
+
+function buildCards() {
+  const list = document.getElementById("cardList");
+  list.innerHTML = "";
+  words.forEach(w => {
+    const card = document.createElement("div");
+    card.className = `card cat-${w.cat}`;
+    card.dataset.cat = w.cat;
+    card.dataset.idx = w.num;
+    card.dataset.text = (w.word + (w.kanji||"") + w.paras.join(" ")).toLowerCase();
+
+    const hdr = document.createElement("div");
+    hdr.className = "card-header";
+    hdr.innerHTML = `
+      <span class="card-num">${String(w.num).padStart(2,"0")}</span>
+      <span class="card-word">${w.word}</span>
+      <span class="card-info">
+        <span class="card-pos">${w.pos}</span>
+        ${w.kanji ? `<span class="card-kanji">${w.kanji}</span>` : ""}
+      </span>
+      <span class="card-toggle">▼</span>
+    `;
+    hdr.addEventListener("click", () => card.classList.toggle("open"));
+
+    const body = document.createElement("div");
+    body.className = "card-body";
+    body.innerHTML = w.paras.map((p,i) =>
+      `${i>0?'<span class="para-sep"></span>':''}<p>${p}</p>`
+    ).join("");
+
+    card.appendChild(hdr);
+    card.appendChild(body);
+    list.appendChild(card);
+  });
+  updateCount();
+}
+
+function filterCards() {
+  const q = document.getElementById("searchInput").value.toLowerCase().trim();
+  let shown = 0;
+  document.querySelectorAll(".card").forEach(card => {
+    const matchCat = currentCat === "all" || card.dataset.cat === currentCat;
+    const matchQ = !q || card.dataset.text.includes(q);
+    if (matchCat && matchQ) { card.classList.remove("hidden"); shown++; }
+    else card.classList.add("hidden");
+  });
+  document.getElementById("countLine").textContent =
+    shown === words.length ? `全${words.length}語を表示中` : `${shown}語を表示中（全${words.length}語中）`;
+}
+
+function updateCount() {
+  document.getElementById("countLine").textContent = `全${words.length}語を表示中`;
+}
+
+document.getElementById("searchInput").addEventListener("input", filterCards);
+
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentCat = btn.dataset.cat;
+    filterCards();
+  });
+});
+
+document.getElementById("openAllBtn").addEventListener("click", () => {
+  allOpen = !allOpen;
+  document.querySelectorAll(".card:not(.hidden)").forEach(c => {
+    if (allOpen) c.classList.add("open"); else c.classList.remove("open");
+  });
+  document.getElementById("openAllBtn").textContent = allOpen ? "すべて閉じる" : "すべて開く";
+});
+
+buildCards();
+</script>
+</body>
+</html>
