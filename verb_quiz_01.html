@@ -401,7 +401,7 @@ function renderQuestion() {
 
 function renderResult() {
   const pct = Math.round(score / BATCH * 100);
-  const msg = pct === 100 ? '満点！完璧です' : pct >= 80 ? 'よくできました' : pct >= 60 ? 'もう少し復習を' : 'しっかり復習しよう';
+  const msg = pct === 100 ? 'わーい！' : pct >= 80 ? 'あっすー' : pct >= 60 ? 'あす' : '論外っすー';
 
   let html = `
     <div class="hd">
