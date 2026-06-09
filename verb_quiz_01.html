@@ -227,7 +227,7 @@ const GYOU_LIST = ["ア行","カ行","ガ行","サ行","タ行","ダ行","ナ行
 const TYPE_LIST = ["四段","上一段","上二段","下一段","下二段","変格"];
 const KEI_LIST  = ["未然","連用","終止","連体","已然","命令"];
 
-const BATCH = 20;
+const BATCH = 5;
 let pool = [];
 let queue = [];
 let qIdx = 0;
@@ -429,7 +429,7 @@ function renderResult() {
 
   html += `<div class="btn-row">
     <button onclick="endQuiz()">終わる</button>
-    <button class="primary" onclick="startBatch()">もう20問やる</button>
+    <button class="primary" onclick="startBatch()">もう1回やる</button>
   </div>`;
 
   document.getElementById('screen-quiz').classList.remove('active');
