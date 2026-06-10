@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habits — 英コミュⅡ NO3 冊子｜大阪桐蔭</title>
+<style>
+  /* ── Tokens ── */
+  :root {
+    --bg:       #f8f7f4;
+    --surface:  #ffffff;
+    --ink:      #1a1a2e;
+    --muted:    #5a5a72;
+    --accent:   #2c5f8a;   /* 落ち着いた紺藍 */
+    --accent2:  #c0392b;   /* 英文注記の赤 */
+    --highlight:#fffbe6;   /* 重要ポイント背景 */
+    --border:   #d8d6d0;
+    --tag-bg:   #e8f0f7;
+    --tag-txt:  #2c5f8a;
+    --radius:   8px;
+    --serif:    'Georgia', 'Times New Roman', serif;
+    --sans:     'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    --mono:     'Menlo', 'Consolas', monospace;
+  }
+
+  /* ── Reset ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  /* ── Layout ── */
+  .wrapper { max-width: 860px; margin: 0 auto; padding: 0 20px 80px; }
+
+  /* ── Header ── */
+  header {
+    background: var(--accent);
+    color: #fff;
+    padding: 36px 20px 28px;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  header .school { font-size: 12px; letter-spacing: 0.15em; opacity: 0.8; margin-bottom: 4px; }
+  header h1 { font-family: var(--serif); font-size: 2.2rem; font-weight: 700; letter-spacing: 0.05em; }
+  header .meta { font-size: 12px; opacity: 0.75; margin-top: 6px; }
+  .student-box {
+    margin: 16px auto 0;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: var(--radius);
+    padding: 10px 20px;
+    display: inline-flex;
+    gap: 32px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 32px;
+  }
+  .toc-title { font-size: 11px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin: 4px 0; }
+  .toc a { color: var(--accent); text-decoration: none; font-size: 13px; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* ── Section blocks ── */
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .section-header {
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-header .icon { font-size: 16px; }
+  .section-body { padding: 20px 24px; }
+
+  /* ── 語彙表 ── */
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    font-size: 13px;
+  }
+  .vocab-row {
+    display: grid;
+    grid-template-columns: 36px 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .vocab-row:last-child { border-bottom: none; }
+  .vocab-num {
+    background: var(--tag-bg);
+    color: var(--tag-txt);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .vocab-en, .vocab-ja {
+    padding: 8px 12px;
+    border-right: 1px solid var(--border);
+    min-height: 38px;
+  }
+  .vocab-ja { border-right: none; }
+
+  /* ── 本文 ── */
+  .passage {
+    font-family: var(--serif);
+    font-size: 15px;
+    line-height: 2;
+    color: #1a1a2e;
+  }
+  .passage p { margin-bottom: 14px; }
+  .underline-num {
+    text-decoration: underline;
+    text-decoration-color: var(--accent2);
+    text-underline-offset: 3px;
+    font-weight: 600;
+    color: var(--accent2);
+    cursor: help;
+  }
+  .label-alpha {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: #e8f0f7;
+    color: var(--accent);
+    border-radius: 3px;
+    padding: 1px 4px;
+    margin-right: 3px;
+    font-weight: 700;
+  }
+  .blank-box {
+    display: inline-block;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 20px;
+    background: var(--highlight);
+    font-size: 13px;
+    color: var(--muted);
+    font-family: var(--sans);
+  }
+
+  /* ── 設問 ── */
+  .mondai {
+    background: #fafaf8;
+    border-left: 4px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+  .mondai .q-label {
+    font-weight: 700;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+  .answer-lines .line-row {
+    border-bottom: 1px solid #ccc;
+    min-height: 32px;
+    margin-bottom: 4px;
+  }
+  .choice-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 8px 0;
+  }
+  .choice {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 14px;
+    font-size: 13px;
+    background: var(--surface);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .choice:hover { background: var(--tag-bg); }
+
+  /* ── 重要ポイント ── */
+  .point-block {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin: 14px 0;
+    overflow: hidden;
+  }
+  .point-head {
+    background: var(--highlight);
+    padding: 8px 16px;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--ink);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .point-label {
+    font-family: var(--mono);
+    background: var(--accent);
+    color: #fff;
+    border-radius: 4px;
+    padding: 1px 7px;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .point-body {
+    padding: 12px 16px;
+    font-size: 13.5px;
+    line-height: 1.9;
+  }
+  .point-body .phrase {
+    font-family: var(--serif);
+    font-weight: 700;
+    color: var(--accent2);
+  }
+  .point-body .meaning {
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .example {
+    background: #f5f5f0;
+    border-radius: 4px;
+    padding: 6px 12px;
+    margin: 6px 0;
+    font-size: 13px;
+    font-family: var(--serif);
+  }
+  .example .en { color: #1a1a2e; }
+  .example .ja { color: var(--muted); font-size: 12px; font-family: var(--sans); }
+  .divider { border: none; border-top: 1px dashed var(--border); margin: 10px 0; }
+
+  /* ── 表 ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .data-table th {
+    background: var(--accent);
+    color: #fff;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  .data-table td {
+    padding: 7px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .data-table tr:nth-child(even) td { background: #f9f8f6; }
+  .data-table .phrase-cell { font-family: var(--serif); font-weight: 700; color: var(--accent2); }
+
+  /* ── 全訳 ── */
+  .translation {
+    font-size: 14px;
+    line-height: 2;
+    color: #1a1a2e;
+  }
+  .translation p { margin-bottom: 12px; }
+  .trans-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: #e8f0f7;
+    color: var(--accent);
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-right: 4px;
+  }
+
+  /* ── 自分の和訳記入欄 ── */
+  .write-block {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin: 10px 0;
+  }
+  .write-block .write-num {
+    background: var(--tag-bg);
+    color: var(--tag-txt);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .write-area {
+    padding: 4px 12px 4px;
+  }
+  .write-line {
+    border-bottom: 1px solid #ddd;
+    min-height: 30px;
+  }
+  .write-line + .write-line { margin-top: 0; }
+
+  /* ── 練習問題 ── */
+  .exercise-block {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin: 12px 0;
+    background: #fafaf8;
+  }
+  .exercise-block .ex-label {
+    font-weight: 700;
+    color: var(--accent2);
+    margin-right: 6px;
+  }
+  .write-lines-ex { margin-top: 8px; }
+  .write-lines-ex .line { border-bottom: 1px solid #ccc; min-height: 28px; }
+
+  /* ── 熟語表 ── */
+  .idiom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  .idiom-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    background: var(--surface);
+    font-size: 13px;
+  }
+  .idiom-card .idiom-phrase { font-family: var(--serif); font-weight: 700; color: var(--accent2); margin-bottom: 2px; }
+  .idiom-card .idiom-meaning { color: var(--accent); font-weight: 700; }
+  .idiom-card .idiom-ex { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+  /* ── sticky nav ── */
+  .sticky-nav {
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    border-bottom: 2px solid var(--accent);
+    z-index: 100;
+    padding: 8px 24px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .nav-pill {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--tag-bg);
+    color: var(--tag-txt);
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: background 0.15s;
+  }
+  .nav-pill:hover { background: var(--accent); color: #fff; }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.5rem; }
+    .vocab-grid { grid-template-columns: 1fr; }
+    .idiom-grid { grid-template-columns: 1fr; }
+    .choice-row { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="school">大阪桐蔭高等学校　英語コミュニケーションⅡ</div>
+  <h1>Habits</h1>
+  <div class="meta">NO3 冊子　｜　駿台全国模試 2017年6月 大問1</div>
+  <div class="student-box">
+    <span>高2一貫　＿＿組　＿＿番</span>
+    <span>氏名　＿＿＿＿＿＿＿＿＿＿＿＿</span>
+  </div>
+</header>
+
+<nav class="sticky-nav">
+  <a class="nav-pill" href="#vocab">§語彙</a>
+  <a class="nav-pill" href="#text-full">§本文（問題）</a>
+  <a class="nav-pill" href="#mondai">§設問</a>
+  <a class="nav-pill" href="#text1">§書き込み前半</a>
+  <a class="nav-pill" href="#points1">§重要ポイント前半</a>
+  <a class="nav-pill" href="#mytrans1">§自訳前半</a>
+  <a class="nav-pill" href="#trans1">§全訳前半</a>
+  <a class="nav-pill" href="#text2">§書き込み後半</a>
+  <a class="nav-pill" href="#points2">§重要ポイント後半</a>
+  <a class="nav-pill" href="#mytrans2">§自訳後半</a>
+  <a class="nav-pill" href="#trans2">§全訳後半</a>
+</nav>
+
+<div class="wrapper">
+
+<!-- ===== 語彙調べ ===== -->
+<div id="vocab" class="section" style="margin-top:24px;">
+  <div class="section-header"><span class="icon">📝</span>§ 語彙調べ</div>
+  <div class="section-body">
+    <div class="vocab-grid">
+      <!-- 左列 1–10 / 右列 11–20 をフラットに並べる -->
+      <div class="vocab-row"><span class="vocab-num">1</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">11</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">2</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">12</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">3</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">13</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">4</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">14</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">5</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">15</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">6</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">16</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">7</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">17</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">8</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">18</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">9</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">19</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">10</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+      <div class="vocab-row"><span class="vocab-num">20</span><span class="vocab-en"></span><span class="vocab-ja"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 駿台本文（設問付き） ===== -->
+<div id="text-full" class="section">
+  <div class="section-header"><span class="icon">📖</span>§ 駿台問題（本文）</div>
+  <div class="section-body">
+    <div class="passage">
+      <p>I recently wrote a book which is mainly about habits. When I think of this book, I can't help remembering an old friend who, one day while we were chatting, gave me an important clue about the mysterious aspects of habits — a clue that gave me the idea of writing about them. Indeed, it would be fair to say that everything began with <span class="underline-num" title="下線部(1)">(1)</span>a question she asked during that conversation.</p>
+
+      <p>For as long as I can remember, one of my favorite features in any book, magazine, or TV show has been the "before and after." These words have always caught my imagination and aroused my curiosity. Whenever I come across something about a "before and after" change, <span class="underline-num" title="下線部(2)">(2)</span>an image springs to my mind of a wonderful transformation the mere thought of which thrills me, and no matter what that change is like, I always get curious about it. Whether the change is as important as quitting smoking, or as trivial as reorganizing a desk, I love to read or hear about how and why it has been made.</p>
+
+      <p><span class="blank-box">（　3　）</span></p>
+
+      <p>As you know, sometimes, people can make dramatic changes, but more often, they can't.</p>
+
+      <p>A few years ago, I noticed a pattern: whether people successfully made a change they'd intended to or whether they failed to do so, their explanations about those successes or failures very often related to the formation of some kind, or kinds, of habit.</p>
+
+      <p>Then, one day, when I was having lunch with my old friend, she said something that turned my casual interest in habits into a full-time preoccupation. After we'd looked at our menus, she said, "I want to get myself in the habit of exercise, but I can't, and it really bothers me." In a brief statement that would absorb me for a long time to come, she added, "In high school, I was on the track team, and I never missed track practice, but I can no longer go running. Why?" "Why?" I echoed, as I mentally looked through everything I'd learned throughout my career as a writer <span class="blank-box">（　4　）</span> some relevant insight or useful explanation, but I could find none.</p>
+
+      <p>Our conversation shifted to other topics, but as the days passed, I couldn't get this exchange out of my mind. Her question buzzed in my head with the special energy that told me I'd come across something important.</p>
+
+      <p>Finally, <span class="underline-num" title="下線部(5)">(5)</span> [ア connected ／ イ I ／ ウ I'd ／ エ noticed ／ オ the exchange ／ カ what ／ キ with ] about people's accounts of their changes, and it struck me: To understand how people are able to change, I must understand habits. I felt the sense of joyous anticipation and relief that I feel every time I get the idea for my next book. It was obvious! Habits!</p>
+
+      <p>This is how I set out to write my book about habits, and I'm really grateful to my friend. I can't praise her contribution too highly, for <span class="underline-num" title="下線部(6)">(6)</span>it was no doubt her casual remark which led me to clearly realize how powerful a part habits play in our lives and to decide to research and write about the subject. In fact, but for that remark of hers, I might never have even given serious thought to habits.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 設問 ===== -->
+<div id="mondai" class="section">
+  <div class="section-header"><span class="icon">✏️</span>§ 設問</div>
+  <div class="section-body">
+
+    <div class="mondai">
+      <span class="q-label">(A)</span>下線部(1)の具体的な内容を、本文の記述に即して<strong>80字以内の日本語</strong>で説明せよ。
+      <div style="margin-top:10px;">
+        <div class="answer-lines">
+          <div class="line-row"></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);padding:0 4px;">
+            <span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80字</span>
+          </div>
+          <div class="line-row"></div>
+          <div class="line-row"></div>
+          <div class="line-row"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mondai">
+      <span class="q-label">(B)</span>下線部(2)、(6)を<strong>和訳</strong>せよ。
+      <div style="margin-top:10px;">
+        <p style="font-size:13px;margin-bottom:6px;"><strong>(2)</strong></p>
+        <div class="answer-lines">
+          <div class="line-row"></div>
+          <div class="line-row"></div>
+        </div>
+        <p style="font-size:13px;margin:12px 0 6px;"><strong>(6)</strong></p>
+        <div class="answer-lines">
+          <div class="line-row"></div>
+          <div class="line-row"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mondai">
+      <span class="q-label">(C)</span>空所（3）には次の４つの文が入る。正しく並び替え、解答欄に記号を順番に示せ。
+      <div style="margin-top:10px;font-size:13.5px;line-height:1.9;">
+        <p><strong>ア</strong> In addition, I also had a personal interest in it as an ordinary person who often tried, but failed, to make a change.</p>
+        <p><strong>イ</strong> Of course, I had an occupational interest in it as a writer who often dealt with topics concerning human nature.</p>
+        <p><strong>ウ</strong> This is a question which was somewhat interesting and meaningful to me in two ways.</p>
+        <p><strong>エ</strong> Why or why not, and why do they fail more often they succeed?</p>
+      </div>
+      <div style="margin-top:8px;font-size:13px;">
+        正解順：<span style="display:inline-block;border:1px solid var(--border);border-radius:4px;padding:4px 40px;background:var(--highlight);">　→　　→　　→　</span>
+      </div>
+    </div>
+
+    <div class="mondai">
+      <span class="q-label">(D)</span>空所（4）に入れるのに最も適切なものを選べ。
+      <div class="choice-row" style="margin-top:8px;">
+        <span class="choice">ア　for</span>
+        <span class="choice">イ　from</span>
+        <span class="choice">ウ　in</span>
+        <span class="choice">エ　with</span>
+      </div>
+      <div style="margin-top:6px;font-size:13px;">答え：<span style="display:inline-block;border:1px solid var(--border);border-radius:4px;padding:3px 30px;background:var(--highlight);"></span></div>
+    </div>
+
+    <div class="mondai">
+      <span class="q-label">(E)</span>下線部(5)を含む文が文脈に合う適切な英文になるように、下線部(5)内の語句を順に並び替え、<strong>２・４・６番目</strong>に入るものの記号を記せ。
+      <div style="margin-top:6px;font-size:13px;">
+        ２番目：<span style="display:inline-block;border:1px solid var(--border);border-radius:4px;padding:3px 24px;background:var(--highlight);margin-right:12px;"></span>
+        ４番目：<span style="display:inline-block;border:1px solid var(--border);border-radius:4px;padding:3px 24px;background:var(--highlight);margin-right:12px;"></span>
+        ６番目：<span style="display:inline-block;border:1px solid var(--border);border-radius:4px;padding:3px 24px;background:var(--highlight);"></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== 書き込み用本文 前半 ===== -->
+<div id="text1" class="section">
+  <div class="section-header"><span class="icon">🖊</span>§ 書き込み用本文（前半パート）</div>
+  <div class="section-body">
+    <div class="passage">
+      <p><span class="label-alpha">(a)</span>When I think of this book, I can't help remembering an old friend who, one day while we were chatting, gave me an important clue about the mysterious aspects of habits — a clue that gave me the idea of writing about them. <span class="label-alpha">(b)</span>Indeed, it would be fair to say that everything began with a question she asked during that conversation.</p>
+
+      <p><span class="label-alpha">(c)</span>For as long as I can remember, one of my favorite features in any book, magazine, or TV show has been the "before and after." <span class="label-alpha">(d)</span>These words have always caught my imagination and aroused my curiosity. <span class="label-alpha">(e)</span>Whenever I come across something about a "before and after" change, an image springs to my mind of a wonderful transformation the mere thought of which thrills me, and no matter what that change is like, I always get curious about it. <span class="label-alpha">(f)</span>Whether the change is as important as quitting smoking, or as trivial as reorganizing a desk, I love to read or hear about how and why it has been made.</p>
+
+      <p>As you know, sometimes, people can make dramatic changes, but more often, they can't.</p>
+
+      <p>Why or why not, and why do they fail more often than they succeed? This is a question which was somewhat interesting and meaningful to me in two ways. Of course, I had an occupational interest in it as a writer who often dealt with topics concerning human nature. <span class="label-alpha">(g)</span>In addition, I also had a personal interest in it as an ordinary person who often tried, but failed, to make a change.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 重要ポイント 前半 ===== -->
+<div id="points1" class="section">
+  <div class="section-header"><span class="icon">⭐</span>§ 重要ポイントまとめ（前半パート）</div>
+  <div class="section-body">
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(a)</span><span class="phrase">think of A</span>「Aについて考える」</div>
+      <div class="point-body">
+        <div class="example"><span class="en">What do you think of our new uniform?</span><br><span class="ja">「私たちの新しい制服についてどう思いますか。」</span></div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(a)′</span>テッパン表現 — <span class="phrase">cannot help DOing ＝ cannot help but DO</span></div>
+      <div class="point-body">
+        <p class="meaning">「〜せざるを得ない」「思わず〜してしまう」</p>
+        <div class="example">
+          <span class="en">Bill was so funny that she couldn't help laughing.</span><br>
+          <span class="en">= Bill was so funny that she couldn't help but laugh.</span><br>
+          <span class="ja">「ビルがとてもおかしかったので、彼女は思わず笑ってしまった。」</span>
+        </div>
+        <div class="example">
+          <span class="en">They couldn't help but admire her courage.</span><br>
+          <span class="ja">「彼らは彼女の勇気には感心せざるを得なかった。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(a)″</span>挿入・副詞はスルーの原則</div>
+      <div class="point-body">
+        <p>挿入句をどけると文の骨格が浮き出る。</p>
+        <div class="example">
+          <span class="en">We compared groups of people <u>who, as far as we could tell, are exactly the same</u>.</span><br>
+          <span class="ja">➤ 挿入句をどけると、普通の関係代名詞の主格の who だとわかる。</span>
+        </div>
+        <div class="example">
+          <span class="en">A husband<u>, for instance,</u> is able to convince his wife, <u>who never eats meat or fish,</u> to visit a hamburger shop.</span><br>
+          <span class="ja">➤ 挿入句をどけると S is able to convince O to DO の骨格が浮き出る。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(a)‴</span>―（ダッシュ）の働き</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">He gave me a piece of advice — a piece of advice that changed my life.</span><br>
+          <span class="ja">「彼は私に一つの助言をくれた。そしてそれは、私の人生を変える助言だった。」</span>
+        </div>
+        <p style="font-size:13px;color:var(--muted);">※ ダッシュ以降で前の名詞を言い換え・補足する。</p>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(a)⁗</span>同格の of ― 抽象 <em>of</em> 具体：「具体という抽象」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">the fact <u>of his being a student</u> (= the fact that he is a student)</span><br>
+          <span class="ja">「彼が学生であるという事実」</span>
+        </div>
+        <p style="margin:8px 0 4px;font-weight:700;font-size:13px;">【練習】括弧内に「抽象」「具体」を入れよ</p>
+        <div class="exercise-block">
+          <p>They are extremely efficient animals, feeding on wounded or dying animals, thus performing an important role in nature <span style="text-decoration:underline;">of getting rid of the weaker animals in a species</span>.</p>
+          <p>（　　　　）（　　　　）</p>
+        </div>
+        <div class="exercise-block">
+          <p>Fast food chains face a difficulty: <span style="text-decoration:underline;">how to get people to eat food that is often very bad for their health</span>.</p>
+          <p>（　　　　）（　　　　）</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(b)</span><span class="phrase">It is fair to say that節</span>「[that節]と言っても差し支えない」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">I think it is fair to say that they are pleased with this latest offer.</span><br>
+          <span class="ja">「彼らがこの最新の提案に満足していると言ってもいいと思います。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(b)′</span><span class="phrase">begin with A</span>「Aから始める」／<span class="phrase">begin by DOing</span>「DOingすることから始める」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">I began by writing my own name.</span><span class="ja">　「まず自分の名前を書いた。」</span>
+        </div>
+        <div class="example">
+          <span class="en">Let's begin with your work history.</span><span class="ja">　「まずあなたの職歴から始めましょう。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(b)″</span>カタマリで従属接続詞になるやつたち</div>
+      <div class="point-body">
+        <table class="data-table">
+          <thead><tr><th>英語</th><th>日本語テンプレ</th><th>例文</th></tr></thead>
+          <tbody>
+            <tr><td class="phrase-cell">as far as S' V'</td><td>S'がV'する限り</td><td>The desert stretches as far as the eyes can see.</td></tr>
+            <tr><td class="phrase-cell">as long as S' V'</td><td>S'がV'しさえすれば / する限り</td><td>I'll never forget that day as long as I live.</td></tr>
+            <tr><td class="phrase-cell">once S' V'</td><td>一旦S'がV'すると</td><td>Once he makes up his mind, he doesn't change it.</td></tr>
+            <tr><td class="phrase-cell">unless S' V'</td><td>S'がV'しない限り</td><td>We'll go to the beach unless it rains.</td></tr>
+            <tr><td class="phrase-cell">every time S' V'</td><td>S'がV'するたびに</td><td>Every time I see her, I get nervous.</td></tr>
+            <tr><td class="phrase-cell">next time</td><td>次にS'がV'したときに</td><td>Next time I see you, I'll show you the pictures.</td></tr>
+            <tr><td class="phrase-cell">as soon as S' V'</td><td>S'がV'するとすぐに</td><td>As soon as I got home, the phone rang.</td></tr>
+            <tr><td class="phrase-cell">the moment S' V'</td><td>S'がV'するとすぐに</td><td>The moment I got into bed, I fell asleep.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(c)</span><span class="phrase">feature</span> ① 「特徴・特色」　② 「（新聞・雑誌などの）特集記事」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">Solitude is a feature of urban life.</span><span class="ja">　「孤独は都会生活の１つの特色である。」</span>
+        </div>
+        <div class="example">
+          <span class="en">This magazine has a feature on healthy habits.</span><span class="ja">　「この雑誌には健康的な習慣についての特集記事がある。」</span>
+        </div>
+        <p style="margin-top:6px;font-size:13px;"><span style="font-weight:700;">※ run a feature on A</span> で「A特集をする」というカタマリでも覚えよう。</p>
+        <div class="example">
+          <span class="en">The famous magazine ran a feature on Japan.</span><span class="ja">　「その有名な雑誌は、日本特集をした。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(d)</span>【無生物主語構文のテンプレ】</div>
+      <div class="point-body">
+        <p style="font-weight:700;margin-bottom:6px;">① 「〜させる」系</p>
+        <p style="font-size:13px;font-style:italic;margin-bottom:4px;">make O DO / force O to DO / compel O to DO / cause O to DO / lead O to DO</p>
+        <div class="example">
+          <span class="en">What made you say that?</span><span class="ja">　「なぜあなたはそんなことを言ったのですか。」</span>
+        </div>
+        <div class="example">
+          <span class="en">Financial conditions forced him to move to the suburbs.</span><br>
+          <span class="ja">「経済的な事情により、彼は郊外に引っ越さざるを得なかった。」</span>
+        </div>
+        <hr class="divider">
+        <p style="font-weight:700;margin-bottom:4px;">② 「妨げる」系</p>
+        <p style="font-size:13px;font-style:italic;margin-bottom:4px;">prevent O from DOing / keep O from DOing / stop O from DOing</p>
+        <div class="example">
+          <span class="en">Urgent business prevented her from attending the meeting.</span><br>
+          <span class="ja">「急用ができたので、彼女はその会議に出席できなかった。」</span>
+        </div>
+        <hr class="divider">
+        <p style="font-weight:700;margin-bottom:4px;">③ 「思い出させる」「奪う」系</p>
+        <p style="font-size:13px;font-style:italic;margin-bottom:4px;">remind A of B / rob A of B / deprive A of B</p>
+        <div class="example">
+          <span class="en">This song reminds me of my college days.</span><span class="ja">　「この歌を聞くと、私は大学時代を思い出す。」</span>
+        </div>
+        <hr class="divider">
+        <p style="font-weight:700;margin-bottom:4px;">④ 「連れて行く・来る」系</p>
+        <p style="font-size:13px;font-style:italic;margin-bottom:4px;">bring / take / lead</p>
+        <div class="example">
+          <span class="en">An hour's walk brought me to the beautiful lake.</span><span class="ja">　「１時間歩くと、私はその美しい湖に着いた。」</span>
+        </div>
+        <hr class="divider">
+        <p style="font-weight:700;margin-bottom:4px;">⑤ 「告げる」系</p>
+        <p style="font-size:13px;font-style:italic;margin-bottom:4px;">show / say / tell</p>
+        <div class="example">
+          <span class="en">His letter says that he will come back next month.</span><br>
+          <span class="ja">「彼の手紙によると、彼は来月戻ってくるそうだ。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(d)′</span><span class="phrase">catch one's attention / imagination / interest</span>「人の注意／想像／興味をひく」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">A sign on the wall caught my attention.</span><span class="ja">　「壁の広告が私の興味をひいた。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(e)</span><span class="phrase">come across O</span>「O（人）に偶然出くわす」「O（事・物）を偶然見つける」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">Where did you come across the rare stamps?</span><span class="ja">　「その珍しい切手はどこで見つけたのですか。」</span>
+        </div>
+        <div class="example">
+          <span class="en">She came across him at the airport the other day.</span><span class="ja">　「この前空港で彼女は偶然彼に出くわした。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(e)′</span><span class="phrase">spring</span> 自動詞「突然やってくる・急に現れる」/ <span class="phrase">come / leap / spring to mind</span>「突然頭に浮かぶ」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">A doubt sprang up in my mind.</span><span class="ja">　「ある疑念が私の心に湧き起こった。」</span>
+        </div>
+        <div class="example">
+          <span class="en">After hearing his presentation, two questions came to mind.</span><br>
+          <span class="ja">「彼の発表を聞き終わると、２つの疑問が頭に浮かんだ。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(e)″</span>難しいけど出てる… — <strong>【the 名詞１＋名詞２＋of which】の読み替えルール</strong></div>
+      <div class="point-body">
+        <p style="font-size:13px;margin-bottom:8px;"><strong>ルール①</strong>　【the 名詞１＋名詞２＋of which】 は 【the 名詞１＋whose＋名詞２＋後ろの不完全カタマリ】に読み替えろ</p>
+        <div class="exercise-block">
+          <p><strong>練習</strong>：A house <span style="text-decoration:underline;">the windows of which</span> are broken stands empty in the neighborhood.</p>
+          <div class="write-lines-ex">
+            <div class="line">書き換え：</div>
+            <div class="line" style="margin-top:8px;">和訳：</div>
+          </div>
+        </div>
+        <div class="exercise-block" style="margin-top:10px;">
+          <p>The company released a new product <span style="text-decoration:underline;">the development of which</span> had taken many years.</p>
+          <div class="write-lines-ex">
+            <div class="line">書き換え：</div>
+            <div class="line" style="margin-top:8px;">和訳：</div>
+          </div>
+        </div>
+        <hr class="divider" style="margin-top:12px;">
+        <p style="font-size:13px;margin-bottom:8px;"><strong>ルール②　分離のルール</strong>　— 被修飾語と修飾語を分離させて文を「小顔」にする（1文型のとき多発）</p>
+        <div class="example">
+          <span class="en">The day will come <u>(when robots will do most of our housework)</u>.</span><br>
+          <span class="ja">「ロボットが家事の大半をやってくれる日が来るでしょう。」</span>
+        </div>
+        <div class="example">
+          <span class="en">The demand grew <u>(for the protection of endangered species)</u>.</span><br>
+          <span class="ja">「絶滅危惧種保護の需要が高まった。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(e)‴</span><span class="phrase">no matter what S' V'</span>「たとえ何でも〜」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">Don't trust him, no matter what he says.</span><span class="ja">　「たとえ彼が何を言おうと信用するな。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(f)</span><strong>whether の２つの用法</strong></div>
+      <div class="point-body">
+        <p style="font-weight:700;margin-bottom:4px;">① 副詞 whether 節（〜であろうとなかろうと）</p>
+        <div class="example">
+          <span class="en">Whether he is chairman or not, he deserves to be criticized.</span><br>
+          <span class="ja">「彼が議長であろうとなかろうと、非難されて当然だ。」</span>
+        </div>
+        <hr class="divider">
+        <p style="font-weight:700;margin-bottom:4px;">② 名詞 whether 節（〜かどうか）</p>
+        <div class="example">
+          <span class="en">He asked me whether I liked the plan or not.</span><br>
+          <span class="ja">「彼は私にそのプランが気に入っているか聞いた。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(g)</span>共通関係 —（A＋B）Y 型</div>
+      <div class="point-body">
+        <p style="font-size:13px;margin-bottom:6px;">考え方は「他動詞①　and　他動詞②　共通関係」と同じ。</p>
+        <p style="font-weight:700;margin-bottom:4px;">[パターン１] 共通の目的語</p>
+        <div class="example">
+          <span class="en">★ If we do not <u>pay attention to</u> or <u>respect</u> values of others, we cannot be called internationally-minded.</span><br>
+          <span class="ja">「もし他者の価値観に注意を払い、尊重しなければ、私たちは国際的な精神を持った人とは言えない。」</span>
+        </div>
+        <p style="font-weight:700;margin:8px 0 4px;">[パターン２] 共通の名詞限定</p>
+        <div class="example">
+          <span class="en">The myth of the hero is the most <u>common</u> and the <u>best-known</u> myth in the world.</span><br>
+          <span class="ja">「英雄神話は、世界で最も一般的で、かつ最もよく知られた神話である。」</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== 自分の和訳 前半 ===== -->
+<div id="mytrans1" class="section">
+  <div class="section-header"><span class="icon">📄</span>§ 自分の和訳（前半パート）</div>
+  <div class="section-body">
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">各文の和訳を書き込もう。番号は本文の文(a)〜(g)に対応。</p>
+    <div class="write-block"><div class="write-num">(a)</div><div class="write-area"><div class="write-line"></div><div class="write-line"></div></div></div>
+    <div class="write-block"><div class="write-num">(b)</div><div class="write-area"><div class="write-line"></div><div class="write-line"></div></div></div>
+    <div class="write-block"><div class="write-num">(c)</div><div class="write-area"><div class="write-line"></div><div class="write-line"></div></div></div>
+    <div class="write-block"><div class="write-num">(d)</div><div class="write-area"><div class="write-line"></div></div></div>
+    <div class="write-block"><div class="write-num">(e)</div><div class="write-area"><div class="write-line"></div><div class="write-line"></div></div></div>
+    <div class="write-block"><div class="write-num">(f)</div><div class="write-area"><div class="write-line"></div><div class="write-line"></div></div></div>
+    <div class="write-block"><div class="write-num">(g)</div><div class="write-area"><div class="write-line"></div><div class="write-line"></div></div></div>
+  </div>
+</div>
+
+<!-- ===== 駿台全訳 前半 ===== -->
+<div id="trans1" class="section">
+  <div class="section-header"><span class="icon">🈯</span>§ 駿台全訳（前半パート）</div>
+  <div class="section-body">
+    <div class="translation">
+      <p>最近，私は習慣をメインテーマとする本を書きました。<span class="trans-label">(a)</span>この本について考えると，ある古い友人のことが思い出さずにはいられません。彼女はある日，一緒におしゃべりをしているときに，習慣の持つ不思議な側面についての重要な手がかりを与えてくれて，それが，私が習慣について何かを書くという考えを与える手がかりとなりました。<span class="trans-label">(b)</span>実際のところ，その会話の間に彼女が口にしたある疑問から，すべてが始まったと言って差し支えないでしょう。</p>
+
+      <p><span class="trans-label">(c)</span>覚えている限りずっと，本や雑誌やテレビ番組のどんなものでも，特集の中で私が気に入っているものの１つが，「ビフォー・アンド・アフター」でした。<span class="trans-label">(d)</span>このフレーズが出てくると必ず，私の想像は広がり，好奇心が沸き起こります。<span class="trans-label">(e)</span>「ビフォー・アンド・アフター」の変化に関するものに出くわすと必ず，考えるだけでも高揚感を覚える驚嘆すべき変容のイメージがいきなり頭に浮かび，その変化がどのようなものであるかにかかわらず，私はいつもそれについて知りたくなるのです。<span class="trans-label">(f)</span>禁煙と同様に重要なものであろうと，机の再整理をするのと同様に些細なものでも，その変化がどのようになぜ行われたかについて読んだり聞いたりするのが，私は大好きです。</p>
+
+      <p>皆さんもご存じのように，人は劇的に変化できることもありますが，できないことの方が多いのです。なぜ劇的に変化できたり，変化できなかったりし，なぜ成功するよりも失敗することの方が多いのでしょうか。２つの点でこの疑問はいくらか興味深く意味深いと，私は感じていました。当然のことですが，人間の本性に関する話題を扱うことが多い作家の1人として，職業柄この疑問に興味を感じていました。<span class="trans-label">(g)</span>さらに，変化しようとしてみても変化できないことが多い普通の人間の１人として，個人的にもそれに興味を感じていました。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 書き込み用本文 後半 ===== -->
+<div id="text2" class="section">
+  <div class="section-header"><span class="icon">🖊</span>§ 書き込み用本文（後半パート）</div>
+  <div class="section-body">
+    <div class="passage">
+      <p><span class="label-alpha">(h)</span>A few years ago, I noticed a pattern: whether people successfully made a change they'd intended to or whether they failed to do so, their explanations about those successes or failures very often related to the formation of some kind, or kinds, of habit.</p>
+
+      <p><span class="label-alpha">(i)</span>Then, one day, when I was having lunch with my old friend, she said something that turned my casual interest in habits into a full-time preoccupation. After we'd looked at our menus, she said, "I want to get myself in the habit of exercise, but I can't, and it really bothers me." <span class="label-alpha">(j)</span>In a brief statement that would absorb me for a long time to come, she added, "In high school, I was on the track team, and I never missed track practice, <span class="label-alpha">(k)</span>but I can no longer go running. <span class="label-alpha">(l)</span>Why?" "Why?" I echoed, as I mentally looked through everything I'd learned throughout my career as a writer for some relevant insight or useful explanation, but I could find none.</p>
+
+      <p><span class="label-alpha">(m)</span>Our conversation shifted to other topics, but as the days passed, I couldn't get this exchange out of my mind. Her question buzzed in my head with the special energy that told me I'd come across something important.</p>
+
+      <p><span class="label-alpha">(n)</span>Finally, I connected the exchange with what I'd noticed about people's accounts of their changes, and it struck me: To understand how people are able to change, I must understand habits. <span class="label-alpha">(o)</span>I felt the sense of joyous anticipation and relief that I feel every time I get the idea for my next book. It was obvious! Habits!</p>
+
+      <p>This is how I set out to write my book about habits, and I'm really grateful to my friend. <span class="label-alpha">(p)</span>I can't praise her contribution too highly, for it was no doubt her casual remark which led me to clearly realize how powerful a part habits play in our lives and to decide to research and write about the subject. In fact, but for that remark of hers, I might never have even given serious thought to habits.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 重要ポイント 後半 ===== -->
+<div id="points2" class="section">
+  <div class="section-header"><span class="icon">⭐</span>§ 重要ポイントまとめ（後半パート）</div>
+  <div class="section-body">
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(h)</span><span class="phrase">whether S' V' or whether S V</span>（whether節の繰り返し）</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">I don't know whether she is still in Tokyo or whether she has gone to Osaka.</span><br>
+          <span class="ja">「彼女はまだ東京にいるのか、それとも大阪へ行ってしまったのか私には分からない。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(h)′</span><span class="phrase">make a change</span>「変える・改良する」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">We must make a radical change in our eating habits.</span><br>
+          <span class="ja">「私たちは食生活を根本的に変えなくてはならない。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(h)″</span><span class="phrase">S intend to DO</span>「SはDOするつもりである」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">I fully intend to graduate this year.</span><span class="ja">　「絶対に今年卒業するつもりだ。」</span>
+        </div>
+        <div class="example">
+          <span class="en">I intend him to help me with my homework. = I intend that he help me with my homework.</span><br>
+          <span class="ja">「彼に宿題を手伝ってもらうつもりだ。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(h)‴</span><span class="phrase">S fail to DO</span>「SはDOしそこなう・DOできない」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">The parachute failed to open.</span><span class="ja">　「パラシュートは開かなかった。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(i)</span><span class="phrase">turn A into B</span>「AをBに変える」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">Heat turns ice into water.</span><span class="ja">　「熱は氷を水に変える。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(i)′</span><span class="phrase">casual</span> [形]「何気ない・無頓着な・さりげない」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">It was just a casual remark — I wasn't really serious.</span><br>
+          <span class="ja">「何気なく言っただけだ。本気じゃなかった。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(j)</span>時間の表現 <span class="phrase">to come</span>「来たる時間・今後の時間・これから先の時間」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">This moment will live in our memory for many years to come.</span><br>
+          <span class="ja">「この瞬間はこれから先の何年間も私たちの記憶に残るでしょう。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(k)</span><span class="phrase">go DOing</span>「DOingしにいく」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">I went shopping in Umeda with my friend last weekend.</span><br>
+          <span class="ja">「私は先週末、友達と梅田に買い物をしに行きました。」</span>
+        </div>
+        <p style="font-size:12px;color:var(--muted);">※ 場所の前の前置詞は in</p>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(l)</span>「同時の as」 — 「…すると同時に」「…しながら」（when より同時性を強く表す）</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">As I entered the room, applause broke out.</span><br>
+          <span class="ja">「私が部屋に入っていくと同時に拍手が起こった。」</span>
+        </div>
+        <div class="example">
+          <span class="en">When[as×] I got home, I washed my hands and gargled.</span><br>
+          <span class="ja">「家に帰って手を洗い、うがいをした。」</span>
+          <div style="font-size:12px;color:var(--muted);">➤ 時間的な間隔がある場合は as は使えない。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(l)′</span><span class="phrase">look through A</span>「Aに目を通す・Aを詳しく調べる」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">He looks through the newspaper every morning.</span><span class="ja">　「彼は毎朝新聞に目を通す。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(m)</span><span class="phrase">get A out of B</span>「BからAを出す・取り出す・抜き取る」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">He got his wallet out of his pocket.</span><span class="ja">　「彼はポケットから財布を取りだした。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(n)</span><span class="phrase">connect A with B</span>「AをBと関係づける・AでBを連想する（= associate）」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">We used to connect London with fog.</span><span class="ja">　「ロンドンで霧をよく連想したものだ。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(n)′</span><span class="phrase">account</span>「説明・報告・報告書」／<span class="phrase">give an account of A</span>「Aの説明・報告をする」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">We've got eyewitness accounts from passengers who were on the plane.</span><br>
+          <span class="ja">「私たちは飛行機に乗っていた乗客から目撃証言を得た。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(p)</span><span class="phrase">cannot 〜 too</span>「いくら〜しても…しすぎるということはない」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">You can't be too careful about your health.</span><br>
+          <span class="ja">「どんなに体に気をつけても気をつけすぎということはない。」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(p)′</span><span class="phrase">, for ＋ 節</span>「というのも、…だから」</div>
+      <div class="point-body">
+        <div class="exercise-block">
+          <p>A husband, for instance, is able to convince his wife, who never eats meat or fish, to visit a hamburger shop, <strong>for</strong> salads and fruit juices are on the menu.　【H1 NO8 fast food店 冊子】</p>
+          <div class="write-lines-ex">
+            <div class="line">和訳：</div>
+            <div class="line" style="margin-top:6px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(p)″</span><span class="phrase">S lead O to A</span> のあれこれ</div>
+      <div class="point-body">
+        <p style="font-weight:700;margin-bottom:4px;">① 物理的にAという場所に導く</p>
+        <div class="example">
+          <span class="en">This street leads you to the station.</span><span class="ja">　「この通りを行けば、あなたはその駅に行くことができる。」</span>
+        </div>
+        <p style="font-weight:700;margin:8px 0 4px;">② 精神的にAという思考へと至らせる</p>
+        <div class="example">
+          <span class="en">This led me to believe that he had told me the truth.</span><br>
+          <span class="ja">「これ（のおかげ）で、彼が真実を述べたと私は信じた。」</span>
+        </div>
+        <p style="font-weight:700;margin:8px 0 4px;">③ 結果的にAという結論へと至らせる</p>
+        <div class="example">
+          <span class="en">Further experience will lead you to see how deep art is.</span><br>
+          <span class="ja">「もっと経験を積めば、芸術がいかに深いものかがわかるだろう。」</span>
+        </div>
+        <div class="exercise-block" style="margin-top:10px;">
+          <p>The feeling of envy that accompanies this situation leads you to tell the obvious untruth that you've lost even more weight.　【H1 NO16 Lie冊子】</p>
+          <div class="write-lines-ex">
+            <div class="line">和訳：</div>
+            <div class="line" style="margin-top:6px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(p)‴</span><span class="phrase">no doubt</span>「疑いもなく・きっと」</div>
+      <div class="point-body">
+        <div class="example">
+          <span class="en">This will no doubt become a focus of controversy.</span><span class="ja">　「これはきっと議論の中心となるだろう。」</span>
+        </div>
+        <p style="font-size:12px;color:var(--muted);">※ no doubt は肯定の言い合いが強いので、文頭に持ってきても倒置は発生しない。</p>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(p)⁗</span>強調構文 — <span class="phrase">It is 強調したい要素 ＋ that/which/who ＋ 不完全文</span></div>
+      <div class="point-body">
+        <div class="exercise-block">
+          <p>It is <u>not the song or rhyme itself</u> that supports attachment and language development, but rather the combination of loving interaction between parent and child with the singing and chanting.　【H1 NO19 parentese冊子】</p>
+          <div class="write-lines-ex">
+            <div class="line">和訳：</div>
+            <div class="line" style="margin-top:6px;"></div>
+          </div>
+        </div>
+        <div style="background:#fffbe6;border-radius:6px;padding:12px;margin-top:10px;font-size:13px;line-height:1.9;">
+          <p><strong>～ 吉田の頭の中 ～</strong></p>
+          <p>❶ it is 〜から始まっているなあ。[強調構文]か[仮主語真主語]かどっちやろ〜</p>
+          <p>❷ that 以下が supports(V) attachment and language development(O)って Sナシの不完全文が来てるな〜</p>
+          <p>❸ ん、but?? しかも、rather?? 明らかに、not A but B で supports の S を強調するような構造やし、the song or rhyme itself supports … が成立する。しかも itself を先行詞には取れへんから関係代名詞の that ではなく、<strong>分裂文（強調構文）確定</strong>やな。</p>
+          <p>❹ 全体像は「愛着や言語発達を支えるのは、歌や詩それ自体ではなく、むしろ（the combination 以下）なのだ。」か。</p>
+          <p>❺ combine C with D → 名詞構文で展開 → <strong>和訳完成！</strong></p>
+          <p style="margin-top:6px;color:var(--accent2);font-weight:700;">【補足】強調構文は「他の候補を否定する」。not A but B を伴うことが多い ⇒ 単語・熟語をちゃんと覚えろ！</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="point-block">
+      <div class="point-head"><span class="point-label">(p)″″</span>品詞の本質的な理解 — <strong>〈形容詞＋a/an＋名詞〉の語順</strong>と熟語崩し</div>
+      <div class="point-body">
+        <p style="font-size:13px;margin-bottom:6px;">as / too / so / how などは副詞のため、後ろに名詞を直接持ってくることができない。<br>→ <strong>〈形容詞 ＋ a/an ＋ 名詞〉</strong> というイレギュラーな語順になる。</p>
+        <div class="example">
+          <span class="en">(1) He will be <u>as great a man as</u> his father.</span><span class="ja">　「彼は彼の父親と同じくらい偉大な人になるだろう。」</span>
+        </div>
+        <div class="example">
+          <span class="en">(2) This is <u>too small a room</u> to live in.</span><span class="ja">　「ここは住むには狭すぎる部屋だ。」</span>
+        </div>
+        <div class="example">
+          <span class="en">(3) She is <u>so famous a writer</u> that everyone has heard of her.</span><br>
+          <span class="ja">「彼女はとても有名な作家なので、みんなが彼女のことを聞いたことがある。」</span>
+        </div>
+
+        <div style="background:#f5f5f0;border-radius:4px;padding:10px;margin:8px 0;font-size:13px;">
+          <p><strong>確認</strong>　"Everything you cook tastes really good."</p>
+          <p>　→　"Thanks, but I don't think I'm ( __ ) cook as you."</p>
+          <div class="choice-row" style="margin-top:6px;">
+            <span class="choice">① a good as</span>
+            <span class="choice">② as a good</span>
+            <span class="choice">③ as good a</span>
+            <span class="choice">④ good as a</span>
+          </div>
+        </div>
+
+        <p style="font-weight:700;margin:12px 0 6px;">【間接疑問による熟語崩し】how の間接疑問に書き換えよ</p>
+        <div class="exercise-block">
+          <p><strong>(1)</strong> Education plays an important role in society.</p>
+          <div class="write-lines-ex"><div class="line">how の間接疑問：</div><div class="line" style="margin-top:6px;">和訳：</div></div>
+        </div>
+        <div class="exercise-block" style="margin-top:8px;">
+          <p><strong>(2)</strong> Parents have a great influence on children.</p>
+          <div class="write-lines-ex"><div class="line">how の間接疑問：</div><div class="line" style="margin-top:6px;">和訳：</div></div>
+        </div>
+        <div class="exercise-block" style="margin-top:8px;">
+          <p><strong>(3)</strong> This was a difficult decision.</p>
+          <div class="write-lines-ex"><div class="line">how の間接疑問：</div><div class="line" style="margin-top:6px;">和訳：</div></div>
+        </div>
+        <div class="exercise-block" style="margin-top:8px;">
+          <p><strong>(4)</strong> Global warming is a serious problem.</p>
+          <div class="write-lines-ex"><div class="line">how の間接疑問：</div><div class="line" style="margin-top:6px;">和訳：</div></div>
+        </div>
+        <p style="font-size:12px;color:var(--accent2);font-weight:700;margin-top:8px;">⇒ &lt;how 形容詞 ＋ 名詞 ＋ 名詞&gt; という形があれば熟語崩しを疑え！</p>
+      </div>
+    </div>
+
+    <!-- 熟語崩し一覧 -->
+    <div class="point-block">
+      <div class="point-head">熟語崩しのパターン一覧</div>
+      <div class="point-body">
+        <p style="font-weight:700;margin-bottom:6px;">関係代名詞による熟語崩し</p>
+        <table class="data-table">
+          <thead><tr><th>#</th><th>英文</th><th>元の熟語</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>The effect (acid rain has φ on plants) is serious.</td><td><em>have a/an ~ effect on A</em>「Aに〜な影響をもたらす」</td></tr>
+            <tr><td>2</td><td>It is difficult [to realize the enormously important part (that language plays φ in our social behavior)].</td><td><em>play a/an ~ part in A</em>「Aにおいて〜な役割を果たす」</td></tr>
+            <tr><td>3</td><td>…the attention (they paid φ to their personal appearance)…</td><td><em>pay attention to A</em>「Aに注意を払う」</td></tr>
+          </tbody>
+        </table>
+        <p style="font-weight:700;margin:10px 0 6px;">受動態による熟語崩し</p>
+        <table class="data-table">
+          <thead><tr><th>#</th><th>英文</th><th>元の熟語</th></tr></thead>
+          <tbody>
+            <tr><td>4</td><td>Good care should be taken φ of these orphans.</td><td><em>take care of A</em>「Aの世話をする」</td></tr>
+            <tr><td>5</td><td>…constant use must be made φ of maps.</td><td><em>make use of A</em>「Aを利用する」</td></tr>
+            <tr><td>6</td><td>…growing importance is being attached φ to creating…</td><td><em>attach importance to A</em>「Aを重視する」</td></tr>
+          </tbody>
+        </table>
+        <p style="font-weight:700;margin:10px 0 6px;">不定詞・過去分詞・how・whatによる熟語崩し</p>
+        <table class="data-table">
+          <thead><tr><th>#</th><th>英文</th><th>元の熟語</th></tr></thead>
+          <tbody>
+            <tr><td>7</td><td>We have no fault (to find φ with his writing).</td><td><em>find fault with A</em>「Aにけちをつける」</td></tr>
+            <tr><td>8</td><td>…the important part (played φ in their lives by economic factors).</td><td><em>play a/an ~ part in A</em></td></tr>
+            <tr><td>9</td><td>It's surprising [how much influence our beliefs have φ on what we see].</td><td><em>have ~ influence on A</em></td></tr>
+            <tr><td>10</td><td>…what role we should play φ in life…</td><td><em>play a ~ role in A</em></td></tr>
+          </tbody>
+        </table>
+        <p style="font-weight:700;margin:10px 0 6px;">強調構文による熟語崩し</p>
+        <table class="data-table">
+          <thead><tr><th>#</th><th>英文</th><th>元の熟語</th></tr></thead>
+          <tbody>
+            <tr><td>11</td><td>It is in this last fact that the danger lies.</td><td><em>lie in A</em>「Aにある」</td></tr>
+            <tr><td>12</td><td>It is on each individual effort the safety and happiness of the whole depends.</td><td><em>depend on A</em>「Aに依存する・A次第である」</td></tr>
+            <tr><td>13</td><td>…it is his own parents whom…he values and with whom he identifies himself.</td><td><em>identify oneself with A</em>「Aに共感する・賛同する」</td></tr>
+          </tbody>
+        </table>
+        <p style="font-weight:700;margin:10px 0 6px;">熟語だまし</p>
+        <table class="data-table">
+          <thead><tr><th>#</th><th>英文</th><th>注意ポイント</th></tr></thead>
+          <tbody>
+            <tr><td>14</td><td>Samantha is too ready to make promises.</td><td>too〜to… ではなく <em>be ready to DO</em>「DOしがちだ」</td></tr>
+            <tr><td>15</td><td>The atmosphere of that hotel is one of happy domesticity.</td><td>one of 名複 ではなく <em>one</em> が an atmosphere の代名詞</td></tr>
+            <tr><td>16</td><td>…it is perfectly in order to discuss each other's incomes…</td><td>in order to do ではなく <em>in order</em> が「許されて・適切な」という C の役割</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== 自分の和訳 後半 ===== -->
+<div id="mytrans2" class="section">
+  <div class="section-header"><span class="icon">📄</span>§ 自分の和訳（後半パート）</div>
+  <div class="section-body">
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">各文の和訳を書き込もう。番号は本文の文(h)〜(p)に対応。</p>
+    <div class="write-block"><div class="write-num">(h)</div><div class="write-area"><div class="write-line"></div><div class="write-line"></div></div></div>
+    <div class="write-block"><div class="write-num">(i)</div><div class="write-area"><div class="write-line"></div><div class="write-line"></div></div></div>
+    <div class="write-block"><div class="write-num">(j)</div><div class="write-area"><div class="write-line"></div><div class="write-line"></div></div></div>
+    <div class="write-block"><div class="write-num">(k)</div><div class="write-area"><div class="write-line"></div></div></div>
+    <div class="write-block"><div class="write-num">(l)</div><div class="write-area"><div class="write-line"></div><div class="write-line"></div></div></div>
+    <div class="write-block"><div class="write-num">(m)</div><div class="write-area"><div class="write-line"></div><div class="write-line"></div></div></div>
+    <div class="write-block"><div class="write-num">(n)</div><div class="write-area"><div class="write-line"></div><div class="write-line"></div></div></div>
+    <div class="write-block"><div class="write-num">(o)</div><div class="write-area"><div class="write-line"></div></div></div>
+    <div class="write-block"><div class="write-num">(p)</div><div class="write-area"><div class="write-line"></div><div class="write-line"></div><div class="write-line"></div></div></div>
+  </div>
+</div>
+
+<!-- ===== 駿台全訳 後半 ===== -->
+<div id="trans2" class="section">
+  <div class="section-header"><span class="icon">🈯</span>§ 駿台全訳（後半パート）</div>
+  <div class="section-body">
+    <div class="translation">
+      <p><span class="trans-label">(h)</span>数年前に，私はあるパターンがあることに気づきました。人々が変わろうと意図したようにうまく変わることができたのか，変わることができなかったのかに関わらず，その成功や失敗についての彼らの説明は，たいていの場合，何らかの習慣の形成と関係があったのです。</p>
+
+      <p><span class="trans-label">(i)</span>そして，ある日，私が旧友と昼食をとっているときに彼女が，私の習慣に対するなんとなくの興味を，いつも頭から離れないものに変えるあることを言いました。メニューを見た後で，彼女は「運動の習慣を身につけたいのだけれどうまくいかなくて，本当に嫌になっちゃうわ」と言いました。<span class="trans-label">(j)</span>その後長い間私の心に留まることになる短い発言の中で，彼女は「高校で陸上部にいたときは，一度も練習を休んだことがなかったのに，<span class="trans-label">(k)</span>今はもう走りに出かけることができないのよね。どうしてなのかしら」と加えました。<span class="trans-label">(l)</span>私は「どうしてなのかしら」とおうむ返ししながら，作家としての経歴の中でそれまで学んできたことのすべてを頭の中で振り返って，何か適切な洞察や役に立つ説明を探し出そうとしたのですが，まったく見つかりませんでした。</p>
+
+      <p><span class="trans-label">(m)</span>私たちは別の話題へと移りましたが，日が経つにつれて，このやり取りを私の頭から消すことができませんでした。彼女の疑問は私の頭の中を駆け巡り，その尋常ではない勢いは，何か重要なことに出くわしたということを私に告げていました。</p>
+
+      <p><span class="trans-label">(n)</span>とうとう，彼女とのやり取りと人々が変化について行う説明に関して私が気づいていたことが，私の頭の中でつながりました。そのときひらめいたのは，どうすれば人々が変化できるかを理解するには習慣を理解しなければならない，ということでした。<span class="trans-label">(o)</span>私は，次の本のアイデアが浮かぶといつも感じる楽しい期待感と安堵感を感じました。間違いありません！習慣です！</p>
+
+      <p>こんなふうにして，私は習慣をメインテーマとする本を書き始めました。この友人には感謝の気持ちで一杯です。<span class="trans-label">(p)</span>彼女のしてくれた貢献は，いくら賞賛しても賞賛しすぎにはならないほどのものです。というのも，間違いなくまさに彼女の何気ない発言がきっかけとなって，習慣が私たちの生活の中でどれほど影響力のある役割を果たしているかを私がはっきりと認識し，その題材について調査して文章を書こうと私が決心したのですから。実際，彼女のあの発言がなければ，私が習慣について真剣に考えることすら，まったくなかったかもしれないのです。</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrapper -->
+
+<script>
+// ナビゲーション：スクロールで現在地のピルをハイライト
+const pills = document.querySelectorAll('.nav-pill');
+const sections = [...pills].map(p => document.querySelector(p.getAttribute('href')));
+window.addEventListener('scroll', () => {
+  let cur = -1;
+  sections.forEach((s, i) => {
+    if (s && window.scrollY >= s.offsetTop - 80) cur = i;
+  });
+  pills.forEach((p, i) => {
+    p.style.background = i === cur ? 'var(--accent)' : '';
+    p.style.color = i === cur ? '#fff' : '';
+  });
+});
+</script>
+
+</body>
+</html>
