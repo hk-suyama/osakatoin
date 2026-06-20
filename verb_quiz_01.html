@@ -259,8 +259,8 @@ const KEI_LIST  = ["未然","連用","終止","連体","已然","命令"];
 const GAS_URL = "https://script.google.com/macros/s/AKfycbyqJohqB0qmX8wAakGWFaLiP6uT5yTta6U8gfoTUmKWgFzytw1GenfA7xFf92L-o31vgw/exec";   // 例: "https://script.google.com/macros/s/XXXX.../exec"
 
 const LB_KEY = "kobun_streak_leaderboard_v1";
-const LB_MAX = 20;          // ランキング掲載数
-const LB_MIN = 8;           // この連続数以上で登録対象
+const LB_MAX = 10;          // ランキング掲載数
+const LB_MIN = 3;           // この連続数以上で登録対象
 
 function todayStr() {
   const d = new Date();
@@ -270,9 +270,17 @@ function todayStr() {
   return `${yy}-${mm}-${dd}`;
 }
 function shortDate(s) {
-  // "2026-06-20" → "06/20"。それ以外はそのまま返す。
-  const m = String(s).match(/^\d{4}-(\d{2})-(\d{2})$/);
-  return m ? `${m[1]}/${m[2]}` : String(s);
+  // "2026-06-20" → "06/20"
+  const iso = String(s).match(/^\d{4}-(\d{2})-(\d{2})/);
+  if (iso) return `${iso[1]}/${iso[2]}`;
+  // "Sat Jun 20 2026 ..." のような日付文字列にも対応
+  const d = new Date(s);
+  if (!isNaN(d.getTime())) {
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${mm}/${dd}`;
+  }
+  return String(s);
 }
 
 /* ---- ローカル保存（GAS未設定 or 通信失敗時のフォールバック） ---- */
@@ -625,7 +633,7 @@ async function endQuiz() {
   const pct = totalAnswered > 0 ? Math.round(totalCorrect / totalAnswered * 100) : 0;
   let html = `
     <div class="hd">
-      <div class="hd-title">お疲れさまでした</div>
+      <div class="hd-title">お疲れさまっすー</div>
     </div>
     <div class="result-card">
       <div style="font-size:13px;color:#888;margin-bottom:12px">累計成績</div>
