@@ -16,6 +16,12 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS Mincho',Georgia,serif;ba
 .hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
 .hd-title{font-size:16px;font-weight:500;color:#1a1a1a}
 .hd-sub{font-size:13px;color:#666}
+.streak-badge{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e0ddd7;border-radius:20px;padding:5px 14px;margin-bottom:1rem}
+.streak-fire{font-size:15px}
+.streak-num{font-size:18px;font-weight:600;color:#C00000;line-height:1}
+.streak-lbl{font-size:11px;color:#888}
+.streak-best{margin-left:auto;font-size:11px;color:#888}
+.streak-best b{color:#1F4E79;font-size:14px}
 .prog-outer{height:4px;background:#ddd;border-radius:2px;margin-bottom:1.25rem;overflow:hidden}
 .prog-inner{height:100%;background:#1F4E79;border-radius:2px;transition:width .3s}
 .q-card{background:#fff;border:1px solid #e0ddd7;border-radius:10px;padding:1.25rem;margin-bottom:.75rem}
@@ -32,6 +38,8 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS Mincho',Georgia,serif;ba
 .fb{margin-top:1rem;padding:10px 14px;border-radius:8px;font-size:13px;line-height:1.8}
 .fb.ok{background:#e8f5e9;border:1px solid #81c784;color:#1b5e20}
 .fb.ng{background:#ffebee;border:1px solid #ef9a9a;color:#b71c1c}
+.streak-break{margin-top:8px;font-size:12px;color:#b71c1c}
+.streak-keep{margin-top:8px;font-size:12px;color:#1b5e20}
 .ans-gyou{color:#C00000;font-weight:500}
 .ans-type{color:#1F4E79;font-weight:500}
 .ans-sep{color:#666}
@@ -60,6 +68,20 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS Mincho',Georgia,serif;ba
 .stat-n{font-size:22px;font-weight:500;color:#1a1a1a}
 .stat-l{font-size:11px;color:#888;margin-top:3px}
 .end-note{font-size:12px;color:#999;text-align:center;margin-top:1rem}
+.lb-card{background:#fff;border:1px solid #e0ddd7;border-radius:10px;padding:1.25rem;margin-bottom:1rem}
+.lb-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.lb-title{font-size:14px;font-weight:600;color:#1a1a1a;letter-spacing:.05em}
+.lb-scope{font-size:11px;color:#999}
+.lb-row{display:flex;align-items:center;gap:12px;padding:9px 6px;border-bottom:1px solid #f0ede8;font-size:14px}
+.lb-row:last-child{border-bottom:none}
+.lb-row.me{background:#fdf6f6;border-radius:6px}
+.lb-rank{width:28px;text-align:center;font-weight:600;color:#999;flex-shrink:0}
+.lb-rank.r1{color:#C9A227}.lb-rank.r2{color:#8A8A8A}.lb-rank.r3{color:#A9713B}
+.lb-streak{font-weight:600;color:#C00000;font-size:17px}
+.lb-unit{font-size:11px;color:#888;font-weight:400;margin-left:2px}
+.lb-date{margin-left:auto;font-size:11px;color:#aaa}
+.lb-me-tag{font-size:10px;color:#C00000;border:1px solid #e8b4b4;border-radius:10px;padding:1px 7px;margin-left:6px}
+.lb-empty{font-size:13px;color:#999;text-align:center;padding:1.5rem 0}
 </style>
 </head>
 <body>
@@ -227,6 +249,98 @@ const GYOU_LIST = ["ア行","カ行","ガ行","サ行","タ行","ダ行","ナ行
 const TYPE_LIST = ["四段","上一段","上二段","下一段","下二段","変格"];
 const KEI_LIST  = ["未然","連用","終止","連体","已然","命令"];
 
+/* ============================================================
+   ランキング保存層 ── 端末をまたいだ共有（Google Apps Script）
+   ------------------------------------------------------------
+   ↓↓↓ ここに GAS の公開URLを貼ってください ↓↓↓
+   （手順は同梱の GAS_setup.txt を参照）
+   URLが空のままだと localStorage（端末ごと）で動きます。
+   ============================================================ */
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyqJohqB0qmX8wAakGWFaLiP6uT5yTta6U8gfoTUmKWgFzytw1GenfA7xFf92L-o31vgw/exec";   // 例: "https://script.google.com/macros/s/XXXX.../exec"
+
+const LB_KEY = "kobun_streak_leaderboard_v1";
+const LB_MAX = 20;          // ランキング掲載数
+const LB_MIN = 8;           // この連続数以上で登録対象
+
+function todayStr() {
+  const d = new Date();
+  const yy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yy}-${mm}-${dd}`;
+}
+function shortDate(s) {
+  // "2026-06-20" → "06/20"。それ以外はそのまま返す。
+  const m = String(s).match(/^\d{4}-(\d{2})-(\d{2})$/);
+  return m ? `${m[1]}/${m[2]}` : String(s);
+}
+
+/* ---- ローカル保存（GAS未設定 or 通信失敗時のフォールバック） ---- */
+const LocalStore = {
+  load() {
+    try { const raw = localStorage.getItem(LB_KEY); return raw ? JSON.parse(raw) : []; }
+    catch (e) { return LocalStore._mem || []; }
+  },
+  save(list) {
+    try { localStorage.setItem(LB_KEY, JSON.stringify(list)); }
+    catch (e) { LocalStore._mem = list; }
+  }
+};
+
+/* ---- GAS通信 ---- */
+async function gasFetch() {
+  const res = await fetch(GAS_URL, { method: "GET" });
+  const data = await res.json();
+  return (data && data.ok && Array.isArray(data.list)) ? data.list : [];
+}
+async function gasSubmit(entry) {
+  // text/plain にするとプリフライト(CORS)を避けられGASと相性が良い
+  const res = await fetch(GAS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(entry)
+  });
+  const data = await res.json();
+  return (data && data.ok && Array.isArray(data.list)) ? data.list : null;
+}
+
+// 連続正解数をランキングに登録（戻り値: {rank, id, list} or null）
+async function submitStreak(streak) {
+  if (streak < LB_MIN) return null;
+  const entry = { streak, date: todayStr(), id: Date.now() + "_" + Math.random().toString(36).slice(2, 7) };
+
+  if (GAS_URL) {
+    try {
+      const list = await gasSubmit(entry);
+      if (list) {
+        const idx = list.findIndex(e => e.id === entry.id);
+        return { rank: idx >= 0 ? idx + 1 : null, id: entry.id, list };
+      }
+    } catch (e) { /* 失敗時は下のローカルへ */ }
+  }
+  // フォールバック（端末内）
+  const list = LocalStore.load();
+  list.push(entry);
+  list.sort((a, b) => b.streak - a.streak || String(a.id).localeCompare(String(b.id)));
+  const trimmed = list.slice(0, LB_MAX);
+  LocalStore.save(trimmed);
+  const idx = trimmed.findIndex(e => e.id === entry.id);
+  return { rank: idx >= 0 ? idx + 1 : null, id: entry.id, list: trimmed };
+}
+
+async function getLeaderboard() {
+  if (GAS_URL) {
+    try {
+      const list = await gasFetch();
+      list.sort((a, b) => b.streak - a.streak || String(a.id).localeCompare(String(b.id)));
+      return list.slice(0, LB_MAX);
+    } catch (e) { /* 失敗時はローカル */ }
+  }
+  const list = LocalStore.load();
+  list.sort((a, b) => b.streak - a.streak || String(a.id).localeCompare(String(b.id)));
+  return list.slice(0, LB_MAX);
+}
+
 const BATCH = 5;
 let pool = [];
 let queue = [];
@@ -237,6 +351,11 @@ let missLog = [];
 let totalCorrect = 0;
 let totalAnswered = 0;
 let roundNum = 0;
+
+// 連続正解（セットをまたいで継続）
+let currentStreak = 0;
+let bestStreak = 0;
+let lastSubmittedId = null;   // 直近で自分が登録したエントリ（ハイライト用）
 
 function shuffle(arr) {
   const a = arr.slice();
@@ -350,6 +469,12 @@ function renderQuestion() {
       </div>
       <div style="font-size:13px;color:#666">${qIdx + 1} / ${BATCH}</div>
     </div>
+    <div class="streak-badge">
+      <span class="streak-fire">🔥</span>
+      <span class="streak-num">${currentStreak}</span>
+      <span class="streak-lbl">連続正解</span>
+      <span class="streak-best">自己ベスト <b>${bestStreak}</b></span>
+    </div>
     <div class="prog-outer"><div class="prog-inner" style="width:${pct}%"></div></div>
     <div class="q-card">
       <div class="q-label">問 ${qIdx + 1} — 【】内の動詞の活用を答えよ</div>
@@ -377,14 +502,34 @@ function renderQuestion() {
         }
       });
 
-      if (ok) { btn.classList.add('correct'); score++; totalCorrect++; }
-      else { btn.classList.add('wrong'); missLog.push(d); }
+      let streakMsg = "";
+      if (ok) {
+        btn.classList.add('correct');
+        score++; totalCorrect++;
+        currentStreak++;
+        if (currentStreak > bestStreak) bestStreak = currentStreak;
+        streakMsg = `<div class="streak-keep">🔥 連続${currentStreak}問正解中！</div>`;
+      } else {
+        btn.classList.add('wrong');
+        missLog.push(d);
+        // 連続が途切れた → ランキング登録を試みる
+        if (currentStreak >= LB_MIN) {
+          streakMsg = `<div class="streak-break">連続${currentStreak}問で途切れました…</div>`;
+          submitStreak(currentStreak).then(res => {
+            if (res && res.rank) lastSubmittedId = res.id;
+          });
+        } else if (currentStreak > 0) {
+          streakMsg = `<div class="streak-break">連続${currentStreak}問で途切れました…</div>`;
+        }
+        currentStreak = 0;
+      }
       totalAnswered++;
 
       let fb = `<div class="fb ${ok ? 'ok' : 'ng'}">`;
       fb += ok
         ? `<strong>正解！</strong>&ensp;${ansStr(d.a)}`
         : `<strong>不正解</strong>&ensp;正解：${ansStr(d.a)}`;
+      fb += streakMsg;
       if (d.note) fb += `<div class="note-box">${d.note}</div>`;
       fb += `</div>`;
       fb += `<button class="next-btn" id="next-btn">${qIdx + 1 < BATCH ? '次の問題へ' : '結果を見る'}</button>`;
@@ -397,6 +542,29 @@ function renderQuestion() {
       });
     });
   });
+}
+
+function lbRowsHtml(list, highlightId) {
+  if (!list || list.length === 0) {
+    return `<div class="lb-empty">まだ記録がありません。<br>連続${LB_MIN}問以上で初登録です！</div>`;
+  }
+  return list.map((e, i) => {
+    const rank = i + 1;
+    const rcls = rank <= 3 ? ` r${rank}` : "";
+    const medal = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : rank;
+    const me = highlightId && e.id === highlightId;
+    return `<div class="lb-row${me ? " me" : ""}">
+      <div class="lb-rank${rcls}">${medal}</div>
+      <div><span class="lb-streak">${e.streak}</span><span class="lb-unit">連続</span>${me ? '<span class="lb-me-tag">今回</span>' : ''}</div>
+      <div class="lb-date">${shortDate(e.date)}</div>
+    </div>`;
+  }).join("");
+}
+
+async function renderLeaderboardInto(elId, highlightId) {
+  const list = await getLeaderboard();
+  const el = document.getElementById(elId);
+  if (el) el.innerHTML = lbRowsHtml(list, highlightId);
 }
 
 function renderResult() {
@@ -413,6 +581,15 @@ function renderResult() {
       <div class="score-denom">/ ${BATCH} 問</div>
       <div class="score-pct">${pct}%</div>
       <div class="score-msg">${msg}</div>
+      <div style="margin-top:14px;font-size:13px;color:#666">🔥 現在の連続正解 <b style="color:#C00000;font-size:18px">${currentStreak}</b>　／　自己ベスト <b style="color:#1F4E79;font-size:18px">${bestStreak}</b></div>
+    </div>
+
+    <div class="lb-card">
+      <div class="lb-head">
+        <div class="lb-title">🏆 連続正解ランキング</div>
+        <div class="lb-scope">TOP ${LB_MAX}</div>
+      </div>
+      <div id="lb-list"><div class="lb-empty">読み込み中…</div></div>
     </div>`;
 
   if (missLog.length > 0) {
@@ -435,9 +612,16 @@ function renderResult() {
   document.getElementById('screen-quiz').classList.remove('active');
   document.getElementById('screen-result').innerHTML = html;
   document.getElementById('screen-result').classList.add('active');
+  renderLeaderboardInto('lb-list', lastSubmittedId);
 }
 
-function endQuiz() {
+async function endQuiz() {
+  // 進行中の連続があれば最後に登録
+  if (currentStreak >= LB_MIN) {
+    const res = await submitStreak(currentStreak);
+    if (res && res.rank) lastSubmittedId = res.id;
+    currentStreak = 0;
+  }
   const pct = totalAnswered > 0 ? Math.round(totalCorrect / totalAnswered * 100) : 0;
   let html = `
     <div class="hd">
@@ -449,14 +633,24 @@ function endQuiz() {
         <div class="stat"><div class="stat-n">${totalAnswered}</div><div class="stat-l">出題数</div></div>
         <div class="stat"><div class="stat-n">${totalCorrect}</div><div class="stat-l">正解数</div></div>
         <div class="stat"><div class="stat-n">${pct}%</div><div class="stat-l">正答率</div></div>
-        <div class="stat"><div class="stat-n">${roundNum}</div><div class="stat-l">セット数</div></div>
+        <div class="stat"><div class="stat-n">${bestStreak}</div><div class="stat-l">最高連続</div></div>
       </div>
     </div>
+
+    <div class="lb-card">
+      <div class="lb-head">
+        <div class="lb-title">🏆 連続正解ランキング</div>
+        <div class="lb-scope">TOP ${LB_MAX}</div>
+      </div>
+      <div id="lb-list-end"><div class="lb-empty">読み込み中…</div></div>
+    </div>
+
     <div class="btn-row">
       <button class="primary" onclick="resetAll()">最初からやり直す</button>
     </div>
     <p class="end-note">竹取物語・今昔物語集（道成寺説話）　全146問</p>`;
   document.getElementById('screen-result').innerHTML = html;
+  renderLeaderboardInto('lb-list-end', lastSubmittedId);
 }
 
 function resetAll() {
@@ -464,6 +658,9 @@ function resetAll() {
   totalCorrect = 0;
   totalAnswered = 0;
   roundNum = 0;
+  currentStreak = 0;
+  bestStreak = 0;
+  lastSubmittedId = null;
   startBatch();
 }
 
