@@ -91,6 +91,8 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS Mincho',Georgia,serif;ba
 .start-err{font-size:12px;color:#b71c1c;margin-top:4px;min-height:1em}
 .start-btn{width:100%;margin-top:.5rem;padding:13px;font-size:15px;border-radius:8px;border:1px solid #1F4E79;background:#1F4E79;color:#fff;cursor:pointer;font-weight:500;font-family:inherit;transition:background .12s}
 .start-btn:hover{background:#185396}
+.start-btn.secondary{margin-top:10px;background:#fff;color:#1F4E79;border:1px solid #bbb}
+.start-btn.secondary:hover{background:#f0ede8}
 .who-badge{font-size:11px;color:#1F4E79;border:1px solid #B8CCE4;border-radius:12px;padding:2px 10px;background:#f5f8fc}
 .lb-label{font-weight:500;color:#1F4E79;font-size:13px;margin-right:2px}
 .change-link{font-size:12px;color:#888;text-decoration:underline;cursor:pointer;background:none;border:none;font-family:inherit;padding:0}
@@ -499,7 +501,7 @@ function renderStart() {
 
   startEl.innerHTML = `
     <div class="start-card">
-      <div class="start-lead">クラスと出席番号を選んでから始めてください。<br>ランキングには「${CLASS_LIST[0]}-12」のような形で表示されます（名前は出ません）。<br>クラス出席番号を登録できるようにしたので、以前のランキングはリセットしました。ご了承ください。</div>
+      <div class="start-lead">クラスと出席番号を選んでから始めてください。<br>ランキングには「${CLASS_LIST[0]}-12」のような形で表示されます（名前は出ません）。</div>
       <div class="field">
         <label class="field-label" for="sel-class">クラス</label>
         <select id="sel-class">${opts}</select>
@@ -510,6 +512,14 @@ function renderStart() {
         <div class="start-err" id="start-err"></div>
       </div>
       <button class="start-btn" id="start-btn">クイズを始める</button>
+      <button class="start-btn secondary" id="view-lb-btn">ランキングを見る</button>
+    </div>
+    <div class="lb-card" id="start-lb-card" style="display:none">
+      <div class="lb-head">
+        <div class="lb-title">🏆 連続正解ランキング</div>
+        <div class="lb-scope">TOP ${LB_MAX}</div>
+      </div>
+      <div id="lb-list-start"><div class="lb-empty">読み込み中…</div></div>
     </div>`;
 
   document.getElementById('start-btn').addEventListener('click', () => {
@@ -534,6 +544,13 @@ function renderStart() {
     bestStreak = 0;
     lastSubmittedId = null;
     startBatch();
+  });
+
+  document.getElementById('view-lb-btn').addEventListener('click', () => {
+    const card = document.getElementById('start-lb-card');
+    card.style.display = 'block';
+    renderLeaderboardInto('lb-list-start', null);
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 }
 
