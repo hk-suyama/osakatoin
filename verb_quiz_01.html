@@ -82,6 +82,18 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS Mincho',Georgia,serif;ba
 .lb-date{margin-left:auto;font-size:11px;color:#aaa}
 .lb-me-tag{font-size:10px;color:#C00000;border:1px solid #e8b4b4;border-radius:10px;padding:1px 7px;margin-left:6px}
 .lb-empty{font-size:13px;color:#999;text-align:center;padding:1.5rem 0}
+.start-card{background:#fff;border:1px solid #e0ddd7;border-radius:10px;padding:1.5rem;margin-bottom:1rem}
+.start-lead{font-size:14px;color:#1a1a1a;margin-bottom:1.25rem;line-height:1.8}
+.field{margin-bottom:1.1rem}
+.field-label{font-size:13px;color:#555;font-weight:500;margin-bottom:6px;display:block}
+.field select,.field input{width:100%;font-size:16px;font-family:inherit;padding:11px 12px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#1a1a1a}
+.field select:focus,.field input:focus{outline:none;border-color:#1F4E79}
+.start-err{font-size:12px;color:#b71c1c;margin-top:4px;min-height:1em}
+.start-btn{width:100%;margin-top:.5rem;padding:13px;font-size:15px;border-radius:8px;border:1px solid #1F4E79;background:#1F4E79;color:#fff;cursor:pointer;font-weight:500;font-family:inherit;transition:background .12s}
+.start-btn:hover{background:#185396}
+.who-badge{font-size:11px;color:#1F4E79;border:1px solid #B8CCE4;border-radius:12px;padding:2px 10px;background:#f5f8fc}
+.lb-label{font-weight:500;color:#1F4E79;font-size:13px;margin-right:2px}
+.change-link{font-size:12px;color:#888;text-decoration:underline;cursor:pointer;background:none;border:none;font-family:inherit;padding:0}
 </style>
 </head>
 <body>
@@ -91,7 +103,8 @@ body{font-family:'Hiragino Mincho ProN','Yu Mincho','MS Mincho',Georgia,serif;ba
     <p>竹取物語・今昔物語集 — 146問からランダム出題</p>
   </div>
 
-  <div id="screen-quiz" class="screen active"></div>
+  <div id="screen-start" class="screen active"></div>
+  <div id="screen-quiz" class="screen"></div>
   <div id="screen-result" class="screen"></div>
 </div>
 
@@ -262,6 +275,14 @@ const LB_KEY = "kobun_streak_leaderboard_v1";
 const LB_MAX = 10;          // ランキング掲載数
 const LB_MIN = 3;           // この連続数以上で登録対象
 
+const CLASS_LIST = ["PR", "ES1", "ES2", "ES3", "ES4", "E1", "E2"];  // プルダウンの並び
+const NUM_MAX = 40;         // 出席番号の上限
+
+// プレイヤー識別（クラス＋出席番号）。毎回スタート画面で選ぶ。
+let playerClass = "";
+let playerNum = "";
+function playerLabel() { return playerClass && playerNum ? `${playerClass}-${playerNum}` : ""; }
+
 function todayStr() {
   const d = new Date();
   const yy = d.getFullYear();
@@ -312,41 +333,56 @@ async function gasSubmit(entry) {
   return (data && data.ok && Array.isArray(data.list)) ? data.list : null;
 }
 
+// 同一ラベル（クラス＋番号）はベスト1件だけ残す
+function dedupBest(list) {
+  const best = new Map();
+  for (const e of list) {
+    const key = e.label || e.id;   // ラベルが無い古い記録はidで個別扱い
+    const cur = best.get(key);
+    if (!cur || e.streak > cur.streak) best.set(key, e);
+  }
+  const out = Array.from(best.values());
+  out.sort((a, b) => b.streak - a.streak || String(a.id).localeCompare(String(b.id)));
+  return out;
+}
+
 // 連続正解数をランキングに登録（戻り値: {rank, id, list} or null）
 async function submitStreak(streak) {
   if (streak < LB_MIN) return null;
-  const entry = { streak, date: todayStr(), id: Date.now() + "_" + Math.random().toString(36).slice(2, 7) };
+  const entry = {
+    streak,
+    label: playerLabel(),
+    date: todayStr(),
+    id: Date.now() + "_" + Math.random().toString(36).slice(2, 7)
+  };
 
   if (GAS_URL) {
     try {
-      const list = await gasSubmit(entry);
-      if (list) {
+      const raw = await gasSubmit(entry);
+      if (raw) {
+        const list = dedupBest(raw).slice(0, LB_MAX);
         const idx = list.findIndex(e => e.id === entry.id);
         return { rank: idx >= 0 ? idx + 1 : null, id: entry.id, list };
       }
     } catch (e) { /* 失敗時は下のローカルへ */ }
   }
   // フォールバック（端末内）
-  const list = LocalStore.load();
-  list.push(entry);
-  list.sort((a, b) => b.streak - a.streak || String(a.id).localeCompare(String(b.id)));
-  const trimmed = list.slice(0, LB_MAX);
-  LocalStore.save(trimmed);
-  const idx = trimmed.findIndex(e => e.id === entry.id);
-  return { rank: idx >= 0 ? idx + 1 : null, id: entry.id, list: trimmed };
+  const all = LocalStore.load();
+  all.push(entry);
+  const list = dedupBest(all).slice(0, LB_MAX);
+  LocalStore.save(list);
+  const idx = list.findIndex(e => e.id === entry.id);
+  return { rank: idx >= 0 ? idx + 1 : null, id: entry.id, list };
 }
 
 async function getLeaderboard() {
   if (GAS_URL) {
     try {
-      const list = await gasFetch();
-      list.sort((a, b) => b.streak - a.streak || String(a.id).localeCompare(String(b.id)));
-      return list.slice(0, LB_MAX);
+      const raw = await gasFetch();
+      return dedupBest(raw).slice(0, LB_MAX);
     } catch (e) { /* 失敗時はローカル */ }
   }
-  const list = LocalStore.load();
-  list.sort((a, b) => b.streak - a.streak || String(a.id).localeCompare(String(b.id)));
-  return list.slice(0, LB_MAX);
+  return dedupBest(LocalStore.load()).slice(0, LB_MAX);
 }
 
 const BATCH = 5;
@@ -450,6 +486,57 @@ function makeChoices(correct) {
   return shuffle([[...correct], ...result.slice(0, 3)]);
 }
 
+// ===== スタート画面（クラス・出席番号の選択） =====
+function renderStart() {
+  document.getElementById('screen-quiz').classList.remove('active');
+  document.getElementById('screen-result').classList.remove('active');
+  const startEl = document.getElementById('screen-start');
+  startEl.classList.add('active');
+
+  const opts = ['<option value="">— クラスを選択 —</option>']
+    .concat(CLASS_LIST.map(c => `<option value="${c}"${c === playerClass ? " selected" : ""}>${c}</option>`))
+    .join("");
+
+  startEl.innerHTML = `
+    <div class="start-card">
+      <div class="start-lead">クラスと出席番号を選んでから始めてください。<br>ランキングには「${CLASS_LIST[0]}-12」のような形で表示されます（名前は出ません）。</div>
+      <div class="field">
+        <label class="field-label" for="sel-class">クラス</label>
+        <select id="sel-class">${opts}</select>
+      </div>
+      <div class="field">
+        <label class="field-label" for="inp-num">出席番号（1〜${NUM_MAX}）</label>
+        <input id="inp-num" type="number" inputmode="numeric" min="1" max="${NUM_MAX}" step="1" placeholder="例：12" value="${playerNum}">
+        <div class="start-err" id="start-err"></div>
+      </div>
+      <button class="start-btn" id="start-btn">クイズを始める</button>
+    </div>`;
+
+  document.getElementById('start-btn').addEventListener('click', () => {
+    const cls = document.getElementById('sel-class').value;
+    const numRaw = document.getElementById('inp-num').value.trim();
+    const err = document.getElementById('start-err');
+    if (!cls) { err.textContent = "クラスを選んでください。"; return; }
+    const num = parseInt(numRaw, 10);
+    if (!numRaw || isNaN(num) || num < 1 || num > NUM_MAX || String(num) !== numRaw.replace(/^0+/, "")) {
+      err.textContent = `出席番号は1〜${NUM_MAX}の数字で入力してください。`;
+      return;
+    }
+    err.textContent = "";
+    playerClass = cls;
+    playerNum = String(num);
+    // 新しいプレイヤーとして成績をリセットして開始
+    pool = [];
+    totalCorrect = 0;
+    totalAnswered = 0;
+    roundNum = 0;
+    currentStreak = 0;
+    bestStreak = 0;
+    lastSubmittedId = null;
+    startBatch();
+  });
+}
+
 function startBatch() {
   roundNum++;
   if (pool.length < BATCH) pool = shuffle(DATA);
@@ -458,6 +545,7 @@ function startBatch() {
   score = 0;
   missLog = [];
   answered = false;
+  document.getElementById('screen-start').classList.remove('active');
   document.getElementById('screen-result').classList.remove('active');
   document.getElementById('screen-quiz').classList.add('active');
   renderQuestion();
@@ -475,7 +563,10 @@ function renderQuestion() {
         <div class="hd-title">動詞活用クイズ</div>
         <div class="hd-sub">第${roundNum}セット</div>
       </div>
-      <div style="font-size:13px;color:#666">${qIdx + 1} / ${BATCH}</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="who-badge">${playerLabel()}</span>
+        <span style="font-size:13px;color:#666">${qIdx + 1} / ${BATCH}</span>
+      </div>
     </div>
     <div class="streak-badge">
       <span class="streak-fire">🔥</span>
@@ -556,14 +647,18 @@ function lbRowsHtml(list, highlightId) {
   if (!list || list.length === 0) {
     return `<div class="lb-empty">まだ記録がありません。<br>連続${LB_MIN}問以上で初登録です！</div>`;
   }
+  const myLabel = playerLabel();
   return list.map((e, i) => {
     const rank = i + 1;
     const rcls = rank <= 3 ? ` r${rank}` : "";
     const medal = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : rank;
-    const me = highlightId && e.id === highlightId;
+    const isJustNow = highlightId && e.id === highlightId;
+    const isMine = myLabel && e.label === myLabel;
+    const me = isJustNow || isMine;
+    const labelText = e.label ? e.label : "（無記名）";
     return `<div class="lb-row${me ? " me" : ""}">
       <div class="lb-rank${rcls}">${medal}</div>
-      <div><span class="lb-streak">${e.streak}</span><span class="lb-unit">連続</span>${me ? '<span class="lb-me-tag">今回</span>' : ''}</div>
+      <div><span class="lb-label">${labelText}</span>　<span class="lb-streak">${e.streak}</span><span class="lb-unit">連続</span>${isJustNow ? '<span class="lb-me-tag">今回</span>' : ''}</div>
       <div class="lb-date">${shortDate(e.date)}</div>
     </div>`;
   }).join("");
@@ -662,6 +757,7 @@ async function endQuiz() {
 }
 
 function resetAll() {
+  // 別の生徒が続けて使えるよう、スタート画面（クラス・番号選択）に戻る
   pool = [];
   totalCorrect = 0;
   totalAnswered = 0;
@@ -669,10 +765,10 @@ function resetAll() {
   currentStreak = 0;
   bestStreak = 0;
   lastSubmittedId = null;
-  startBatch();
+  renderStart();
 }
 
-startBatch();
+renderStart();
 </script>
 </body>
 </html>
