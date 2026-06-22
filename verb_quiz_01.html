@@ -402,6 +402,7 @@ let roundNum = 0;
 let currentStreak = 0;
 let bestStreak = 0;
 let lastSubmittedId = null;   // 直近で自分が登録したエントリ（ハイライト用）
+let streakSubmitted = false;  // 現在の連続を登録済みかどうか（二重送信防止）
 
 function shuffle(arr) {
   const a = arr.slice();
@@ -501,7 +502,7 @@ function renderStart() {
 
   startEl.innerHTML = `
     <div class="start-card">
-      <div class="start-lead">クラスと出席番号を選んでから始めてください。<br>ランキングには「${CLASS_LIST[0]}-40」のような形で表示されます（名前は出ません）。</div>
+      <div class="start-lead">クラスと出席番号を選んでから始めてください。<br>ランキングには「${CLASS_LIST[0]}-12」のような形で表示されます（名前は出ません）。</div>
       <div class="field">
         <label class="field-label" for="sel-class">クラス</label>
         <select id="sel-class">${opts}</select>
@@ -543,6 +544,7 @@ function renderStart() {
     currentStreak = 0;
     bestStreak = 0;
     lastSubmittedId = null;
+    streakSubmitted = false;
     startBatch();
   });
 
@@ -622,15 +624,17 @@ function renderQuestion() {
       if (ok) {
         btn.classList.add('correct');
         score++; totalCorrect++;
+        if (currentStreak === 0) streakSubmitted = false;  // 新しい連続の開始
         currentStreak++;
         if (currentStreak > bestStreak) bestStreak = currentStreak;
         streakMsg = `<div class="streak-keep">🔥 連続${currentStreak}問正解中！</div>`;
       } else {
         btn.classList.add('wrong');
         missLog.push(d);
-        // 連続が途切れた → ランキング登録を試みる
-        if (currentStreak >= LB_MIN) {
+        // 連続が途切れた → ランキング登録を試みる（未登録のときだけ）
+        if (currentStreak >= LB_MIN && !streakSubmitted) {
           streakMsg = `<div class="streak-break">連続${currentStreak}問で途切れました…</div>`;
+          streakSubmitted = true;
           submitStreak(currentStreak).then(res => {
             if (res && res.rank) lastSubmittedId = res.id;
           });
@@ -736,12 +740,13 @@ function renderResult() {
 }
 
 async function endQuiz() {
-  // 進行中の連続があれば最後に登録
-  if (currentStreak >= LB_MIN) {
+  // 進行中の連続があれば最後に登録（未登録のときだけ）
+  if (currentStreak >= LB_MIN && !streakSubmitted) {
+    streakSubmitted = true;
     const res = await submitStreak(currentStreak);
     if (res && res.rank) lastSubmittedId = res.id;
-    currentStreak = 0;
   }
+  currentStreak = 0;
   const pct = totalAnswered > 0 ? Math.round(totalCorrect / totalAnswered * 100) : 0;
   let html = `
     <div class="hd">
@@ -782,6 +787,7 @@ function resetAll() {
   currentStreak = 0;
   bestStreak = 0;
   lastSubmittedId = null;
+  streakSubmitted = false;
   renderStart();
 }
 
