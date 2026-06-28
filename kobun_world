@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>古文の世界に分け入る ― 最難関大読解のための前提知識</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Antique&family=Noto+Serif+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* 夜と灯火の宮廷 ― palette */
+  --sumi:#15181f;          /* 墨・夜の地 */
+  --sumi-2:#1d212b;        /* やや明るい夜 */
+  --sumi-3:#272c38;        /* パネル */
+  --tomoshibi:#d9a441;     /* 灯火の金茶 */
+  --tomoshibi-dim:#b08534; /* 沈んだ金 */
+  --kuchiba:#b05f3c;       /* 朽葉・几帳 */
+  --futaai:#5b6b8c;        /* 二藍・薄縹 */
+  --moegi:#7a8b5a;         /* 萌黄 */
+  --usuzumi:#c7cbd4;       /* 薄墨・本文白 */
+  --usuzumi-2:#9aa0ae;     /* 弱い文字 */
+  --kinari:#ece6d6;        /* 生成り・見出し白 */
+  --line:#3a4150;          /* 罫 */
+  --line-soft:#2c323e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--sumi);
+  color:var(--usuzumi);
+  font-family:"Shippori Mincho",serif;
+  line-height:1.95;
+  font-size:17px;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:.01em;
+  overflow-x:hidden;
+}
+/* 夜空に灯る微かな粒 */
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(1px 1px at 18% 24%, rgba(217,164,65,.20), transparent),
+    radial-gradient(1px 1px at 72% 58%, rgba(217,164,65,.14), transparent),
+    radial-gradient(1px 1px at 42% 82%, rgba(199,203,212,.10), transparent),
+    radial-gradient(1px 1px at 88% 16%, rgba(217,164,65,.12), transparent);
+}
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* ====== 表紙 ====== */
+.cover{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  position:relative;padding:80px 0;
+}
+.cover-inner{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center}
+@media(max-width:820px){.cover-inner{grid-template-columns:1fr}}
+.cover-eyebrow{
+  font-family:"Zen Kaku Gothic New",sans-serif;font-weight:500;
+  letter-spacing:.42em;font-size:12.5px;color:var(--tomoshibi);
+  text-transform:none;margin-bottom:30px;padding-left:.42em;
+}
+.cover h1{
+  font-family:"Shippori Mincho",serif;font-weight:800;
+  font-size:clamp(40px,7vw,78px);line-height:1.22;color:var(--kinari);
+  letter-spacing:.04em;
+}
+.cover h1 .accent{color:var(--tomoshibi);position:relative}
+.cover .lead{
+  margin-top:34px;max-width:46ch;color:var(--usuzumi-2);font-size:16.5px;
+  line-height:2.1;
+}
+.cover .lead .em{color:var(--usuzumi);font-weight:500}
+.cover-meta{
+  margin-top:46px;display:flex;gap:30px;flex-wrap:wrap;
+  font-family:"Zen Kaku Gothic New",sans-serif;font-size:11.5px;
+  letter-spacing:.22em;color:var(--usuzumi-2);
+}
+.cover-meta span{display:flex;align-items:center;gap:9px}
+.cover-meta span::before{content:"";width:5px;height:5px;background:var(--kuchiba);transform:rotate(45deg)}
+
+/* 縦組みの題箋 */
+.tanzaku{
+  font-family:"Shippori Mincho",serif;font-weight:600;
+  font-size:clamp(19px,2.3vw,25px);
+  color:var(--kinari);letter-spacing:.2em;
+  border:1px solid var(--line);border-radius:3px;
+  padding:42px 30px 60px;background:linear-gradient(160deg,var(--sumi-3),var(--sumi-2));
+  box-shadow:0 24px 60px rgba(0,0,0,.5), inset 0 0 0 1px rgba(217,164,65,.06);
+  position:relative;display:flex;justify-content:center;
+}
+.tanzaku .col{
+  writing-mode:vertical-rl;text-orientation:mixed;
+  display:inline-block;vertical-align:top;line-height:1.6;
+}
+.tanzaku::after{
+  content:"古文の世界";position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);
+  writing-mode:horizontal-tb;font-family:"Zen Kaku Gothic New",sans-serif;
+  font-size:9.5px;letter-spacing:.3em;color:var(--tomoshibi-dim);white-space:nowrap;
+}
+.tanzaku .seal{
+  writing-mode:horizontal-tb;position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
+  color:var(--sumi);background:var(--kuchiba);font-family:"Zen Antique",serif;
+  font-size:12px;padding:6px 7px;line-height:1.25;text-align:center;border-radius:2px;
+  letter-spacing:0;}
+
+/* ====== 序文 ====== */
+.preface{padding:78px 0 36px;border-top:1px solid var(--line-soft)}
+.preface .marker{
+  font-family:"Zen Kaku Gothic New",sans-serif;font-size:11px;letter-spacing:.34em;
+  color:var(--kuchiba);margin-bottom:22px;
+}
+.preface p{max-width:64ch;margin:0 auto 20px;color:var(--usuzumi);font-size:17px}
+.preface p .strong{color:var(--kinari);font-weight:600}
+.preface .pull{
+  max-width:50ch;margin:40px auto;padding:26px 30px;border-left:2px solid var(--tomoshibi);
+  background:linear-gradient(90deg,rgba(217,164,65,.05),transparent);
+  font-size:18.5px;line-height:2.05;color:var(--kinari);font-weight:500;
+}
+
+/* ====== 目次 ====== */
+.toc{padding:60px 0 90px}
+.toc-head{display:flex;align-items:baseline;gap:18px;margin-bottom:38px;
+  border-bottom:1px solid var(--line);padding-bottom:18px}
+.toc-head .ttl{font-family:"Zen Antique",serif;font-size:26px;color:var(--kinari);letter-spacing:.1em}
+.toc-head .sub{font-family:"Zen Kaku Gothic New",sans-serif;font-size:11px;letter-spacing:.3em;color:var(--usuzumi-2)}
+.toc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:760px){.toc-grid{grid-template-columns:1fr}}
+.toc-item{
+  display:flex;gap:18px;align-items:baseline;padding:18px 22px;
+  background:var(--sumi-2);border:1px solid var(--line-soft);border-radius:4px;
+  text-decoration:none;color:inherit;transition:.25s;
+}
+.toc-item:hover{border-color:var(--tomoshibi-dim);background:var(--sumi-3);transform:translateY(-2px)}
+.toc-item .no{
+  font-family:"Zen Antique",serif;font-size:21px;color:var(--tomoshibi);
+  flex-shrink:0;width:1.4em;text-align:center;
+}
+.toc-item .tx .t{display:block;color:var(--kinari);font-size:16.5px;font-weight:600;letter-spacing:.02em}
+.toc-item .tx .d{display:block;color:var(--usuzumi-2);font-size:12.5px;margin-top:4px;font-family:"Zen Kaku Gothic New",sans-serif;letter-spacing:.04em}
+
+/* ====== 章 ====== */
+.chapter{padding:70px 0;border-top:1px solid var(--line-soft);scroll-margin-top:20px}
+.ch-head{margin-bottom:44px}
+.ch-kicker{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.ch-num{
+  font-family:"Zen Antique",serif;font-size:15px;color:var(--sumi);
+  background:var(--tomoshibi);width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 0 0 4px rgba(217,164,65,.12);
+}
+.ch-genre{font-family:"Zen Kaku Gothic New",sans-serif;font-size:11px;letter-spacing:.32em;color:var(--kuchiba)}
+.ch-head h2{
+  font-family:"Shippori Mincho",serif;font-weight:800;font-size:clamp(28px,4.3vw,42px);
+  color:var(--kinari);line-height:1.32;letter-spacing:.02em;
+}
+.ch-head .ch-lead{margin-top:18px;max-width:62ch;color:var(--usuzumi-2);font-size:16px;line-height:2.05}
+
+/* 小見出し */
+.term{margin:46px 0 0}
+.term-head{display:flex;align-items:baseline;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.term-head .jp{
+  font-family:"Shippori Mincho",serif;font-weight:700;font-size:23px;color:var(--tomoshibi);
+  letter-spacing:.04em;
+}
+.term-head .yomi{font-family:"Zen Kaku Gothic New",sans-serif;font-size:12px;color:var(--usuzumi-2);letter-spacing:.12em}
+.term-head .yomi::before{content:"〔";color:var(--line)}
+.term-head .yomi::after{content:"〕";color:var(--line)}
+.term p{margin-bottom:16px;color:var(--usuzumi)}
+.term p .hi{color:var(--kinari);font-weight:600;border-bottom:1px solid rgba(217,164,65,.4);padding-bottom:1px}
+.term p .word{color:var(--tomoshibi);font-weight:500}
+
+/* 読解のツボ */
+.tubo{
+  margin:26px 0;background:var(--sumi-2);border:1px solid var(--line-soft);
+  border-radius:5px;padding:24px 26px;position:relative;overflow:hidden;
+}
+.tubo::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(var(--futaai),var(--moegi));
+}
+.tubo .lab{
+  font-family:"Zen Kaku Gothic New",sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.22em;color:var(--futaai);margin-bottom:12px;display:flex;align-items:center;gap:8px;
+}
+.tubo .lab::before{content:"◆";font-size:9px;color:var(--futaai)}
+.tubo p{margin-bottom:10px;font-size:15.5px;line-height:1.95}
+.tubo p:last-child{margin-bottom:0}
+.tubo .word{color:var(--futaai);font-weight:600}
+
+/* 典拠・場面 縦組み */
+.tenkyo{
+  margin:30px 0;display:grid;grid-template-columns:1fr 1fr;gap:0;
+  border:1px solid var(--line);border-radius:5px;overflow:hidden;
+  align-items:stretch;
+}
+@media(max-width:680px){.tenkyo{grid-template-columns:1fr}}
+.tenkyo .vbox{
+  background:linear-gradient(180deg,var(--sumi-3),var(--sumi-2));
+  padding:30px 30px;
+  font-family:"Shippori Mincho",serif;font-size:17px;
+  color:var(--kinari);letter-spacing:.03em;line-height:2.1;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;
+}
+.tenkyo .vbox::before{
+  content:"";position:absolute;left:0;top:24px;bottom:24px;width:3px;
+  background:linear-gradient(var(--tomoshibi),var(--kuchiba));
+}
+.tenkyo .vbox .ln{display:block;text-indent:1em}
+@media(max-width:680px){
+  .tenkyo .vbox{flex-direction:column;align-items:center;border-left:none;border-bottom:1px solid var(--line);min-height:0;gap:.2em}
+  .tenkyo .vbox .ln{writing-mode:horizontal-tb;line-height:2.0;text-align:center}
+}
+.tenkyo .vbox .ruby-src{color:var(--tomoshibi)}
+.tenkyo .exp{padding:26px 28px;background:var(--sumi-2)}
+.tenkyo .exp .src{
+  font-family:"Zen Kaku Gothic New",sans-serif;font-size:11px;letter-spacing:.2em;
+  color:var(--kuchiba);margin-bottom:14px;
+}
+.tenkyo .exp p{font-size:15px;line-height:1.95;color:var(--usuzumi);margin-bottom:12px}
+.tenkyo .exp p:last-child{margin-bottom:0}
+.tenkyo .exp .hi{color:var(--kinari);font-weight:600}
+
+/* 読解のためのポイント */
+.nyushi{
+  margin:26px 0;padding:22px 26px;border:1px dashed var(--kuchiba);border-radius:5px;
+  background:rgba(176,95,60,.06);
+}
+.nyushi .lab{
+  font-family:"Zen Kaku Gothic New",sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.2em;color:var(--kuchiba);margin-bottom:12px;
+}
+.nyushi p{font-size:15px;line-height:1.95;color:var(--usuzumi);margin-bottom:8px}
+.nyushi p:last-child{margin-bottom:0}
+.nyushi .q{color:var(--kinari);font-style:normal;font-weight:600}
+
+/* 対比表 */
+.tbl{margin:26px 0;border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.tbl table{width:100%;border-collapse:collapse;font-size:14.5px}
+.tbl th{
+  background:var(--sumi-3);color:var(--tomoshibi);font-family:"Zen Kaku Gothic New",sans-serif;
+  font-weight:700;font-size:12.5px;letter-spacing:.12em;padding:14px 16px;text-align:left;
+  border-bottom:1px solid var(--line);
+}
+.tbl td{padding:14px 16px;border-bottom:1px solid var(--line-soft);border-right:1px solid var(--line-soft);vertical-align:top;line-height:1.8}
+.tbl td:last-child{border-right:none}
+.tbl tr:last-child td{border-bottom:none}
+.tbl td .k{color:var(--kinari);font-weight:600}
+.tbl tbody tr:nth-child(even){background:var(--sumi-2)}
+
+/* 語彙ミニリスト */
+.lexi{margin:26px 0;display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--line-soft);border-radius:5px;overflow:hidden}
+@media(max-width:680px){.lexi{grid-template-columns:1fr}}
+.lexi .row{display:flex;gap:14px;padding:14px 18px;border-bottom:1px solid var(--line-soft);align-items:baseline}
+.lexi .row:nth-child(odd){border-right:1px solid var(--line-soft)}
+@media(max-width:680px){.lexi .row:nth-child(odd){border-right:none}}
+.lexi .w{font-family:"Shippori Mincho",serif;font-weight:700;color:var(--tomoshibi);font-size:16px;flex-shrink:0;min-width:4.5em}
+.lexi .m{font-size:14px;color:var(--usuzumi);line-height:1.8}
+
+/* 結び */
+.outro{padding:80px 0 40px;border-top:1px solid var(--line)}
+.outro .marker{font-family:"Zen Kaku Gothic New",sans-serif;font-size:11px;letter-spacing:.34em;color:var(--kuchiba);margin-bottom:22px}
+.outro h2{font-family:"Shippori Mincho",serif;font-weight:800;font-size:clamp(26px,4vw,38px);color:var(--kinari);margin-bottom:26px;line-height:1.4}
+.outro p{max-width:62ch;color:var(--usuzumi);margin-bottom:18px}
+.outro p .strong{color:var(--kinari);font-weight:600}
+.order-flow{display:flex;flex-wrap:wrap;gap:12px;margin:34px 0;align-items:center}
+.order-flow .step{
+  background:var(--sumi-2);border:1px solid var(--line);border-radius:4px;padding:14px 20px;
+  font-size:14.5px;color:var(--kinari);font-weight:600;
+}
+.order-flow .step .n{color:var(--tomoshibi);font-family:"Zen Antique",serif;margin-right:8px}
+.order-flow .arr{color:var(--kuchiba);font-size:18px}
+
+footer{padding:50px 0 70px;text-align:center;border-top:1px solid var(--line-soft)}
+footer .mark{font-family:"Zen Antique",serif;font-size:18px;color:var(--tomoshibi-dim);letter-spacing:.2em}
+footer .sub{font-family:"Zen Kaku Gothic New",sans-serif;font-size:11px;letter-spacing:.24em;color:var(--usuzumi-2);margin-top:14px}
+
+/* 進捗バー */
+.progress{position:fixed;top:0;left:0;height:2px;background:var(--tomoshibi);z-index:50;width:0}
+
+/* ====== 検索 ====== */
+.search-toggle{
+  position:fixed;top:20px;right:20px;z-index:60;
+  display:flex;align-items:center;gap:8px;
+  background:var(--sumi-3);color:var(--kinari);
+  border:1px solid var(--line);border-radius:30px;
+  padding:10px 18px 10px 15px;cursor:pointer;
+  font-family:"Zen Kaku Gothic New",sans-serif;font-size:13px;letter-spacing:.1em;
+  box-shadow:0 6px 22px rgba(0,0,0,.4);transition:.22s;
+}
+.search-toggle:hover{border-color:var(--tomoshibi-dim);background:var(--sumi-2);color:var(--tomoshibi)}
+.search-toggle svg{color:var(--tomoshibi)}
+@media(max-width:600px){.search-toggle .st-label{display:none}.search-toggle{padding:11px;border-radius:50%}}
+
+.search-overlay{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(10,12,16,.72);backdrop-filter:blur(4px);
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:80px 20px 20px;
+}
+.search-overlay[hidden]{display:none}
+.search-box{
+  width:100%;max-width:680px;background:var(--sumi-2);
+  border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  animation:sbIn .2s ease;
+}
+@keyframes sbIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+.search-bar{display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line-soft)}
+.search-bar .sb-icon{color:var(--tomoshibi);flex-shrink:0}
+#searchInput{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--kinari);font-family:"Shippori Mincho",serif;font-size:17px;
+  letter-spacing:.02em;
+}
+#searchInput::placeholder{color:var(--usuzumi-2);font-size:15px}
+.sb-close{
+  background:transparent;border:none;color:var(--usuzumi-2);font-size:24px;
+  cursor:pointer;line-height:1;padding:0 4px;transition:.2s;
+}
+.sb-close:hover{color:var(--kinari)}
+.search-hint{
+  padding:14px 20px;font-family:"Zen Kaku Gothic New",sans-serif;
+  font-size:12.5px;color:var(--usuzumi-2);letter-spacing:.04em;
+}
+.search-results{max-height:54vh;overflow-y:auto}
+.sr-item{
+  display:block;width:100%;text-align:left;background:transparent;
+  border:none;border-top:1px solid var(--line-soft);
+  padding:15px 20px;cursor:pointer;transition:.16s;color:inherit;
+}
+.sr-item:hover,.sr-item.active{background:var(--sumi-3)}
+.sr-top{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.sr-ch{
+  font-family:"Zen Kaku Gothic New",sans-serif;font-size:10.5px;letter-spacing:.14em;
+  color:var(--sumi);background:var(--tomoshibi-dim);padding:2px 8px;border-radius:3px;flex-shrink:0;
+}
+.sr-term{font-family:"Shippori Mincho",serif;font-size:16px;color:var(--kinari);font-weight:600}
+.sr-yomi{font-family:"Zen Kaku Gothic New",sans-serif;font-size:11px;color:var(--usuzumi-2)}
+.sr-snippet{font-size:13px;color:var(--usuzumi-2);line-height:1.7;margin-top:2px}
+.sr-snippet mark,.sr-term mark{background:rgba(217,164,65,.28);color:var(--tomoshibi);border-radius:2px;padding:0 1px}
+.sr-empty{padding:22px 20px;color:var(--usuzumi-2);font-family:"Zen Kaku Gothic New",sans-serif;font-size:13px}
+
+/* ジャンプ先ハイライト */
+.flash{animation:flashHi 2.2s ease}
+@keyframes flashHi{
+  0%,12%{background:rgba(217,164,65,.16);box-shadow:0 0 0 6px rgba(217,164,65,.10)}
+  100%{background:transparent;box-shadow:0 0 0 6px rgba(217,164,65,0)}
+}
+
+/* セクション内アンカー戻り */
+.toc-back{display:inline-block;margin-top:8px;font-family:"Zen Kaku Gothic New",sans-serif;
+  font-size:11px;letter-spacing:.18em;color:var(--usuzumi-2);text-decoration:none}
+.toc-back:hover{color:var(--tomoshibi)}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<!-- ============ 検索 ============ -->
+<button class="search-toggle" id="searchToggle" aria-label="言葉で調べる">
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
+  <span class="st-label">調べる</span>
+</button>
+
+<div class="search-overlay" id="searchOverlay" hidden>
+  <div class="search-box" role="dialog" aria-label="言葉で調べる">
+    <div class="search-bar">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="sb-icon"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
+      <input type="text" id="searchInput" placeholder="語・読み・テーマで調べる（例：乳母子、かじ、無常）" autocomplete="off" spellcheck="false">
+      <button class="sb-close" id="searchClose" aria-label="閉じる">×</button>
+    </div>
+    <div class="search-hint" id="searchHint">語句や読みがなを入力すると、本文の該当箇所を探します。</div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<!-- ============ 表紙 ============ -->
+<header class="cover">
+  <div class="wrap cover-inner">
+    <div>
+      <div class="cover-eyebrow">最難関大学 古文読解のための前提知識</div>
+      <h1>古文の世界に<br>分け入る<span class="accent">。</span></h1>
+      <p class="lead">
+        単語の意味を当て、助動詞を識別し、敬語の方向を見抜く。
+        それでもなお解けない設問がある。<span class="em">理由は、答えが「言葉」ではなく「世界」の側にあるからだ。</span>
+        加持とは何か。なぜ人は出家するのか。乳母子は誰の味方か。
+        当時の人々が当然としていた前提を共有してはじめて、本文は「読める」ものになる。
+      </p>
+      <div class="cover-meta">
+        <span>全十三章</span>
+        <span>信仰・出家・婚姻・身分・美意識</span>
+        <span>典拠場面と入試の着眼つき</span>
+      </div>
+    </div>
+    <div class="tanzaku">
+      <span class="col">ことわりは ことばの そとに あり</span>
+      <span class="seal">講<br>義</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 序文 ============ -->
+<section class="preface">
+  <div class="wrap">
+    <div class="marker">序 ― なぜ「世界観」から始めるのか</div>
+    <p>
+      古文の学習は、ふつう単語と文法から始まる。それは正しい。だが、最難関大学が問うてくるのは、その先にある<span class="strong">「なぜ登場人物はそう感じ、そう動いたのか」</span>という心情と論理の理解である。たとえば「女、にはかに様を変へてけり」という一文。語彙としては「様を変ふ＝出家する」と訳せば足りる。しかし設問は問う ―― なぜ彼女は出家したのか、と。
+    </p>
+    <p>
+      その答えは本文の言葉尻には書かれていない。出家が<span class="strong">現世の人間関係をすべて断つ決定的な行為</span>であり、多くは絶望の果ての最終手段だという「当時の常識」を知る者だけが、前後の文脈から理由を再構成できる。知識のない者は「髪を切った」という事実しか読み取れない。これは読解ではない。
+    </p>
+    <div class="pull">
+      言葉を訳すことを「解釈」と呼ぶなら、<br>その言葉が生きていた世界を知ることを「読解」と呼ぶ。
+    </div>
+    <p>
+      本書は、平安・中世の物語世界を生きた人々の<span class="strong">前提・制度・価値観</span>を、読解の現場で使える形に整理したものである。各テーマには、その知識が実際の本文でどう働くかを示す「読解のツボ」、典型的な場面例を原文と解説で対照させる「典拠」、そして「読解のためのポイント」を添えた。通読すれば、本文の向こうに立ち上がる世界の輪郭が見えてくるはずだ。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 目次 ============ -->
+<nav class="toc">
+  <div class="wrap">
+    <div class="toc-head">
+      <span class="ttl">目次</span>
+      <span class="sub">THIRTEEN CHAPTERS</span>
+    </div>
+    <div class="toc-grid">
+      <a class="toc-item" href="#ch1"><span class="no">一</span><span class="tx"><span class="t">信仰と病 ― 物の怪の世界</span><span class="d">加持祈祷・物の怪・陰陽道・穢れ</span></span></a>
+      <a class="toc-item" href="#ch2"><span class="no">二</span><span class="tx"><span class="t">出家するということ</span><span class="d">世を捨てる・道心・往生の希求</span></span></a>
+      <a class="toc-item" href="#ch3"><span class="no">三</span><span class="tx"><span class="t">養育と人間関係</span><span class="d">乳母・乳母子・後見・家</span></span></a>
+      <a class="toc-item" href="#ch4"><span class="no">四</span><span class="tx"><span class="t">結婚と恋愛の作法</span><span class="d">通い婚・垣間見・後朝・待つ女</span></span></a>
+      <a class="toc-item" href="#ch5"><span class="no">五</span><span class="tx"><span class="t">身分と官位の感覚</span><span class="d">上達部・殿上人・后妃の序列</span></span></a>
+      <a class="toc-item" href="#ch6"><span class="no">六</span><span class="tx"><span class="t">宮廷社会と女房</span><span class="d">出仕・教養・語り手としての女房</span></span></a>
+      <a class="toc-item" href="#ch7"><span class="no">七</span><span class="tx"><span class="t">帝を取り巻く人間関係</span><span class="d">御息所・みこ・院・外戚・呼称</span></span></a>
+      <a class="toc-item" href="#ch8"><span class="no">八</span><span class="tx"><span class="t">美意識と評価語</span><span class="d">あはれ・をかし・心づきなし</span></span></a>
+      <a class="toc-item" href="#ch9"><span class="no">九</span><span class="tx"><span class="t">時間・空間・生活</span><span class="d">時刻と方角・寝殿造・年中行事</span></span></a>
+      <a class="toc-item" href="#ch10"><span class="no">十</span><span class="tx"><span class="t">無常・運命・死生観</span><span class="d">宿世・無常・夢・もののあはれ</span></span></a>
+      <a class="toc-item" href="#ch11"><span class="no">十一</span><span class="tx"><span class="t">和歌の修辞</span><span class="d">掛詞・縁語・序詞・本歌取り</span></span></a>
+      <a class="toc-item" href="#ch12"><span class="no">十二</span><span class="tx"><span class="t">軍記物語の世界</span><span class="d">名誉・主従・無常・滅びの美学</span></span></a>
+      <a class="toc-item" href="#ch13"><span class="no">十三</span><span class="tx"><span class="t">説話の枠組み</span><span class="d">今は昔・因果応報・霊験・教訓</span></span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ 第一章 信仰と病 ============ -->
+<section class="chapter" id="ch1">
+  <div class="wrap">
+    <div class="ch-head">
+      <div class="ch-kicker"><span class="ch-num">一</span><span class="ch-genre">信仰 ・ 病 ・ 怪異</span></div>
+      <h2>信仰と病 ―― 物の怪の住む世界</h2>
+      <p class="ch-lead">
+        平安貴族にとって、病・出産・天変・夢は、すべて目に見えぬ力の働きであった。医学が呪術と未分化なこの世界では、「病む」とは多くの場合「憑かれる」ことを意味する。この前提を欠くと、看病・祈祷の場面はただの背景描写に見えてしまう。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">加持・祈祷</span><span class="yomi">かじ・きとう</span></div>
+      <p>
+        <span class="word">加持</span>とは、密教の僧（<span class="hi">験者＝げんざ</span>）が印を結び真言を唱えて、仏の加護を病人の身に移す行為である。現代でいえば<span class="hi">医療そのもの</span>の位置を占める。高貴な人が病めば名僧が召され、昼夜を分かたず祈りが続けられた。「験あり（効きめがある）」「験なし」という言い方は、この祈祷の効果を指す。
+      </p>
+      <p>
+        決定的に重要なのは、当時の発想では<span class="hi">病気の原因が「物の怪」である</span>こと。死霊・生霊が人にとり憑くから人は病む。ゆえに治療とは、薬を与えることではなく、<span class="word">験者が物の怪を責めたて、調伏（ちょうぶく）して退散させる</span>営みになる。
+      </p>
+    </div>
+
+    <div class="tubo">
+      <div class="lab">読解のツボ ― 「悩む」「わづらふ」を見たら</div>
+      <p><span class="word">「悩む」「わづらふ」「例ならず」「心地あし」</span>は、単なる気分の不調ではなく、しばしば物の怪の関与する本格的な「病」を示す合図である。この語が出たら、近くに祈祷・験者・憑坐の登場を予期して読む。</p>
+      <p>とりわけ<span class="word">出産（御産）の場面</span>は要注意。出産は命がけであり、物の怪が最も活発に現れる危機とされた。安産祈願の祈祷の最中に物の怪が暴れ出す、という展開は物語の山場の定型である。</p>
+    </div>
+
+    <div class="tenkyo">
+      <div class="vbox">
+        <span class="ln">御物の怪のひとつ、</span>
+        <span class="ln">憑坐に駆り移して、</span>
+        <span class="ln">さばかりさいなめど、</span>
+        <span class="ln">さらにあらはれず ――</span>
+        <span class="ln">御けしき、いと苦しげなり。</span>
+      </div>
+      <div class="exp">
+        <div class="src">典型場面 ― 出産・看病の段</div>
+        <p>物の怪を<span class="hi">憑坐（よりまし）</span>＝霊を一時的に乗り移らせる媒体役（多くは童女）に駆り移し、験者が責めさいなむが、なかなか正体を現さない、という場面。</p>
+        <p>『源氏物語』葵巻では、出産する葵の上に取り憑いた物の怪が、<span class="hi">六条御息所の生霊</span>であることが、その口を借りて明かされる。生きた人間の嫉妬や怨念が、本人の意識を離れて霊となって他人を苦しめる ―― この「生霊」の観念は、人間関係の緊張を可視化する装置として読む。</p>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">陰陽道と禁忌</span><span class="yomi">おんやうだう</span></div>
+      <p>
+        吉凶・方角・暦を司る陰陽道は、日常行動を細かく規定した。これらは単なる迷信ではなく、行動を縛る<span class="hi">れっきとした社会のルール</span>として機能した。だからこそ「予定が禁忌で流れる」ことが物語の転機になりうる。
+      </p>
+    </div>
+
+    <div class="lexi">
+      <div class="row"><span class="w">物忌</span><span class="m">ものいみ。凶兆・夢・暦により、一定期間家に籠もり外との接触を断つ。来客も訪問も止まる。</span></div>
+      <div class="row"><span class="w">方違へ</span><span class="m">かたたがへ。目的の方角が塞がる（方塞がり）とき、前夜別方向の家に泊まり、方角を変えてから向かう。</span></div>
+      <div class="row"><span class="w">穢れ</span><span class="m">けがれ。死・出産・血は穢れとされ、触れた者は一定期間、宮中や祭祀から退く必要があった。</span></div>
+      <div class="row"><span class="w">夢解き</span><span class="m">ゆめとき。夢は未来や神仏の意を告げるものとされ、夢占いで吉凶を判じた。物語の伏線になる。</span></div>
+    </div>
+
+    <div class="nyushi">
+      <div class="lab">読解のためのポイント</div>
+      <p><span class="q">男が女のもとを訪れない夜に着目する。</span>その理由が「方違へ」「物忌」にあることがある。本文中の暦・方角への言及を、恋の足が止まる「行動の制約」として読めると、すれ違いの場面の意味が変わる。</p>
+      <p><span class="q">「悩む」「わづらふ」の正体を文脈で押さえる。</span>物の怪・病の世界観を踏まえ、看病・祈祷の文脈と結びつけて読む。単なる「気分のすぐれなさ」ではなく、物の怪の関与する危機として捉えるのが要点。</p>
+    </div>
+    <a class="toc-back" href="#ch1">▲ 章のはじめへ</a>
+  </div>
+</section>
+
+<!-- ============ 第二章 出家 ============ -->
+<section class="chapter" id="ch2">
+  <div class="wrap">
+    <div class="ch-head">
+      <div class="ch-kicker"><span class="ch-num">二</span><span class="ch-genre">遁世 ・ 信仰 ・ 決断</span></div>
+      <h2>出家するということ</h2>
+      <p class="ch-lead">
+        現代人が「出家」と聞いて思う以上に、それは重い。家・官位・恋・家族 ―― 現世のあらゆる縁を断つ行為であり、人間関係の物語においては、しばしば「これ以上ここにはいられない」という最終的な意思表示として選ばれる。読解上もっとも誤読されやすい主題である。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">世を捨てる</span><span class="yomi">よをすつ</span></div>
+      <p>
+        出家とは、文字どおり<span class="hi">「世」＝現世の人間関係の網の目から降りること</span>である。家を出て俗世の交わりを断ち、仏道に専念する。ゆえに出家は、周囲にとって<span class="word">衝撃的な「別れ」</span>であり、しばしば必死の引き止めの対象になる。
+      </p>
+      <p>
+        とりわけ<span class="hi">男女関係においては、一方の出家は関係の終焉を意味する</span>。女が出家すれば、通ってきた男とのつながりは原則として絶たれる。だから出家は、夫の心変わり・死別・耐えがたい苦悩の果てに選ばれる、<span class="word">絶望の最終手段</span>として描かれることが多い。「いっそ尼にでもなってしまおうか」という独白は、現状からの脱出願望のサインである。
+      </p>
+    </div>
+
+    <div class="tubo">
+      <div class="lab">読解のツボ ― 出家を表す言葉の段階</div>
+      <p>出家は一語で表されない。次の表現群を<span class="word">すべて「出家（の決意・実行）」と結びつけて</span>読めるようにする。</p>
+      <p><span class="word">「様を変ふ」「やつす」「御髪おろす」「世を背く」「世を遁る」「頭おろす」「墨染に変ふ」</span>― いずれも髪を切り墨染の衣をまとう＝出家を指す。</p>
+      <p>また、正式な出家に至らずとも、<span class="word">「道心おこる」「行ひ（勤行）」</span>など仏道に心を寄せる段階（在家のまま）と、正式な出家とは区別して読むと精度が上がる。</p>
+    </div>
+
+    <div class="tenkyo">
+      <div class="vbox">
+        <span class="ln">かくては、世に経べくも</span>
+        <span class="ln">おぼえずなりにければ、</span>
+        <span class="ln">人知れず様を変へて、</span>
+        <span class="ln">深き山に入りなむと</span>
+        <span class="ln">思ひ立ちぬ。</span>
+      </div>
+      <div class="exp">
+        <div class="src">典型場面 ― 出家の決意</div>
+        <p>「このままではとても生きていけそうにも思えなくなったので、人知れず出家して、深い山に入ってしまおうと決意した」。</p>
+        <p>ここで読むべきは、出家が<span class="hi">「世に経べくもおぼえず（現世で生きていけそうにない）」という絶望と一対</span>になっている点。出家の手前には必ず、それを選ばせた苦悩がある。設問はその苦悩の中身を問うてくる。</p>
+        <p>「深き山に入る」も重要で、<span class="hi">山＝俗世から最も遠い聖域</span>。山に籠もることは現世との距離の最大化を象徴する。</p>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">往生への希求</span><span class="yomi">おうじやう</span></div>
+      <p>
+        出家は絶望からの逃避であると同時に、<span class="hi">来世の安楽（極楽往生）を願う積極的な信仰行為</span>でもある。この両面を押さえると、出家者の心情は単純な「悲しみ」では捉えきれなくなる。現世を厭い（厭離穢土）、浄土を願う（欣求浄土）という中世的心性が、その背後にある。
+      </p>
+    </div>
+
+    <div class="nyushi">
+      <div class="lab">読解のためのポイント</div>
+      <p><span class="q">出家の決意は、その手前の「絶望」とセットで読む。</span>直前の出来事（夫の裏切り、死別、恋の破綻など）を「現世への絶望」として整理し、出家＝関係の断絶・救済の希求という意味づけと結ぶ。</p>
+      <p><span class="q">「やつす」「様を変ふ」を見たら、不可逆の決断と捉える。</span>語義（出家する）に加え、それが現世の縁を断つ後戻りできない選択であることまで意識すると、人物の心情の重さが見えてくる。</p>
+    </div>
+    <a class="toc-back" href="#ch2">▲ 章のはじめへ</a>
+  </div>
+</section>
+
+<!-- ============ 第三章 養育と人間関係 ============ -->
+<section class="chapter" id="ch3">
+  <div class="wrap">
+    <div class="ch-head">
+      <div class="ch-kicker"><span class="ch-num">三</span><span class="ch-genre">養育 ・ 血縁 ・ 後見</span></div>
+      <h2>養育と人間関係 ―― 誰が誰の味方か</h2>
+      <p class="ch-lead">
+        物語の登場人物は孤立して存在しない。誰に育てられ、誰に支えられ、誰を腹心とするか ―― その人間関係の網が、行動の動機と可能性を決める。とりわけ「乳母」と「乳母子」は、貴族社会に固有の濃密な絆であり、物語を陰で動かす。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">乳母</span><span class="yomi">めのと</span></div>
+      <p>
+        貴族の子は、実母ではなく<span class="hi">乳母が授乳し養育する</span>のが常であった。乳母は養い君（やしないぎみ）に対して、しばしば<span class="word">実母以上に献身的</span>であり、その子が成人したのちも生涯にわたって後見・相談役・庇護者であり続ける。
+      </p>
+      <p>
+        物語の中で乳母は、養い君の<span class="hi">縁談や恋に深く関与し、時には策を巡らせる</span>能動的な存在として描かれる。養い君の幸福のためなら手段を選ばぬこともある。「乳母」が登場したら、その人物が誰の利害を背負って動いているかを意識する。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">乳母子</span><span class="yomi">めのとご</span></div>
+      <p>
+        乳母の実の子で、養い君と<span class="hi">乳を分けて共に育った「乳兄弟・乳姉妹」</span>。身分は養い君より低いが、心理的な距離はもっとも近い。物語においては、主人の<span class="word">最も信頼できる腹心・協力者</span>として機能する。
+      </p>
+      <p>
+        とりわけ恋愛では、<span class="word">恋文の取り次ぎ・密会の手引き・秘密の共有者</span>という役割を担う。『源氏物語』の<span class="hi">惟光（光源氏の乳母子）</span>が、主人の忍び歩きや密会を一手に引き受けるのが典型。乳母子が出てきたら「主人公の秘密を知り、ともに動く者」と読む。
+      </p>
+    </div>
+
+    <div class="tbl">
+      <table>
+        <thead><tr><th>関係</th><th>立場</th><th>物語での働き</th></tr></thead>
+        <tbody>
+          <tr><td><span class="k">実母</span></td><td>身分上の母</td><td>養育には必ずしも直接関わらない。死別すると後見を失う契機に。</td></tr>
+          <tr><td><span class="k">乳母</span></td><td>養育の母</td><td>生涯の後見役。縁談・恋に介入し、策を巡らせることも。</td></tr>
+          <tr><td><span class="k">乳母子</span></td><td>乳兄弟・腹心</td><td>恋の取り次ぎ、密会の手引き、秘密の共有者。主人と一体で動く。</td></tr>
+          <tr><td><span class="k">後見</span></td><td>庇護者</td><td>経済・政治的に支える。父・有力者。これを失うと没落へ向かう。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tubo">
+      <div class="lab">読解のツボ ― 「後見」の有無が運命を決める</div>
+      <p><span class="word">後見（うしろみ）</span>とは、親代わりに経済的・政治的に人を支える存在。父を亡くした姫君に有力な後見がいるか否かは、その後の人生 ―― 良縁に恵まれるか、零落するか ―― を直接左右する。</p>
+      <p>物語で<span class="word">「親（特に父）が亡くなる」</span>展開が出たら、それは多くの場合<span class="word">「後見の喪失＝零落の始まり」</span>の合図。以後の苦難はここから連鎖する。この因果を押さえると、悲劇の構造が見える。</p>
+    </div>
+
+    <div class="tenkyo">
+      <div class="vbox">
+        <span class="ln">いとよう仕うまつる乳母子の</span>
+        <span class="ln">ありければ、</span>
+        <span class="ln">その人をかたらひて、</span>
+        <span class="ln">御文など忍びて</span>
+        <span class="ln">通はしけり。</span>
+      </div>
+      <div class="exp">
+        <div class="src">典型場面 ― 恋の取り次ぎ</div>
+        <p>「実によく仕える乳母子がいたので、その者を味方に引き入れて、恋文などをこっそりとやりとりさせた」。</p>
+        <p><span class="hi">「かたらふ」</span>はここで「味方に引き入れる・共謀する」の意。乳母子は身分の壁を越えて主人の私事に入り込める唯一の存在であり、だからこそ密事を託される。恋がうまく運ぶかどうかは、しばしば<span class="hi">この取り次ぎ役の働き次第</span>であった。</p>
+      </div>
+    </div>
+
+    <div class="nyushi">
+      <div class="lab">読解のためのポイント</div>
+      <p><span class="q">協力者が誰かを、乳母子の絆から読む。</span>主人公に手を貸す人物が乳母子であれば、その協力は「親しいから」ではなく、共に育った特別な絆に根ざす。制度的な結びつきを背景に置くと、行動の必然が見える。</p>
+      <p><span class="q">境遇の悪化は「後見の喪失」を起点に追う。</span>姫君の零落の物語では、父（後見）の死を出発点とする因果の連鎖を読み取るのが鍵。苦難の根がどこにあるかを押さえる。</p>
+    </div>
+    <a class="toc-back" href="#ch3">▲ 章のはじめへ</a>
+  </div>
+</section>
+
+<!-- ============ 第四章 結婚と恋愛 ============ -->
+<section class="chapter" id="ch4">
+  <div class="wrap">
+    <div class="ch-head">
+      <div class="ch-kicker"><span class="ch-num">四</span><span class="ch-genre">婚姻 ・ 恋愛 ・ 作法</span></div>
+      <h2>結婚と恋愛の作法</h2>
+      <p class="ch-lead">
+        恋愛と結婚の制度は、現代とまったく異なる。男が女のもとへ「通う」こと、女は顔を見せないこと、関係が和歌の贈答で進むこと ―― これらの作法を知らないと、恋物語の一挙手一投足が読み解けない。とりわけ「待つ女」の構図は、平安文学の情感の核である。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">通い婚</span><span class="yomi">かよいこん</span></div>
+      <p>
+        当時の結婚は、<span class="hi">男が女の家へ通う「招婿婚（しょうせいこん）」</span>が基本だった。男が三晩続けて通い、三日目の夜に<span class="word">「三日夜の餅（みかよのもち）」</span>を共に食べることで結婚が成立する。夫婦は同居せず、男は自分の家や宮中から女のもとへ通い続ける。
+      </p>
+      <p>
+        さらに当時は<span class="hi">一夫多妻</span>であり、<span class="word">正妻（北の方）</span>のほかに複数の妻・通い所が併存した。この制度ゆえに、女たちの間には絶えず競争と嫉妬が生まれ、それが物語の葛藤の源泉となる。
+      </p>
+    </div>
+
+    <div class="tubo">
+      <div class="lab">読解のツボ ― 「待つ女」と「夜離れ」</div>
+      <p>男が通う制度の裏面は、<span class="word">女がただひたすら「待つ」しかない</span>という非対称である。男の足が遠のくこと（<span class="word">夜離れ＝よがれ</span>）は、女にとって心変わりの兆しであり、深い不安と嘆きを呼ぶ。</p>
+      <p>古文の女性が嘆く和歌の多くは、この「待っても来ない男」への思いである。<span class="word">「来ぬ人を待つ」</span>状況設定を見抜けば、女の心情は自ずと読める。『蜻蛉日記』はまさにこの「待つ女」の苦悩の記録である。</p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">垣間見</span><span class="yomi">かいまみ</span></div>
+      <p>
+        女は親兄弟以外の男に<span class="hi">顔を見せない</span>のが原則だった。御簾・几帳・扇で常に姿を隠す。ゆえに男が女の姿を<span class="word">物の隙間や垣根越しにのぞき見る「垣間見」</span>こそが、恋の発端の定型となる。源氏が若紫を垣間見る場面は、その代表である。
+      </p>
+      <p>
+        姿が見えないからこそ、男は<span class="hi">噂・筆跡・和歌・楽の音</span>から女を想像し、恋心を募らせた。「まだ見ぬ人」に恋することが、ごく自然に起こりえた世界である。
+      </p>
+    </div>
+
+    <div class="tenkyo">
+      <div class="vbox">
+        <span class="ln">明けぬれば、</span>
+        <span class="ln">後朝の文、</span>
+        <span class="ln">いつしかと待たるるを、</span>
+        <span class="ln">日たくるまで</span>
+        <span class="ln">音もせず。</span>
+      </div>
+      <div class="exp">
+        <div class="src">典型場面 ― 後朝（きぬぎぬ）の別れ</div>
+        <p>共に一夜を過ごした男女は、夜明けとともに別れる。これを<span class="hi">「後朝（きぬぎぬ）の別れ」</span>という。男は帰宅後ただちに<span class="word">「後朝の文」</span>を女に送るのが礼であり、その文が早いか遅いか、来るか来ないかが、男の誠意を測る指標となった。</p>
+        <p>左の場面は、待っても後朝の文が来ない女の不安。<span class="hi">「待たるる」の自発、「音もせず」の余情</span>に、制度に縛られた女の心細さが凝縮する。</p>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">和歌の贈答</span><span class="yomi">わかのぞうとう</span></div>
+      <p>
+        恋は<span class="hi">和歌のやりとりで進行する</span>。求愛も、承諾も、拒絶も、恨みも、すべて歌に託される。返歌があるか否か、その<span class="word">速さ・出来栄え・筆跡（手）</span>が、相手の心と教養を映す。返歌をしない＝拒絶、という符牒も成立する。
+      </p>
+    </div>
+
+    <div class="nyushi">
+      <div class="lab">読解のためのポイント</div>
+      <p><span class="q">女の嘆きは「待つ女」の構図から読む。</span>夜離れや後朝の文の不在を、通い婚という制度の上に置く。来ない男を待つしかない非対称が、嘆きの背景にあると分かれば、心情の必然が掴める。</p>
+      <p><span class="q">贈答歌は、表の意味の裏を読む。</span>掛詞・縁語に込めた当てこすりや恨み、承諾や拒絶を読み取り、前後の地の文（状況説明）と必ず結びつける。歌だけを単独で訳さない。</p>
+    </div>
+    <a class="toc-back" href="#ch4">▲ 章のはじめへ</a>
+  </div>
+</section>
+
+<!-- ============ 第五章 身分と官位 ============ -->
+<section class="chapter" id="ch5">
+  <div class="wrap">
+    <div class="ch-head">
+      <div class="ch-kicker"><span class="ch-num">五</span><span class="ch-genre">身分 ・ 官位 ・ 序列</span></div>
+      <h2>身分と官位の感覚</h2>
+      <p class="ch-lead">
+        この社会で身分は絶対である。身分違いの恋は悲劇を生み、「身のほど」の意識が人の行動を縛る。官職名を細かく暗記する必要はないが、登場人物が「どのくらい高い／低い人物か」を即座に掴む感覚は、読解の土台となる。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">身のほど</span><span class="yomi">みのほど</span></div>
+      <p>
+        階層は固定的で、人は<span class="hi">己の「身のほど」を弁える</span>ことを求められた。身分の高い相手への恋は「分不相応」として、本人にも周囲にも強い葛藤をもたらす。<span class="word">受領（地方官）の娘と上達部の御曹司</span>では、結婚は容易に成立しない。この身分差の壁こそが、多くの恋物語の悲劇を生む。
+      </p>
+    </div>
+
+    <div class="tbl">
+      <table>
+        <thead><tr><th>区分</th><th>位</th><th>説明と読みどころ</th></tr></thead>
+        <tbody>
+          <tr><td><span class="k">上達部</span><br>かんだちめ</td><td>三位以上＋参議</td><td>公卿。最上層の貴族。大臣・大納言・中納言など。物語の中心人物はここに属することが多い。</td></tr>
+          <tr><td><span class="k">殿上人</span><br>てんじょうびと</td><td>四位・五位（＋蔵人）</td><td>清涼殿の殿上の間に昇ることを許された者。貴族社会の中堅。</td></tr>
+          <tr><td><span class="k">地下</span><br>じげ</td><td>六位以下</td><td>昇殿を許されない下級官人。物語では脇役・使用人層。</td></tr>
+          <tr><td><span class="k">受領</span><br>ずりょう</td><td>地方官（国司）</td><td>地方へ赴任して実利を得る中級貴族。富裕だが、家柄では中央貴族に劣るとされた。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tubo">
+      <div class="lab">読解のツボ ― 后妃の序列を押さえる</div>
+      <p>宮中の女性の身分は物語の権力構造そのもの。最低限、次の序列を押さえる。</p>
+      <p><span class="word">中宮（皇后）＞女御（にょうご）＞更衣（こうい）</span>。中宮は后の位、女御はその候補となる高位の妃、更衣はそれに次ぐ。『源氏物語』桐壺巻の悲劇は、<span class="word">「更衣」という低い身分の桐壺更衣が、帝の寵愛を一身に集めた</span>ことへの周囲の嫉妬から始まる。身分と寵愛の不均衡が悲劇を生む構図である。</p>
+      <p>男性皇族では<span class="word">東宮（春宮＝とうぐう）＝皇太子</span>が最重要。「東宮」が誰かは、しばしば物語の政治的帰趨を握る。</p>
+    </div>
+
+    <div class="tenkyo">
+      <div class="vbox">
+        <span class="ln">いとやむごとなき際には</span>
+        <span class="ln">あらぬが、</span>
+        <span class="ln">すぐれて時めき給ふ</span>
+        <span class="ln">ありけり。</span>
+      </div>
+      <div class="exp">
+        <div class="src">典型場面 ― 桐壺巻 冒頭（趣意）</div>
+        <p>「それほど高貴な身分ではない方で、際立って帝のご寵愛を受けていらっしゃる方がいた」。</p>
+        <p><span class="hi">「やむごとなき際にはあらぬ」</span>＝身分は最上ではない、という一句が、後の悲劇のすべてを準備する。身分が低いのに寵愛だけが厚い ―― その不均衡が周囲の反感を呼ぶ、と読めるかどうか。<span class="hi">「時めく」＝寵愛を受けて栄える</span>は最重要語。</p>
+      </div>
+    </div>
+
+    <div class="nyushi">
+      <div class="lab">読解のためのポイント</div>
+      <p><span class="q">恋の困難は「身分差」を制度として読む。</span>二人の恋が容易に進まないとき、その壁が身分（身のほど）にあることが多い。当人の感情だけでなく、社会的な隔てを背景に置く。</p>
+      <p><span class="q">敬語の方向で人物の上下関係を測る。</span>誰に尊敬語が向くかで、その場の最上位者が分かる。身分の感覚と敬語法は連動しており、敬語は人物相関を読む手がかりになる。</p>
+    </div>
+    <a class="toc-back" href="#ch5">▲ 章のはじめへ</a>
+  </div>
+</section>
+
+<!-- ============ 第六章 宮廷社会と女房 ============ -->
+<section class="chapter" id="ch6">
+  <div class="wrap">
+    <div class="ch-head">
+      <div class="ch-kicker"><span class="ch-num">六</span><span class="ch-genre">宮廷 ・ 女房 ・ 教養</span></div>
+      <h2>宮廷社会と女房</h2>
+      <p class="ch-lead">
+        物語や日記の多くは、宮廷に仕える女性 ―― 女房 ―― の目を通して書かれた。彼女たちが何者で、どんな教養を持ち、どんな立場で宮廷を見ていたかを知ることは、語りの視点そのものを理解することにつながる。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">女房</span><span class="yomi">にょうぼう</span></div>
+      <p>
+        后妃や貴人に仕える女性を<span class="word">女房</span>という。彼女たちは<span class="hi">和歌・漢学・音楽・書</span>といった高い教養を備え、主人に代わって客に応対し、主人の名誉を担った。『源氏物語』の紫式部、『枕草子』の清少納言は、いずれも中宮に仕えた女房である。
+      </p>
+      <p>
+        重要なのは、女房がしばしば<span class="hi">物語の語り手・観察者</span>であること。宮廷の出来事は「女房の見聞」というフィルターを通して語られる。だから語りには、女房ならではの<span class="word">距離感・批評眼・主人への配慮</span>が織り込まれる。
+      </p>
+    </div>
+
+    <div class="tubo">
+      <div class="lab">読解のツボ ― 「出仕」の両義性</div>
+      <p>姫君が宮仕えに出る（<span class="word">出仕</span>）ことには、相反する二つの意味がある。一方では、<span class="word">人目に姿を晒す</span>ことであり、深窓に守られるべき姫君が宮仕えに出るのは身分を下げる面がある。親がそれを躊躇する場面は多い。</p>
+      <p>他方、後ろ盾を失った女にとって、宮仕えは<span class="word">数少ない生計と社会的活路</span>でもある。この両義性を踏まえると、「娘を出仕させるかどうか」をめぐる親の葛藤の意味が読める。</p>
+    </div>
+
+    <div class="lexi">
+      <div class="row"><span class="w">上達部</span><span class="m">→ 第五章。女房はこうした高位の貴人に仕える。</span></div>
+      <div class="row"><span class="w">里下がり</span><span class="m">さとさがり。女房が宮中を離れ、実家へ一時帰宅すること。</span></div>
+      <div class="row"><span class="w">局</span><span class="m">つぼね。女房に与えられた宮中の個室。私的な対面や逢瀬の場にもなる。</span></div>
+      <div class="row"><span class="w">候ふ</span><span class="m">さぶらふ・さうらふ。貴人のそばに「お仕えする」。女房の存在を示す基本語。</span></div>
+    </div>
+
+    <div class="nyushi">
+      <div class="lab">読解のためのポイント</div>
+      <p><span class="q">語り手（女房）の立ち位置を意識する。</span>宮廷の出来事は女房の見聞というフィルターを通して語られる。誰に同情的か、誰に批判的かを語りの調子から読むと、出来事の意味づけが見えてくる。</p>
+      <p><span class="q">『枕草子』型では「をかし」とされるものの共通点を探す。</span>何を趣あるものとして拾い上げるか――そこに女房の美意識・知的な感受性が表れる（次章の評価語へつながる）。</p>
+    </div>
+    <a class="toc-back" href="#ch6">▲ 章のはじめへ</a>
+  </div>
+</section>
+
+<!-- ============ 帝を取り巻く人間関係 ============ -->
+<section class="chapter" id="ch7">
+  <div class="wrap">
+    <div class="ch-head">
+      <div class="ch-kicker"><span class="ch-num">七</span><span class="ch-genre">帝 ・ 后妃 ・ 皇子女</span></div>
+      <h2>帝を取り巻く人間関係</h2>
+      <p class="ch-lead">
+        宮廷を舞台にした作品では、帝を中心に幾重もの人間関係が渦を巻く。複数の后妃、その産んだ皇子女、次の帝候補をめぐる駆け引き、后の実家（外戚）の権勢。誰が誰の母で、誰の後ろ盾が誰かを掴めないと、人物の一喜一憂も政争の構図も見えてこない。<span class="hi">「御息所」「みこ」「女御」「院」</span>といった呼称を、相関図の座標として読めるようにする。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">后妃の序列</span><span class="yomi">こうひ</span></div>
+      <p>
+        帝には複数の妻がおり、その身分には明確な序列がある。<span class="hi">中宮（皇后）＞女御＞更衣</span>が基本。さらにその下に御匣殿（みくしげどの）など、宮仕えから帝の寵を得る女性もいた。
+      </p>
+      <p>
+        <span class="word">女御（にょうご）</span>は中宮に次ぐ高位の妃で、多くは大臣・親王クラスの娘。<span class="word">更衣（こうい）</span>はそれに次ぎ、大納言以下の娘がなった。複数の女御の中から、誰が中宮の位に立つか（立后）が、その実家の権勢を懸けた大問題となる。<span class="hi">寵愛の深さと身分の高さは必ずしも一致せず</span>、その不均衡が嫉妬と悲劇を生む（桐壺更衣はその典型）。
+      </p>
+    </div>
+
+    <div class="tbl">
+      <table>
+        <thead><tr><th>呼称</th><th>立場</th><th>読みどころ</th></tr></thead>
+        <tbody>
+          <tr><td><span class="k">中宮・皇后</span><br>ちゅうぐう</td><td>后の位。原則一人</td><td>立后は実家の権勢の頂点。複数の女御が候補を争う。</td></tr>
+          <tr><td><span class="k">女御</span><br>にょうご</td><td>中宮に次ぐ妃</td><td>大臣・親王の娘が多い。中宮候補。所生の皇子が東宮になれば地位は盤石。</td></tr>
+          <tr><td><span class="k">更衣</span><br>こうい</td><td>女御に次ぐ妃</td><td>家柄は劣る。寵愛を受けると周囲の妬みを買いやすい。</td></tr>
+          <tr><td><span class="k">御息所</span><br>みやすんどころ</td><td>皇子女を産んだ妃/東宮妃</td><td>下記参照。文脈で指す対象が変わる要注意語。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">御息所</span><span class="yomi">みやすんどころ</span></div>
+      <p>
+        もとは<span class="hi">帝の寝所に侍る人（御休み所）</span>の意で、そこから転じて<span class="word">帝の寵を受け、皇子・皇女を産んだ女御・更衣</span>を敬っていう語となった。つまり「御息所」と呼ばれる人は、帝との間に子をなした妃であることが多い。
+      </p>
+      <p>
+        さらに用法が広がり、<span class="word">東宮（皇太子）や親王の妃</span>をも「御息所」と呼ぶ。『源氏物語』の<span class="hi">六条御息所</span>は、亡き前東宮の妃であった人で、この用法にあたる。文脈によって「帝の妃」か「東宮妃」かが変わるため、<span class="word">誰の御息所なのかを必ず押さえる</span>。高貴さと、どこか翳りや哀愁を帯びた女性に用いられることが多い語感も覚えておきたい。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">みこ ― 皇子と皇女</span><span class="yomi">みこ・みや</span></div>
+      <p>
+        帝の子は<span class="word">皇子（みこ・おうじ）・皇女（ひめみこ・おうじょ）</span>と呼ばれる。男女ともに<span class="word">「みこ」「親王（しんのう）」「内親王（ないしんのう）」「宮（みや）」</span>などの語で指される。とりわけ<span class="hi">「みこ」は文脈で皇子も皇女も指す</span>ため、性別の判別に注意が要る。
+      </p>
+      <p>
+        皇子のうち誰が<span class="hi">東宮（皇太子）</span>に立つかは、母の身分と外戚の力で決まる。同じ帝の子でも、母が中宮であれば東宮への道が開け、母が更衣であれば不利になる。『源氏物語』の光源氏が<span class="word">臣下に降ろされた（臣籍降下）</span>のは、母（桐壺更衣）に有力な後ろ盾がなく、親王として遇するより源姓を与えて臣下とする方が身のためと帝が判断したからである。<span class="word">皇子の処遇が母の身分で左右される</span>この構造は、宮廷物語の根幹をなす。
+      </p>
+    </div>
+
+    <div class="tenkyo">
+      <div class="vbox">
+        <span class="ln">この御子、</span>
+        <span class="ln">三つになり給ふ年、</span>
+        <span class="ln">御袴着のこと、</span>
+        <span class="ln">一の宮の奉りしに</span>
+        <span class="ln">劣らず。</span>
+      </div>
+      <div class="exp">
+        <div class="src">典型場面 ― 皇子の処遇と母の身分</div>
+        <p>「この御子が三歳におなりの年、御袴着の儀式を、第一皇子の時に劣らぬ盛大さで執り行った」という趣意。</p>
+        <p>皇子への待遇の厚さは、そのまま<span class="hi">母への帝の寵愛の深さ</span>を映す。だが身分の低い母から生まれた皇子が、第一皇子（<span class="word">一の宮</span>）と同等に扱われることは、他の妃やその実家の<span class="hi">警戒と反発</span>を呼ぶ。待遇の描写を、人間関係の緊張のサインとして読む。</p>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">院と女院</span><span class="yomi">いん・にょいん</span></div>
+      <p>
+        <span class="word">院（いん）</span>とは、譲位した帝、すなわち<span class="hi">上皇（太上天皇）</span>を指す。位を退いてもなお大きな権威を保ち、ときに在位の帝をしのぐ影響力を持った（後の院政につながる）。「院」の意向が物語を動かすことも多い。
+      </p>
+      <p>
+        <span class="word">女院（にょいん）</span>は、皇后・皇太后や、帝の生母などに与えられた院に准じる尊号。<span class="word">国母（こくも＝帝の母）</span>となった女性は、宮廷で絶大な地位を占めた。我が子を帝位につけることが、后妃とその一族にとって究極の目標であった理由がここにある。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">外戚 ― 后の実家</span><span class="yomi">がいせき</span></div>
+      <p>
+        帝の后妃の父や兄、すなわち<span class="hi">母方の親族（外戚）</span>こそが、宮廷政治の真の主役である。<span class="word">娘を入内（じゅだい）させ、その娘が皇子を産み、その皇子が東宮・帝となれば、外祖父として摂政・関白として実権を握る</span>。これが摂関政治の仕組みであった。
+      </p>
+      <p>
+        ゆえに大臣たちは競って娘を後宮に送り込み、皇子誕生を願った。<span class="word">立后争い・立太子争い</span>は、当人たちの感情である以上に、その背後の<span class="hi">一族の浮沈を懸けた政争</span>である。后妃の喜びや嘆きの裏に、実家の思惑が働いていることを読むと、宮廷物語の奥行きが立ち上がる。
+      </p>
+    </div>
+
+    <div class="tubo">
+      <div class="lab">読解のツボ ― 呼称から相関図を組み立てる</div>
+      <p>宮廷物語では、人物が本名でなく<span class="word">住む殿舎や役職・続柄で呼ばれる</span>。「藤壺」「弘徽殿（こきでん）」は后妃が住む殿舎の名がそのまま人物の呼称になったもの。「<span class="word">一の宮</span>」は第一皇子、「<span class="word">春宮（とうぐう）</span>」は東宮を指す。</p>
+      <p>初見の本文では、まず<span class="word">①誰が帝か ②その后妃は誰々か ③それぞれの所生の皇子女は誰か ④各人の実家（後ろ盾）はどこか</span>を、呼称を手がかりに整理する。この相関図さえ組めれば、誰が誰を妬み、誰が誰の出世を願うのかという感情と政争の流れが、自ずと読めてくる。</p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">御方・上 ― 敬称による呼び分け</span><span class="yomi">おんかた・うへ</span></div>
+      <p>
+        高貴な女性は、しばしば<span class="word">「御方（おんかた）」「上（うへ）」「君（きみ）」</span>といった敬称で呼ばれる。「<span class="word">上</span>」は正妻や貴人の妻を指すことが多く（「紫の上」「女三の宮」）、「<span class="word">御方</span>」はある区画に住む貴人を、「<span class="word">大殿（おほとの）</span>」は大臣家やその主人を指す。これらは固有名の代わりであり、<span class="hi">誰を指す敬称かを文脈から特定する</span>のが読解の前提作業になる。
+      </p>
+    </div>
+
+    <div class="nyushi">
+      <div class="lab">読解のためのポイント</div>
+      <p><span class="q">「御息所」が誰を指すかを文脈で確かめる。</span>帝の妃か東宮妃かは文脈で変わる。御息所＝皇子女を産んだ妃という語義を押さえつつ、本文では「誰の御息所か」を特定する。</p>
+      <p><span class="q">皇子の処遇は、母の身分と外戚から逆算する。</span>東宮に立てない、あるいは臣籍に降るといった処遇の背後には、母の身分の低さと後ろ盾の不在がある。宮廷の力学として読む。</p>
+      <p><span class="q">呼称から人物を同定する。</span>殿舎名・続柄・敬称による呼び分けを手がかりに、その人物が相関図のどこに位置するかを掴む。宮廷物語ではこの整理が読解の前提になる。</p>
+    </div>
+    <a class="toc-back" href="#ch7">▲ 章のはじめへ</a>
+  </div>
+</section>
+
+<!-- ============ 第七章 美意識と評価語 ============ -->
+<section class="chapter" id="ch8">
+  <div class="wrap">
+    <div class="ch-head">
+      <div class="ch-kicker"><span class="ch-num">八</span><span class="ch-genre">美意識 ・ 評価 ・ 心の動き</span></div>
+      <h2>美意識と評価語</h2>
+      <p class="ch-lead">
+        古文の世界では、人の価値は容姿・教養・趣味の良さで測られた。和歌が下手なこと、無風流であることは欠点とされた。語り手が人物や事物をどう「評価」しているか ―― その評価語を正しく捉えることが、本文の感情の流れを掴む鍵になる。これらは現代語訳しにくい、最重要の心情語群である。
+      </p>
+    </div>
+
+    <div class="tubo">
+      <div class="lab">読解のツボ ― 評価語は「プラスかマイナスか」をまず判定</div>
+      <p>これらの語は文脈で揺れるが、まず<span class="word">語り手がその対象を肯定的に見ているか、否定的に見ているか</span>を判定するのが先決。プラス評価の語が並ぶ箇所はその人物・事物への賞賛、マイナスの語が並ぶ箇所は嫌悪や失望を表す。この符号を取り違えると、心情把握が根本から狂う。</p>
+    </div>
+
+    <div class="lexi">
+      <div class="row"><span class="w">あはれ</span><span class="m">しみじみと心打たれる情趣。悲哀に限らず、深く感じ入る心の動き全般。〔＋〕</span></div>
+      <div class="row"><span class="w">をかし</span><span class="m">明るく知的な面白さ・興趣。風情がある、気が利いている。〔＋〕</span></div>
+      <div class="row"><span class="w">なまめかし</span><span class="m">若々しく上品で優美だ。みずみずしい美しさ。〔＋〕</span></div>
+      <div class="row"><span class="w">えん（艶）なり</span><span class="m">優美で美しい。あでやか。〔＋〕</span></div>
+      <div class="row"><span class="w">はづかし</span><span class="m">（こちらが気後れするほど）相手が立派だ・優れている。〔＋・対象を高く評価〕</span></div>
+      <div class="row"><span class="w">ゆかし</span><span class="m">見たい・聞きたい・知りたい。心が惹かれる。〔＋・関心〕</span></div>
+      <div class="row"><span class="w">心づきなし</span><span class="m">気にくわない。心が惹かれない。〔−〕</span></div>
+      <div class="row"><span class="w">うし（憂し）</span><span class="m">つらい・嫌だ。多く人間関係の苦しみから生じる。〔−〕</span></div>
+      <div class="row"><span class="w">むつかし</span><span class="m">不快だ・うっとうしい・気味が悪い。〔−〕</span></div>
+      <div class="row"><span class="w">あいなし</span><span class="m">面白くない・気にくわない・わけもなく。〔−〕</span></div>
+      <div class="row"><span class="w">すきもの</span><span class="m">好き者。恋の情趣を解する風流人。文脈で賞賛にも揶揄にもなる。〔±〕</span></div>
+      <div class="row"><span class="w">よしなし</span><span class="m">つまらない・どうしようもない・無風流だ。〔−〕</span></div>
+    </div>
+
+    <div class="tenkyo">
+      <div class="vbox">
+        <span class="ln">春はあけぼの。</span>
+        <span class="ln">やうやう白くなりゆく</span>
+        <span class="ln">山ぎは、すこしあかりて、</span>
+        <span class="ln">紫だちたる雲の</span>
+        <span class="ln">ほそくたなびきたる。</span>
+      </div>
+      <div class="exp">
+        <div class="src">典型場面 ― 『枕草子』的美意識</div>
+        <p>清少納言が「春は明け方がよい」と、その情景の美をたたみかける有名な一節。ここには<span class="hi">「をかし」の美学</span>―― 鋭敏な観察眼で、季節の微妙な移ろいに「趣」を見出す感受性 ―― が結晶している。</p>
+        <p>古文の美意識は、こうした<span class="hi">「何を美しいと感じるか」の共有</span>の上に成り立つ。語り手が何に心を動かすかを追えば、その作品の価値観が見えてくる。</p>
+      </div>
+    </div>
+
+    <div class="nyushi">
+      <div class="lab">読解のためのポイント</div>
+      <p><span class="q">「はづかし」を現代語感覚で訳さない。</span>「はづかしき人」は「恥ずかしい人」ではなく「（こちらが気後れするほど）立派な人」。評価語は現代語とのズレに警戒する。</p>
+      <p><span class="q">評価語の符号（＋／−）を集めて評価を測る。</span>語り手がその人物・事物を肯定的に見ているか否定的に見ているか――プラスとマイナスの評価語を拾い集めると、賞賛か批判かが浮かび上がる。</p>
+    </div>
+    <a class="toc-back" href="#ch8">▲ 章のはじめへ</a>
+  </div>
+</section>
+
+<!-- ============ 第八章 時間・空間・生活 ============ -->
+<section class="chapter" id="ch9">
+  <div class="wrap">
+    <div class="ch-head">
+      <div class="ch-kicker"><span class="ch-num">九</span><span class="ch-genre">時間 ・ 空間 ・ 生活</span></div>
+      <h2>時間・空間・生活の感覚</h2>
+      <p class="ch-lead">
+        本文の場面を正しく映像化するには、当時の時刻・方角の数え方、住まいの構造、年中行事の知識が要る。とりわけ「几帳」「御簾」といった隔ての道具は、男女の物理的・心理的距離を象徴し、場面の緊張を生む。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">時刻と方角</span><span class="yomi">じこく・ほうがく</span></div>
+      <p>
+        時刻も方角も<span class="hi">十二支</span>で数えた。<span class="word">子（ね）の刻</span>が深夜零時頃、以後二時間ごとに丑・寅…と進む。<span class="word">暁（あかつき）</span>は夜明け前の暗いうち、<span class="word">あけぼの・しののめ</span>は明け方。恋人たちが別れる「暁の別れ」の情趣は、この時間感覚の上に成り立つ。方角では「丑寅（うしとら）＝北東＝鬼門」のように、方位が吉凶と結びついた。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">寝殿造と隔ての道具</span><span class="yomi">しんでんづくり</span></div>
+      <p>
+        貴族の邸宅は<span class="word">寝殿造</span>。広い建物の内部は、可動の仕切りで緩やかに区切られていた。男女や身分差のある者の間には、必ず<span class="hi">何らかの「隔て」</span>がある。
+      </p>
+    </div>
+
+    <div class="lexi">
+      <div class="row"><span class="w">御簾</span><span class="m">みす。室内と外、あるいは部屋を仕切る簾（すだれ）。貴人は御簾の内にいる。</span></div>
+      <div class="row"><span class="w">几帳</span><span class="m">きちょう。布を垂らした移動式の間仕切り。女性の姿を隠す。「几帳越し」は心理的距離の象徴。</span></div>
+      <div class="row"><span class="w">壁代</span><span class="m">かべしろ。母屋と廂を仕切る垂れ布。</span></div>
+      <div class="row"><span class="w">妻戸</span><span class="m">つまど。建物の隅の両開きの戸。出入り口。</span></div>
+      <div class="row"><span class="w">簀子</span><span class="m">すのこ。建物の外縁の板敷き。訪問者がまず通される。</span></div>
+      <div class="row"><span class="w">母屋・廂</span><span class="m">もや・ひさし。建物中央の主室と、その外側の空間。奥ほど私的・高貴。</span></div>
+    </div>
+
+    <div class="tubo">
+      <div class="lab">読解のツボ ― 「隔て」は心の距離を映す</div>
+      <p>男女が<span class="word">「物越しに語らふ」「几帳を隔てて」</span>対面する場面では、その物理的な隔てが<span class="word">そのまま二人の心理的・身分的距離</span>を象徴している。隔てが取り払われる＝関係が深まる、という対応で読むと、場面の進展が立体的に見える。</p>
+      <p>逆に、男が「几帳の内に入る」「御簾を上げる」といった越境の動作は、<span class="word">親密化・あるいは強引な接近</span>を意味する重大な所作として読む。</p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">年中行事</span><span class="yomi">ねんじゅうぎょうじ</span></div>
+      <p>
+        宮廷の一年は行事に彩られた。これらは場面の季節・舞台設定として登場する。代表例 ―― <span class="word">賀茂祭（葵祭）</span>、<span class="word">五節（ごせち）</span>の舞、<span class="word">賭弓（のりゆみ）</span>、<span class="word">相撲（すまひ）の節</span>など。行事の場は、男女が姿を見せ合い、恋が芽生える出会いの舞台にもなった。
+      </p>
+    </div>
+
+    <div class="nyushi">
+      <div class="lab">読解のためのポイント</div>
+      <p><span class="q">時刻・状況を語から特定する。</span>「暁」「あけぼの」などの語から、後朝の別れの時間帯であることを読み取る。場面を正しく映像化する手がかりになる。</p>
+      <p><span class="q">隔ての描写の変化を、心理的距離の変化として読む。</span>几帳・御簾といった「隔て」が取り払われたり越えられたりする描写は、二人の関係の進展を象徴する。空間描写を関係の変化に重ねる。</p>
+    </div>
+    <a class="toc-back" href="#ch9">▲ 章のはじめへ</a>
+  </div>
+</section>
+
+<!-- ============ 第九章 無常・運命・死生観 ============ -->
+<section class="chapter" id="ch10">
+  <div class="wrap">
+    <div class="ch-head">
+      <div class="ch-kicker"><span class="ch-num">十</span><span class="ch-genre">無常 ・ 運命 ・ 死生観</span></div>
+      <h2>無常・運命・死生観</h2>
+      <p class="ch-lead">
+        最後に、これまでの全章を貫く精神の基盤を据える。なぜ人は諦め、なぜ運命に従い、なぜ世を厭うのか。その根には、仏教に由来する「無常」と「宿世」の感覚がある。これを理解してはじめて、登場人物の諦念や受容が、弱さではなく一つの世界観の表れとして読めるようになる。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">無常</span><span class="yomi">むじょう</span></div>
+      <p>
+        この世のすべては移ろい、とどまらない ―― という仏教的世界観。だが古文における無常観は、単なる悲観ではない。それは<span class="hi">執着を手放し、現世を相対化する智慧</span>でもある。『方丈記』の「ゆく河の流れ」、『平家物語』の「祇園精舎」は、いずれもこの無常を主題に据える。栄華も権勢も必ず滅びる、という感覚が、中世文学の通奏低音となる。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">宿世・契り</span><span class="yomi">すくせ・ちぎり</span></div>
+      <p>
+        現世の境遇・出会い・別れは、すべて<span class="hi">前世からの因縁（宿世）</span>の結果であると考えられた。だから人は不幸に際して<span class="word">「さるべきにや（そうなる運命だったのだろうか）」「前世の契り」</span>と、それを宿縁として受けとめる。
+      </p>
+      <p>
+        これは現代的な「諦め」とは異なる。理不尽な運命を<span class="word">因果の論理によって意味づけ、納得しようとする</span>知的・宗教的な営みである。恋の成就も破綻も、子に恵まれることも恵まれないことも、すべて宿世で説明された。登場人物が嘆きの果てに静かに運命を受け入れるとき、その背後にはこの宿世観がある。
+      </p>
+    </div>
+
+    <div class="tenkyo">
+      <div class="vbox">
+        <span class="ln">さるべきにこそは</span>
+        <span class="ln">ありけめと、</span>
+        <span class="ln">思ひなぐさめむと</span>
+        <span class="ln">すれど、</span>
+        <span class="ln">なほ飽かず悲し。</span>
+      </div>
+      <div class="exp">
+        <div class="src">典型場面 ― 運命の受容と、なお残る悲しみ</div>
+        <p>「そうなるべき前世からの定めだったのだろうと、自分を慰めようとするけれど、それでもやはり悲しみは尽きない」。</p>
+        <p>ここに古文の心情の<span class="hi">奥行き</span>がある。宿世として頭では納得しようとしてもなお、抑えきれない悲しみが残る ―― この<span class="hi">「理（ことわり）による納得」と「抑えがたい情」とのせめぎ合い</span>こそが、最難関大が記述で問う心情の機微である。「さるべきにや」を見たら、運命の受容とその裏の哀感をセットで読む。</p>
+      </div>
+    </div>
+
+    <div class="tubo">
+      <div class="lab">読解のツボ ― 「もののあはれ」へ統合する</div>
+      <p>本居宣長が『源氏物語』の本質とした<span class="word">「もののあはれ」</span>とは、事物や人の心に深く触れたときに自然と湧き起こる、しみじみとした感動の心である。無常も、宿世も、恋の哀しみも、究極的にはこの<span class="word">「あはれ」を知る心</span>に流れ込む。</p>
+      <p>登場人物が運命や別れに直面したとき、彼らは嘆くと同時に、その悲しみそのものを深く「感じ入って」いる。この<span class="word">感受の深さ</span>を読み取ることが、古文読解の最終的な到達点である。</p>
+    </div>
+
+    <div class="nyushi">
+      <div class="lab">読解のためのポイント</div>
+      <p><span class="q">「さるべきにや」に運命の受容と哀感の両面を読む。</span>前世の定めとして納得しようとする姿勢と、それでも抑えきれず残る悲しみ――この二層をセットで捉えると、心情の機微が見えてくる。</p>
+      <p><span class="q">個別の場面を作品全体の無常観につなぐ。</span>一つの別れや嘆きの場面を、作品を貫く無常という主題の表れとして読むと、その場面の意味が深まる。</p>
+    </div>
+    <a class="toc-back" href="#ch10">▲ 章のはじめへ</a>
+  </div>
+</section>
+
+<!-- ============ 第十章 和歌の修辞 ============ -->
+<section class="chapter" id="ch11">
+  <div class="wrap">
+    <div class="ch-head">
+      <div class="ch-kicker"><span class="ch-num">十一</span><span class="ch-genre">和歌 ・ 修辞 ・ 二重の意味</span></div>
+      <h2>和歌の修辞 ―― 言葉を二重化する技法</h2>
+      <p class="ch-lead">
+        和歌は三十一文字に複数の意味を畳み込む。掛詞・縁語・序詞といった修辞は、単なる飾りではなく、<span class="word"></span>限られた字数に情景と心情を同時に込めるための装置である。技法の名を覚えるだけでなく、<span class="hi">「何と何が重ねられ、表の意味の奥に何が隠されているか」</span>を読み解くことが、和歌解釈の核心となる。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">掛詞</span><span class="yomi">かけことば</span></div>
+      <p>
+        一つの音に<span class="hi">二つの意味を重ねる</span>技法。同音異義を利用し、表向きの叙景と、その裏の心情とを同時に表現する。和歌修辞の中心であり、最も問われる。
+      </p>
+      <p>
+        頻出の掛詞は語彙として覚えておく。<span class="word">「まつ」（松／待つ）</span>、<span class="word">「あき」（秋／飽き）</span>、<span class="word">「ながめ」（眺め／長雨）</span>、<span class="word">「ふる」（降る／経る／古る）</span>、<span class="word">「よ」（夜／世）</span>、<span class="word">「うき」（憂き／浮き）</span>、<span class="word">「かれ」（枯れ／離れ）</span>、<span class="word">「あふ」（逢ふ／逢坂）</span>など。<span class="hi">自然描写の中に恋の感情が掛けられている</span>パターンが圧倒的に多い。
+      </p>
+    </div>
+
+    <div class="tenkyo">
+      <div class="vbox">
+        <span class="ln">花の色は</span>
+        <span class="ln">うつりにけりな</span>
+        <span class="ln">いたづらに</span>
+        <span class="ln">わが身世にふる</span>
+        <span class="ln">ながめせしまに</span>
+      </div>
+      <div class="exp">
+        <div class="src">小野小町 ― 掛詞の二重構造</div>
+        <p><span class="hi">「ふる」＝「経る」と「降る」</span>、<span class="hi">「ながめ」＝「眺め」と「長雨」</span>が掛けられている。</p>
+        <p>表の意味は「花の色は色あせてしまった、むなしく長雨が降る間に」という叙景。その裏に「私の容色も衰えてしまった、むなしく物思いに沈んで時を過ごす間に」という<span class="hi">わが身の嘆き</span>が重ねられる。叙景と詠嘆が一語で同時に成立する点に、掛詞の妙がある。</p>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">縁語</span><span class="yomi">えんご</span></div>
+      <p>
+        一首の中に、<span class="hi">意味上の関連で結びつく語を意図的に散りばめる</span>技法。たとえば「糸」に対して「よる（縒る）」「はる（張る）」「乱る」「ほころぶ」を配するように、中心となる語の縁から呼び起こされる語群を響かせる。掛詞としばしば併用され、<span class="word">表の意味とは別の連想の網</span>を一首に張りめぐらせる。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">序詞</span><span class="yomi">じょことば</span></div>
+      <p>
+        ある語句を導き出すために前置きされる、<span class="hi">七音以上の比較的長い修飾句</span>。多くは具体的な自然の景物を描き、それを通して主想の語へと連接する。枕詞と似るが、<span class="word">序詞は字数が長く、その場限りの創作で、作者の個性が出る</span>点で異なる。「あしひきの山鳥の尾の…」が「ながながし」を導くように、序詞そのものが豊かなイメージを担う。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">枕詞</span><span class="yomi">まくらことば</span></div>
+      <p>
+        特定の語を導く、<span class="hi">主に五音の慣用的な修飾語</span>。「ちはやぶる→神」「あしひきの→山」「ひさかたの→光・天」「たらちねの→母」など、組み合わせが固定している。<span class="word">それ自体は訳さなくてよい</span>のが原則で、序詞と違い創作性はない。枕詞を見たら「次に来る語の合図」と捉える。
+      </p>
+    </div>
+
+    <div class="tubo">
+      <div class="lab">読解のツボ ― 修辞は「心情の隠し場所」</div>
+      <p>これらの修辞は技法のための技法ではない。直接には言いにくい<span class="word">恋心・嘆き・恨み</span>を、自然描写の裏に忍ばせるための仕掛けである。掛詞・縁語を見抜くとは、<span class="word">表の叙景の奥に隠された本当の心情を取り出す</span>ことにほかならない。</p>
+      <p>解釈問題では、まず<span class="word">「自然の景」と「人の心」の二層に分けて読む</span>。景物の語に同音の心情語が掛かっていないかを疑う習慣をつけると、一首の奥行きが見えてくる。</p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">本歌取り</span><span class="yomi">ほんかどり</span></div>
+      <p>
+        有名な古歌（本歌）の語句や趣向を<span class="hi">意図的に取り入れて新たな歌を詠む</span>技法。新古今時代に洗練された。読み手が本歌を知っていることを前提に、<span class="word">本歌の世界を背景として響かせ、重層的な余情を生む</span>。本歌との差異やずらしに作者の工夫が宿る。教養の共有を前提とした、高度に知的な営みである。
+      </p>
+    </div>
+
+    <div class="nyushi">
+      <div class="lab">読解のためのポイント</div>
+      <p><span class="q">掛詞は、一語に重なる二つの意味を取り出す。</span>同音に重ねられた表（叙景）と裏（心情）の二重の意味を見抜く。自然描写の語に同音の心情語が掛かっていないかを疑う。</p>
+      <p><span class="q">贈答歌は、贈歌を踏まえて返歌の心を読む。</span>返歌は前の歌の語を受けて応じる。掛詞・縁語に込めた当てこすり・拒絶・承諾を、地の文の状況とあわせて読む。</p>
+      <p><span class="q">本歌取りは、背後に響く本歌を探す。</span>有名な古歌を踏まえた歌では、本歌の世界が背景として重なる。本歌との差異やずらしに作者の工夫が宿る。</p>
+    </div>
+    <a class="toc-back" href="#ch11">▲ 章のはじめへ</a>
+  </div>
+</section>
+
+<!-- ============ 第十一章 軍記物語の世界 ============ -->
+<section class="chapter" id="ch12">
+  <div class="wrap">
+    <div class="ch-head">
+      <div class="ch-kicker"><span class="ch-num">十二</span><span class="ch-genre">軍記 ・ 武士 ・ 名誉</span></div>
+      <h2>軍記物語の世界</h2>
+      <p class="ch-lead">
+        『平家物語』に代表される軍記物語は、宮廷の恋物語とはまったく異なる価値観で動く。そこを生きるのは武士であり、彼らを律するのは<span class="word">名誉・主従の忠義・一門の結束</span>であり、その全体を覆うのが<span class="word">仏教的な無常と因果</span>である。この世界の論理を知らないと、武士の一見不可解な行動 ―― 死を恐れぬ突撃、潔い自害、敵への情け ―― が読めない。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">名こそ惜しけれ</span><span class="yomi">なこそをしけれ</span></div>
+      <p>
+        武士にとって最も重いのは命ではなく<span class="hi">「名（名誉・面目）」</span>である。臆病者と見なされること、後世に恥を残すことは、死よりも忌むべきこととされた。<span class="word">「名を惜しむ」</span>心が、無謀に見える戦いへの突入や、退却を潔しとしない態度を生む。
+      </p>
+      <p>
+        この価値観ゆえに、武士は<span class="word">敵に名乗りを上げてから戦い</span>、相手にふさわしい身分かを確かめる。討ち取る相手・討たれる相手の名と家柄が、戦いの意味を決めた。「名を上げる」「名を汚す」という言葉の重みを理解して読む。
+      </p>
+    </div>
+
+    <div class="tenkyo">
+      <div class="vbox">
+        <span class="ln">弓矢取る身ほど</span>
+        <span class="ln">口惜しかりける</span>
+        <span class="ln">ことはなし。</span>
+        <span class="ln">名をば惜しむべき</span>
+        <span class="ln">ものなり。</span>
+      </div>
+      <div class="exp">
+        <div class="src">典型場面 ― 武士の論理</div>
+        <p>「武士として生まれた身ほど、（このような場面で）残念なことはない。武士たる者は名を惜しむべきものだ」という趣意。</p>
+        <p>『平家物語』には、敵将を討つべきか情けをかけるべきか葛藤しつつ、結局<span class="hi">「名を惜しむ」武士の論理</span>に従って行動する場面が繰り返し現れる。熊谷直実が平敦盛を討つ段は、この葛藤の極北として名高い。<span class="hi">私情と武士の責務との相克</span>を読むのが核心である。</p>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">主従の論理</span><span class="yomi">しゅじゅう</span></div>
+      <p>
+        武士の世界は<span class="hi">主君への忠義と、それに報いる御恩</span>という双務的な絆で結ばれる。主君のために命を捨てることは恥ではなく誉れであり、<span class="word">主を見捨てて生き延びることこそ最大の恥</span>とされた。一門・郎党が主とともに滅びゆく場面の悲壮は、この論理を踏まえて初めて重みを持つ。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">無常と滅びの美学</span><span class="yomi">むじょう</span></div>
+      <p>
+        『平家物語』全体を貫くのは、冒頭「祇園精舎の鐘の声」に示される<span class="hi">無常観</span>である。栄華を極めた平家一門が必然のように滅びへ向かう ―― その過程を、軍記物語は<span class="word">「おごれる者は久しからず」という因果の道理</span>として描く。
+      </p>
+      <p>
+        重要なのは、滅びが単なる敗北としてではなく、<span class="hi">哀切な美</span>を帯びて語られること。滅びゆく者へのまなざしには、勝者への賛美以上に<span class="word">敗者への共感（判官贔屓に通じる心性）</span>が込められる。この美意識を読めると、軍記の情感が立ち上がる。
+      </p>
+    </div>
+
+    <div class="tubo">
+      <div class="lab">読解のツボ ― 「武士の行動」は名誉と無常から逆算する</div>
+      <p>軍記物語で武士が示す行動 ―― 圧倒的不利でも退かない、敵に情けをかけて後で苦しむ、潔く自害する ―― は、現代的な合理では測れない。<span class="word">「名を惜しむ心」と「無常の受容」</span>から逆算すると、その選択の必然性が見える。</p>
+      <p>また、軍記には<span class="word">仏教的な因果・宿業</span>の論理が随所に働く。一門の滅亡を「驕りの報い」として意味づける語りの枠組みを意識すると、個々の場面が全体の主題に接続する。</p>
+    </div>
+
+    <div class="nyushi">
+      <div class="lab">読解のためのポイント</div>
+      <p><span class="q">武士の行動は、名誉と主従の論理から逆算する。</span>無謀な突撃や潔い自害、敵への情けは、現代的な合理ではなく「名を惜しむ心」「忠義」から見ると必然になる。価値観を背景に置いて動機を読む。</p>
+      <p><span class="q">個別の滅びを、作品全体の無常観につなぐ。</span>一門や一人の滅びの場面を、「おごれる者は久しからず」という作品を貫く道理の表れとして読むと、その悲壮の意味が深まる。</p>
+    </div>
+    <a class="toc-back" href="#ch12">▲ 章のはじめへ</a>
+  </div>
+</section>
+
+<!-- ============ 第十二章 説話の枠組み ============ -->
+<section class="chapter" id="ch13">
+  <div class="wrap">
+    <div class="ch-head">
+      <div class="ch-kicker"><span class="ch-num">十三</span><span class="ch-genre">説話 ・ 教訓 ・ 語りの型</span></div>
+      <h2>説話の枠組み</h2>
+      <p class="ch-lead">
+        『今昔物語集』『宇治拾遺物語』『古今著聞集』などの説話は、物語とも軍記とも異なる独自の構造を持つ。短い話の一つひとつが、<span class="word">何かを伝えるために語られている</span>。霊験・因果・教訓・滑稽 ―― その「語られる目的」と「型」を見抜くことが、説話読解の鍵になる。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">「今は昔」の語り</span><span class="yomi">いまはむかし</span></div>
+      <p>
+        多くの説話は<span class="hi">「今は昔」</span>で始まり、<span class="hi">「となむ語り伝へたるとや」</span>といった伝聞の決まり文句で結ばれる。これは説話が<span class="word">「語り伝えられてきた話」という体裁</span>をとることを示す。語り手は出来事の外にいて、過去の事例を聴衆に差し出す。この<span class="word">枠（フレーム）の存在</span>を意識すると、説話の客観的・例示的な語り口が理解できる。
+      </p>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">因果応報と霊験</span><span class="yomi">いんがおうほう・れいげん</span></div>
+      <p>
+        説話の大きな柱が<span class="hi">仏教的な因果応報</span>である。善行には善果、悪行には悪果が、しばしば現世で具体的に報いられる。また<span class="word">仏・菩薩・観音などの霊験（不思議な御利益）</span>を説く霊験譚も多い。これらは<span class="word">仏法の正しさ・ありがたさを示す具体例</span>として語られる。
+      </p>
+      <p>
+        ゆえに説話を読むときは、<span class="hi">「この話は何を証明・例示しようとしているのか」</span>を問う。一見奇妙な出来事も、因果や霊験の枠組みに置くと、語りの意図が見えてくる。
+      </p>
+    </div>
+
+    <div class="tenkyo">
+      <div class="vbox">
+        <span class="ln">今は昔、</span>
+        <span class="ln">心に深く</span>
+        <span class="ln">仏を念じ</span>
+        <span class="ln">けるによりて、</span>
+        <span class="ln">命を助かりける</span>
+        <span class="ln">となむ語り伝へたる。</span>
+      </div>
+      <div class="exp">
+        <div class="src">典型構造 ― 霊験譚の枠組み</div>
+        <p>「今は昔、（ある人が）深く仏を念じていたことによって、命が助かったと語り伝えている」という典型の型。</p>
+        <p><span class="hi">冒頭「今は昔」と結び「語り伝へたる」</span>が話を額縁のように囲み、その中で<span class="hi">「仏を念じた→助かった」という因果</span>が示される。説話の多くはこの<span class="word">「原因→結果→だから〜」という教訓的な構造</span>を持つ。型を掴めば、初見の説話でも筋を予測しながら読める。</p>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-head"><span class="jp">教訓性と滑稽</span><span class="yomi">きょうくん・こっけい</span></div>
+      <p>
+        説話は堅い教訓ばかりではない。<span class="word">人間の失敗・欲・愚かさを描いた滑稽な話</span>も多く、とりわけ『宇治拾遺物語』には笑いを誘う世俗説話が豊富である。だがその滑稽の底にも、しばしば<span class="hi">人間観察にもとづく軽い教訓やおかしみ</span>が込められる。深刻な仏教説話と世俗的な笑話の<span class="word">振れ幅の大きさ</span>が、説話集の魅力である。
+      </p>
+    </div>
+
+    <div class="tubo">
+      <div class="lab">読解のツボ ― 「話の眼目」を探す</div>
+      <p>説話は短く、必ず<span class="word">語るに値する一点（眼目・オチ・教訓）</span>がある。読みながら<span class="word">「この話の聞かせどころはどこか」</span>を探すと、構造が掴める。霊験譚なら不思議の核、教訓譚なら戒めの一点、笑話なら落ちの一点。</p>
+      <p>編者の評言（「〜とぞ。あはれなることなり」「〜こそ、をこなれ」など）が末尾に付くことも多く、これが<span class="word">話の意味づけ・編纂意図を明示する</span>。評言があれば、それを手がかりに話の主旨を読む。</p>
+    </div>
+
+    <div class="tbl">
+      <table>
+        <thead><tr><th>説話集</th><th>性格</th><th>読みどころ</th></tr></thead>
+        <tbody>
+          <tr><td><span class="k">今昔物語集</span></td><td>大規模な説話集成。天竺・震旦・本朝の三部構成</td><td>仏教説話と世俗説話を網羅。漢文訓読調の力強い文体。</td></tr>
+          <tr><td><span class="k">宇治拾遺物語</span></td><td>世俗的・滑稽な話が豊富</td><td>笑話・人間味のある話。「鬼に瘤取らるる事」など。語り口が軽妙。</td></tr>
+          <tr><td><span class="k">古今著聞集</span></td><td>事項別に分類された説話集</td><td>和歌・芸能・武勇など部立てごとに整理。有職故実的関心。</td></tr>
+          <tr><td><span class="k">発心集・沙石集</span></td><td>仏教色の濃い教訓説話</td><td>遁世・発心・因果を説く。仏教的世界観が前面に。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="nyushi">
+      <div class="lab">読解のためのポイント</div>
+      <p><span class="q">話の「眼目」を探す。</span>説話には必ず語るに値する一点（霊験・教訓・落ち）がある。「この話の聞かせどころはどこか」を意識しながら読むと、構造が掴める。</p>
+      <p><span class="q">行為と結果を因果応報の枠で結ぶ。</span>登場人物の行動とその結末を、善因善果・悪因悪果の道理として対応づけて読む。</p>
+      <p><span class="q">末尾の評言に編者の意味づけを読む。</span>「あはれなることなり」「をこなり」などの評語は、話の主旨や編纂意図を明示する。評言があれば、それを手がかりに話のねらいを掴む。</p>
+    </div>
+    <a class="toc-back" href="#ch13">▲ 章のはじめへ</a>
+  </div>
+</section>
+
+<!-- ============ 結び ============ -->
+<section class="outro">
+  <div class="wrap">
+    <div class="marker">結 ― 知識を読解力へ</div>
+    <h2>「世界」を知る者が、<br>「言葉」を読める。</h2>
+    <p>
+      ここまで見てきた十三の章は、ばらばらの雑学ではない。<span class="strong">一つの世界観の異なる断面</span>である。物の怪を恐れ、宿世を信じ、無常を見つめる精神。通い婚に縛られ、身分に隔てられ、和歌に心を託す生活。出家という最終手段を持ち、乳母子という腹心を頼る人間関係。そしてその世界は、<span class="strong">和歌の修辞に二重化され、軍記の名誉と滅びに貫かれ、説話の因果に枠取られて</span>語られる。これらはすべて<span class="strong">地続き</span>である。
+    </p>
+    <p>
+      設問の前に立ったとき、本文の言葉を訳すだけでなく、<span class="strong">「この人物は、どんな世界の、どんな前提のもとで、そう感じたのか」</span>と問い直せること ―― それが、最難関大学の求める読解力にほかならない。
+    </p>
+    <p>学習の順序としては、まず物語・日記を貫く行動原理の核から押さえ、その上でジャンル固有の論理へ広げると波及効果が高い。</p>
+    <div class="order-flow">
+      <span class="step"><span class="n">一</span>信仰・出家</span>
+      <span class="arr">→</span>
+      <span class="step"><span class="n">二</span>婚姻・恋愛</span>
+      <span class="arr">→</span>
+      <span class="step"><span class="n">三</span>養育・人間関係</span>
+      <span class="arr">→</span>
+      <span class="step"><span class="n">四</span>身分・美意識</span>
+      <span class="arr">→</span>
+      <span class="step"><span class="n">五</span>無常・死生観</span>
+      <span class="arr">→</span>
+      <span class="step"><span class="n">六</span>和歌・軍記・説話</span>
+    </div>
+    <p>
+      行動の動機（なぜ動くか）を司る前半を固めれば、本文の因果が見えはじめる。そこに評価語と美意識（どう感じるか）を重ね、無常・宿世という精神の基盤で束ね、最後に<span class="strong">和歌の修辞・軍記の倫理・説話の枠組みというジャンルの論理</span>を加える。こうして、<span class="strong">知識が、読解の現場で生きた道具に変わる</span>。
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="mark">古文の世界に分け入る</div>
+    <div class="sub">最難関大学 古文読解のための前提知識 ・ 全十三章</div>
+  </div>
+</footer>
+
+<script>
+const p=document.getElementById('progress');
+addEventListener('scroll',()=>{const h=document.documentElement;const s=h.scrollTop/(h.scrollHeight-h.clientHeight);p.style.width=(s*100)+'%'});
+
+/* ===== 検索機能 ===== */
+(function(){
+  const KAN=['','一','二','三','四','五','六','七','八','九','十','十一','十二'];
+  // インデックス構築
+  const index=[];
+  document.querySelectorAll('section.chapter').forEach(sec=>{
+    const id=sec.id;
+    const numEl=sec.querySelector('.ch-num');
+    const titleEl=sec.querySelector('.ch-head h2');
+    const chNum=numEl?numEl.textContent.trim():'';
+    const chTitle=titleEl?titleEl.textContent.trim():'';
+    const chLabel='第'+chNum+'章';
+    // 章そのもの（見出し＋導入文）
+    const leadEl=sec.querySelector('.ch-lead');
+    index.push({
+      el:titleEl||sec, ch:chLabel, chId:id,
+      term:chTitle, yomi:'', kind:'章',
+      text:(chTitle+' '+(leadEl?leadEl.textContent:'')),
+      snippet:leadEl?leadEl.textContent.trim().slice(0,60):chTitle
+    });
+    // 用語
+    let ti=0;
+    sec.querySelectorAll('.term').forEach(term=>{
+      const jp=term.querySelector('.jp');
+      const yomi=term.querySelector('.yomi');
+      const ps=Array.from(term.querySelectorAll('p')).map(x=>x.textContent).join(' ');
+      if(!term.id) term.id=id+'-term-'+(ti++);
+      index.push({
+        el:term, ch:chLabel, chId:id,
+        term:jp?jp.textContent.trim():'', yomi:yomi?yomi.textContent.trim():'',
+        kind:'語', text:((jp?jp.textContent:'')+' '+(yomi?yomi.textContent:'')+' '+ps),
+        snippet:ps.trim().slice(0,64)
+      });
+    });
+    // 典拠
+    let xi=0;
+    sec.querySelectorAll('.tenkyo').forEach(tk=>{
+      const src=tk.querySelector('.src');
+      const vb=tk.querySelector('.vbox');
+      const exp=Array.from(tk.querySelectorAll('.exp p')).map(x=>x.textContent).join(' ');
+      if(!tk.id) tk.id=id+'-ten-'+(xi++);
+      index.push({
+        el:tk, ch:chLabel, chId:id,
+        term:src?src.textContent.trim():'典拠', yomi:'',
+        kind:'典拠', text:((src?src.textContent:'')+' '+(vb?vb.textContent:'')+' '+exp),
+        snippet:(vb?vb.textContent.replace(/\s+/g,' ').trim().slice(0,64):exp.slice(0,64))
+      });
+    });
+  });
+
+  const overlay=document.getElementById('searchOverlay');
+  const input=document.getElementById('searchInput');
+  const results=document.getElementById('searchResults');
+  const hint=document.getElementById('searchHint');
+  const toggle=document.getElementById('searchToggle');
+  const closeBtn=document.getElementById('searchClose');
+
+  function openSearch(){overlay.hidden=false;setTimeout(()=>input.focus(),30);}
+  function closeSearch(){overlay.hidden=true;input.value='';results.innerHTML='';hint.style.display='';}
+  toggle.addEventListener('click',openSearch);
+  closeBtn.addEventListener('click',closeSearch);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeSearch();});
+  document.addEventListener('keydown',e=>{
+    if((e.ctrlKey||e.metaKey)&&e.key==='f'){e.preventDefault();openSearch();}
+    if(e.key==='Escape'&&!overlay.hidden)closeSearch();
+  });
+
+  function esc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+  function hl(text,q){
+    if(!q)return text;
+    try{return text.replace(new RegExp('('+esc(q)+')','gi'),'<mark>$1</mark>');}catch(e){return text;}
+  }
+
+  let active=-1, current=[];
+  function render(q){
+    q=q.trim();
+    if(!q){results.innerHTML='';hint.style.display='';return;}
+    hint.style.display='none';
+    const hits=index.filter(it=>it.text.toLowerCase().includes(q.toLowerCase()));
+    // 章→語→典拠の順、かつ語のヒットを優先
+    const order={'語':0,'章':1,'典拠':2};
+    hits.sort((a,b)=>{
+      const am=a.term.toLowerCase().includes(q.toLowerCase())?0:1;
+      const bm=b.term.toLowerCase().includes(q.toLowerCase())?0:1;
+      if(am!==bm)return am-bm;
+      return order[a.kind]-order[b.kind];
+    });
+    current=hits.slice(0,30);active=-1;
+    if(!current.length){results.innerHTML='<div class="sr-empty">該当する箇所が見つかりませんでした。別の語や読みがなでお試しください。</div>';return;}
+    results.innerHTML=current.map((it,i)=>{
+      const yomi=it.yomi?'<span class="sr-yomi">'+it.yomi+'</span>':'';
+      const snip=it.snippet?'<div class="sr-snippet">'+hl(it.snippet,q)+'…</div>':'';
+      return '<button class="sr-item" data-i="'+i+'">'+
+        '<div class="sr-top"><span class="sr-ch">'+it.ch+' / '+it.kind+'</span>'+
+        '<span class="sr-term">'+hl(it.term,q)+'</span>'+yomi+'</div>'+snip+'</button>';
+    }).join('');
+    results.querySelectorAll('.sr-item').forEach(btn=>{
+      btn.addEventListener('click',()=>jump(current[+btn.dataset.i]));
+    });
+  }
+
+  function jump(it){
+    closeSearch();
+    const el=it.el;
+    el.scrollIntoView({behavior:'smooth',block:'center'});
+    el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
+    setTimeout(()=>el.classList.remove('flash'),2400);
+  }
+
+  input.addEventListener('input',()=>render(input.value));
+  input.addEventListener('keydown',e=>{
+    if(!current.length)return;
+    if(e.key==='ArrowDown'){e.preventDefault();active=Math.min(active+1,current.length-1);upd();}
+    else if(e.key==='ArrowUp'){e.preventDefault();active=Math.max(active-1,0);upd();}
+    else if(e.key==='Enter'){e.preventDefault();jump(current[active<0?0:active]);}
+  });
+  function upd(){
+    const items=results.querySelectorAll('.sr-item');
+    items.forEach((b,i)=>b.classList.toggle('active',i===active));
+    if(active>=0&&items[active])items[active].scrollIntoView({block:'nearest'});
+  }
+})();
+</script>
+</body>
+</html>
