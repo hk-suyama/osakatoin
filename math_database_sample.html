@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数学問題データベース｜数III 不定積分（サンプル）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --ink:#1c2a4a;          /* 万年筆の紺 */
+  --ink-soft:#51608a;
+  --paper:#f7f8f5;
+  --paper-card:#ffffff;
+  --grid:#dfe5ee;
+  --red:#c0392b;          /* 採点ペンの朱 */
+  --red-soft:#f4e3e0;
+  --line:#c9d2e0;
+  --accent-bg:#eef1f7;
+  --ok:#2e6e4e;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  color:var(--ink);
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:24px 24px;
+  line-height:1.75;
+}
+.wrap{max-width:1060px;margin:0 auto;padding:28px 20px 80px}
+
+/* ---------- ヘッダー ---------- */
+header.site{
+  display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+  border-bottom:3px double var(--ink);
+  padding-bottom:14px;margin-bottom:22px;
+}
+header.site h1{
+  font-family:"Shippori Mincho",serif;
+  font-size:26px;letter-spacing:.06em;margin:0;
+}
+header.site .sub{
+  font-size:13px;color:var(--ink-soft);letter-spacing:.08em;
+}
+.stamp{
+  margin-left:auto;
+  border:2px solid var(--red);color:var(--red);
+  font-family:"Shippori Mincho",serif;font-weight:700;
+  font-size:12px;letter-spacing:.2em;
+  padding:3px 10px;border-radius:4px;transform:rotate(-2deg);
+  background:rgba(255,255,255,.7);
+}
+
+/* ---------- コントロールパネル ---------- */
+.panel{
+  background:var(--paper-card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:20px 22px;
+  box-shadow:0 2px 10px rgba(28,42,74,.06);
+  margin-bottom:26px;
+}
+.panel h2{
+  font-family:"Shippori Mincho",serif;font-size:16px;margin:0 0 10px;
+  letter-spacing:.1em;
+}
+.panel h2 .en{font-size:10px;color:var(--ink-soft);letter-spacing:.2em;margin-left:8px}
+fieldset{border:none;margin:0 0 16px;padding:0}
+legend{
+  font-size:12.5px;font-weight:700;color:var(--ink-soft);
+  letter-spacing:.12em;padding:0;margin-bottom:7px;display:block;
+}
+.topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px 14px}
+.topics label{
+  display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer;
+  padding:4px 6px;border-radius:6px;
+}
+.topics label:hover{background:var(--accent-bg)}
+.topics .cnt{color:var(--ink-soft);font-size:11px;margin-left:auto}
+input[type=checkbox],input[type=radio]{accent-color:var(--ink);width:15px;height:15px}
+.row{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-end}
+.field{display:flex;flex-direction:column;gap:5px}
+.field .lbl{font-size:12.5px;font-weight:700;color:var(--ink-soft);letter-spacing:.12em}
+input[type=number]{
+  width:90px;padding:7px 10px;font-size:15px;border:1px solid var(--line);
+  border-radius:6px;background:#fff;color:var(--ink);font-family:inherit;
+}
+.radio-line{display:flex;gap:16px;align-items:center;font-size:13.5px}
+.radio-line label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.check-line{display:flex;align-items:center;gap:6px;font-size:13.5px;cursor:pointer}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+button{
+  font-family:inherit;font-size:14px;font-weight:700;letter-spacing:.06em;
+  padding:10px 20px;border-radius:8px;border:1.5px solid var(--ink);
+  background:var(--ink);color:#fff;cursor:pointer;
+  transition:transform .06s ease, box-shadow .12s ease;
+}
+button:hover{box-shadow:0 3px 10px rgba(28,42,74,.25)}
+button:active{transform:translateY(1px)}
+button.ghost{background:#fff;color:var(--ink)}
+button.print-q{border-color:var(--ink-soft);background:#fff;color:var(--ink-soft)}
+button.print-a{border-color:var(--red);background:#fff;color:var(--red)}
+button:focus-visible{outline:3px solid #8fa3d0;outline-offset:2px}
+.note{font-size:12px;color:var(--ink-soft);margin-top:10px}
+
+/* ---------- プリント用紙プレビュー ---------- */
+.paper{
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:0 4px 18px rgba(28,42,74,.08);
+  padding:34px 40px;min-height:200px;
+}
+.sheet-head{
+  border-bottom:2px solid var(--ink);
+  padding-bottom:10px;margin-bottom:6px;
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;
+}
+.sheet-title{
+  font-family:"Shippori Mincho",serif;font-size:21px;font-weight:700;
+  letter-spacing:.05em;min-width:200px;outline:none;border-bottom:1px dashed transparent;
+}
+.sheet-title:focus{border-bottom-color:var(--ink-soft)}
+.sheet-meta{margin-left:auto;font-size:12.5px;color:var(--ink);display:flex;gap:18px}
+.name-line{border-bottom:1px solid var(--ink);min-width:170px;display:inline-block}
+.sheet-note{font-size:11.5px;color:var(--ink-soft);margin:0 0 14px}
+.empty{
+  text-align:center;color:var(--ink-soft);padding:52px 10px;font-size:14px;
+}
+.empty .big{font-family:"Shippori Mincho",serif;font-size:17px;margin-bottom:6px;color:var(--ink)}
+
+/* ---------- 問題カード ---------- */
+.q-card{
+  border-bottom:1px dashed var(--line);
+  padding:16px 2px 18px;
+  position:relative;
+}
+.q-card:last-child{border-bottom:none}
+.q-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:2px}
+.q-no{
+  font-family:"Shippori Mincho",serif;font-weight:700;font-size:17px;
+  border:1.6px solid var(--ink);border-radius:4px;padding:0 9px;line-height:1.6;
+  background:#fff;
+}
+.chip{
+  font-size:10.5px;letter-spacing:.08em;padding:2px 8px;border-radius:999px;
+  background:var(--accent-bg);color:var(--ink-soft);border:1px solid var(--line);
+}
+.chip.diff{background:#fff}
+.chip.origin{background:var(--red-soft);color:var(--red);border-color:#e4c4bf}
+.q-tools{margin-left:auto;display:flex;gap:8px}
+.q-tools button{
+  font-size:11.5px;padding:4px 10px;border-radius:6px;font-weight:500;
+  background:#fff;color:var(--ink-soft);border:1px solid var(--line);
+}
+.q-body{font-size:15px}
+.q-lead{margin:6px 0 2px}
+.q-math{margin:4px 0 0 8px}
+.katex{font-size:1.06em}
+
+/* ---------- 解答解説 ---------- */
+.sol{
+  margin:12px 0 0 8px;border-left:3px solid var(--line);
+  padding:4px 0 4px 16px;display:none;
+}
+.sol.open{display:block}
+.sol-tag{
+  display:inline-block;font-size:11px;font-weight:700;letter-spacing:.18em;
+  color:var(--red);border:1px solid var(--red);border-radius:3px;
+  padding:0 7px;margin-bottom:8px;background:#fff;
+}
+.blk{margin:7px 0;font-size:14px}
+.blk.pol{
+  background:var(--accent-bg);border-radius:6px;padding:8px 12px;
+}
+.blk.pol::before{content:"方針";font-weight:700;color:var(--ink-soft);font-size:11.5px;letter-spacing:.2em;display:block;margin-bottom:2px}
+.blk.d{margin:8px 0 8px 6px;overflow-x:auto}
+.blk.ansb{
+  border:1.6px solid var(--ink);border-radius:6px;padding:8px 14px;background:#fff;
+  display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;overflow-x:auto;
+}
+.blk.ansb::before{content:"答";font-family:"Shippori Mincho",serif;font-weight:700;font-size:14px}
+.blk.pt{
+  background:var(--red-soft);border-radius:6px;padding:8px 12px;font-size:13px;
+}
+.blk.pt::before{content:"ポイント";font-weight:700;color:var(--red);font-size:11.5px;letter-spacing:.2em;display:block;margin-bottom:2px}
+
+/* ---------- 解答編（印刷用） ---------- */
+#answer-sheet{display:none}
+
+/* ---------- 印刷 ---------- */
+@media print{
+  @page{size:A4;margin:14mm 13mm}
+  body{background:#fff;font-size:12.5px}
+  .no-print{display:none !important}
+  .wrap{max-width:none;padding:0;margin:0}
+  .paper{border:none;box-shadow:none;border-radius:0;padding:0}
+  header.site{display:none}
+  .q-card{break-inside:avoid;padding:10px 0 12px}
+  .q-tools{display:none}
+  .chip{border:1px solid #999;background:#fff;color:#333}
+  .chip.topic{display:none}
+  .sol{display:none !important}
+  body.print-with-answers #answer-sheet{
+    display:block;break-before:page;
+  }
+  #answer-sheet .sol{display:block !important;border-left-color:#bbb}
+  .sheet-title{border-bottom:none}
+}
+#answer-sheet .as-head{
+  border-bottom:2px solid var(--ink);margin-bottom:8px;padding-bottom:6px;
+  font-family:"Shippori Mincho",serif;font-size:19px;font-weight:700;letter-spacing:.08em;
+}
+#answer-sheet .q-card .q-math{font-size:13px;color:var(--ink-soft)}
+
+@media (max-width:640px){
+  .paper{padding:22px 16px}
+  .sheet-meta{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){
+  button{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="site no-print">
+  <h1>数学問題データベース</h1>
+  <span class="sub">数学III・不定積分編（サンプル：問題集 %224〜%251 準拠）</span>
+  <span class="stamp">OSAKA TOIN 教材開発</span>
+</header>
+
+<!-- ============ コントロールパネル ============ -->
+<section class="panel no-print" aria-label="出題設定">
+  <h2>出題設定<span class="en">SETTINGS</span></h2>
+
+  <fieldset>
+    <legend>範囲（分野）を選択</legend>
+    <div class="topics" id="topicList"></div>
+    <div style="margin-top:8px;display:flex;gap:14px">
+      <button type="button" class="ghost" style="padding:4px 12px;font-size:12px" onclick="setAllTopics(true)">すべて選択</button>
+      <button type="button" class="ghost" style="padding:4px 12px;font-size:12px" onclick="setAllTopics(false)">すべて解除</button>
+    </div>
+  </fieldset>
+
+  <div class="row">
+    <div class="field">
+      <span class="lbl">問題数</span>
+      <input type="number" id="numQ" min="1" max="22" value="6">
+    </div>
+    <div class="field">
+      <span class="lbl">出題モード</span>
+      <div class="radio-line" role="radiogroup">
+        <label><input type="radio" name="mode" value="orig" checked>原題のまま</label>
+        <label><input type="radio" name="mode" value="variant">類題（数値を自動変更）</label>
+      </div>
+    </div>
+    <div class="field">
+      <span class="lbl">表示オプション</span>
+      <label class="check-line"><input type="checkbox" id="showOrigin" checked>元問題の番号を表示する</label>
+    </div>
+  </div>
+
+  <div class="btns">
+    <button type="button" onclick="generate()">プリントを生成する</button>
+    <button type="button" class="ghost" onclick="toggleAllSol()">全部の解答解説を開く／閉じる</button>
+    <button type="button" class="print-q" onclick="printSheet(false)">問題のみ印刷（PDF保存）</button>
+    <button type="button" class="print-a" onclick="printSheet(true)">解答・解説つきで印刷（PDF保存）</button>
+  </div>
+  <p class="note">※ 抽出は「層化ランダム」方式です。選択した分野ごとに問題数を比例配分してから抽出するため、特定分野への偏りが起こりません。同じセッション内では出題回数の少ない問題が優先されます。<br>
+  ※ PDF保存は、印刷ダイアログで「送信先：PDFに保存」を選んでください。プリントのタイトルはプレビュー上で直接クリックして書き換えられます。</p>
+</section>
+
+<!-- ============ プリント本体 ============ -->
+<div class="paper" id="paper">
+  <div class="sheet-head">
+    <span class="sheet-title" id="sheetTitle" contenteditable="true" spellcheck="false">数学III　不定積分　演習プリント</span>
+    <div class="sheet-meta">
+      <span id="sheetDate"></span>
+      <span>年　　組　　番　氏名 <span class="name-line">　</span></span>
+    </div>
+  </div>
+  <p class="sheet-note" id="sheetNote">次の各問いに答えよ。（積分定数は C とする）</p>
+
+  <div id="qArea">
+    <div class="empty">
+      <div class="big">まだ問題がありません</div>
+      上の「出題設定」で範囲と問題数を選び、「プリントを生成する」を押してください。
+    </div>
+  </div>
+
+  <!-- 印刷時のみ現れる解答編 -->
+  <div id="answer-sheet">
+    <div class="as-head">解答・解説編</div>
+    <div id="aArea"></div>
+  </div>
+</div>
+
+</div><!-- /.wrap -->
+
+<script>
+/* =========================================================
+   ユーティリティ（分数・整形・乱数）
+========================================================= */
+const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;};
+function F(n,d=1){if(d<0){n=-n;d=-d;}const g=gcd(n,d);return{n:n/g,d:d/g};}
+/* 分数を単体で表示 */
+const ftex=f=>f.d===1?String(f.n):(f.n<0?'-':'')+`\\dfrac{${Math.abs(f.n)}}{${f.d}}`;
+/* 係数として表示（1→空文字, -1→マイナスのみ） */
+const ctex=f=>{
+  if(f.d===1&&f.n===1)return'';
+  if(f.d===1&&f.n===-1)return'-';
+  return ftex(f);
+};
+/* +3 / -1 のような符号付き定数 */
+const sgn=v=>v<0?`-${Math.abs(v)}`:`+${v}`;
+/* 3x（1なら x） */
+const nx=(n,v='x')=>n===1?v:`${n}${v}`;
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pk=arr=>arr[ri(0,arr.length-1)];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* 解説ブロックの生成ヘルパ */
+const pol=s=>({k:'pol',s});     // 方針
+const tx =s=>({k:'p',s});       // 説明段落
+const d  =s=>({k:'d',s:`$$${s}$$`}); // 途中式（別行立て）
+const ans=s=>({k:'ans',s:`$${s}$`}); // 最終解答
+const pt =s=>({k:'pt',s});      // ポイント
+
+/* =========================================================
+   分野定義
+========================================================= */
+const TOPICS={
+  pow:     {name:'べき関数の積分（基本）',   ref:'%224'},
+  trig:    {name:'三角関数の積分（基本）',   ref:'%227'},
+  exp:     {name:'指数・対数を含む積分',     ref:'%228'},
+  linear:  {name:'1次式の置換（ax+b 型）',  ref:'%229'},
+  subst:   {name:'置換積分',                 ref:'%230・231'},
+  fprime:  {name:"f′/f・合成関数型",        ref:'%232・233'},
+  parts:   {name:'部分積分',                 ref:'%235〜239'},
+  rational:{name:'分数関数の積分',           ref:'%240・241'},
+  trigadv: {name:'三角関数の式変形',         ref:'%242'},
+  irr:     {name:'無理関数の積分',           ref:'%247'},
+  expTrig: {name:'e^x × 三角関数',          ref:'%250'},
+};
+
+/* =========================================================
+   問題テンプレートデータベース
+   - def   : 原題のパラメータ
+   - gen() : 類題用パラメータの生成
+   - stmt(p): 問題文の数式(LaTeX)
+   - sol(p) : パラメータ連動の解答解説
+========================================================= */
+const DB=[
+
+/* ---------- %224 べき関数 ---------- */
+{id:'224-1',src:'%224(1)',topic:'pow',diff:1,
+ def:{a:2,n:5},
+ gen:()=>({a:ri(2,7),n:pk([2,3,4,6,7])}),
+ stmt:p=>`\\int ${p.a}x^{${p.n}}\\,dx`,
+ sol:p=>{const c=F(p.a,p.n+1);return[
+  pol(`べき関数の積分公式 $\\int x^{n}\\,dx=\\dfrac{1}{n+1}x^{n+1}+C$（$n\\neq-1$）を使います。定数倍の $${p.a}$ は、積分記号の外に出してから公式を適用できます。`),
+  d(`\\int ${p.a}x^{${p.n}}\\,dx=${p.a}\\int x^{${p.n}}\\,dx=${p.a}\\times\\dfrac{1}{${p.n+1}}x^{${p.n+1}}+C`),
+  ans(`${ctex(c)}x^{${p.n+1}}+C`),
+  pt(`合言葉は「指数に $1$ を足して、足したあとの数で割る」。答えを微分して $${p.a}x^{${p.n}}$ に戻れば正解です。積分は必ず微分で検算する習慣をつけましょう。`)];}},
+
+{id:'224-2',src:'%224(2)',topic:'pow',diff:1,
+ def:{a:5,n:6},
+ gen:()=>({a:ri(2,7),n:ri(3,7)}),
+ stmt:p=>`\\int\\dfrac{${p.a}}{x^{${p.n}}}\\,dx`,
+ sol:p=>{const m=p.n-1,c=F(p.a,m);
+  const ansTex=`-\\dfrac{${c.n}}{${c.d===1?'':c.d}x^{${m}}}+C`;
+  return[
+  pol(`分母にある $x^{${p.n}}$ は、指数法則で $x^{-${p.n}}$ と書き直せます。「分数のままでは積分できない → 指数の形に直す」が第一歩です。`),
+  d(`\\int\\dfrac{${p.a}}{x^{${p.n}}}\\,dx=\\int ${p.a}x^{-${p.n}}\\,dx`),
+  tx(`あとはべき関数の公式どおり、指数 $-${p.n}$ に $1$ を足して $-${m}$、それで割ります。`),
+  d(`=${p.a}\\times\\dfrac{1}{-${m}}x^{-${m}}+C=-\\dfrac{${p.a}}{${m}}x^{-${m}}+C`),
+  tx(`最後に $x^{-${m}}=\\dfrac{1}{x^{${m}}}$ と分数の形に戻して整理します。`),
+  ans(ansTex),
+  pt(`「指数に $1$ を足す」と、マイナスの指数は $0$ に近づく（$-${p.n}\\to-${m}$）ことに注意。$-${p.n}+1=-${p.n+1}$ とする間違いが非常に多い箇所です。`)];}},
+
+{id:'224-3',src:'%224(3)',topic:'pow',diff:1,
+ def:{pp:2,q:5},
+ gen:()=>{const[pp,q]=pk([[3,5],[2,3],[3,4],[1,3],[1,4],[4,5],[5,6]]);return{pp,q};},
+ stmt:p=>`\\int x^{\\frac{${p.pp}}{${p.q}}}\\,dx`,
+ sol:p=>{const s=p.pp+p.q,c=F(p.q,s);return[
+  pol(`指数が分数でも公式は同じです。$\\int x^{\\alpha}\\,dx=\\dfrac{1}{\\alpha+1}x^{\\alpha+1}+C$。分数の計算だけ丁寧に行いましょう。`),
+  tx(`指数に $1$ を足すと $\\dfrac{${p.pp}}{${p.q}}+1=\\dfrac{${p.pp}+${p.q}}{${p.q}}=\\dfrac{${s}}{${p.q}}$。「$\\dfrac{${s}}{${p.q}}$ で割る」ことは「逆数 $\\dfrac{${p.q}}{${s}}$ を掛ける」ことと同じです。`),
+  d(`\\int x^{\\frac{${p.pp}}{${p.q}}}\\,dx=\\dfrac{${p.q}}{${s}}\\,x^{\\frac{${s}}{${p.q}}}+C`),
+  ans(`${ctex(c)}x^{\\frac{${s}}{${p.q}}}+C`),
+  pt(`$x^{\\frac{${s}}{${p.q}}}=\\sqrt[${p.q}]{x^{${s}}}$ と根号で書いても同じです。答案ではどちらの表記でも構いませんが、指数表記のほうが計算ミスが減ります。`)];}},
+
+{id:'224-4',src:'%224(4)',topic:'pow',diff:1,
+ def:{m:2},
+ gen:()=>({m:pk([1,3,4])}),
+ stmt:p=>`\\int x^{${p.m}}\\sqrt{x}\\,dx`,
+ sol:p=>{const num=2*p.m+3,c=F(2,num);return[
+  pol(`$\\sqrt{x}=x^{\\frac{1}{2}}$ です。根号を見たら指数に直す。これで「べき関数どうしの積」になり、指数法則でまとめられます。`),
+  d(`x^{${p.m}}\\sqrt{x}=x^{${p.m}}\\cdot x^{\\frac{1}{2}}=x^{${p.m}+\\frac{1}{2}}=x^{\\frac{${num}}{2}}`),
+  tx(`あとは公式どおり。指数に $1$ を足すと $\\dfrac{${num}}{2}+1=\\dfrac{${num+2}}{2}$ です。`),
+  d(`\\int x^{\\frac{${num}}{2}}\\,dx=\\dfrac{2}{${num+2}}x^{\\frac{${num+2}}{2}}+C=\\dfrac{2}{${num+2}}x^{${p.m+1}}\\sqrt{x}+C`),
+  ans(`${ctex(F(2,num+2))}x^{${p.m+1}}\\sqrt{x}+C`),
+  pt(`最後に $x^{\\frac{${num+2}}{2}}=x^{${p.m+1}}\\cdot x^{\\frac12}=x^{${p.m+1}}\\sqrt{x}$ と、問題と同じ「根号入り」の形に戻すときれいな答案になります。`)];}},
+
+/* ---------- %227 三角関数 ---------- */
+{id:'227-1',src:'%227(1)',topic:'trig',diff:1,
+ def:{a:5,b:4},
+ gen:()=>({a:ri(2,8),b:ri(2,8)}),
+ stmt:p=>`\\int(${p.a}\\sin x-${p.b}\\cos x)\\,dx`,
+ sol:p=>[
+  pol(`三角関数の積分の基本 2 つ、$\\int\\sin x\\,dx=-\\cos x+C$、$\\int\\cos x\\,dx=\\sin x+C$ をそのまま使います。`),
+  tx(`「$\\sin$ を積分するとマイナスがつく」「$\\cos$ を積分するとマイナスがつかない」——微分のときと符号の付き方が逆になることに注意します。`),
+  d(`\\int(${p.a}\\sin x-${p.b}\\cos x)\\,dx=${p.a}(-\\cos x)-${p.b}(\\sin x)+C`),
+  ans(`-${p.a}\\cos x-${p.b}\\sin x+C`),
+  pt(`検算：答えを微分すると $-${p.a}(-\\sin x)-${p.b}\\cos x=${p.a}\\sin x-${p.b}\\cos x$ で元に戻ります。符号ミスは微分検算で必ず見つかります。`)]},
+
+{id:'227-2',src:'%227(2)',topic:'trig',diff:2,
+ def:{a:3,b:2},
+ gen:()=>({a:ri(2,7),b:ri(2,7)}),
+ stmt:p=>`\\int\\left(\\dfrac{${p.a}}{\\cos^{2}x}-\\dfrac{${p.b}}{\\sin^{2}x}\\right)dx`,
+ sol:p=>[
+  pol(`$(\\tan x)'=\\dfrac{1}{\\cos^{2}x}$、$\\left(\\dfrac{1}{\\tan x}\\right)'=-\\dfrac{1}{\\sin^{2}x}$ を逆向きに使います。つまり $\\int\\dfrac{dx}{\\cos^{2}x}=\\tan x+C$、$\\int\\dfrac{dx}{\\sin^{2}x}=-\\dfrac{1}{\\tan x}+C$ です。`),
+  d(`\\int\\left(\\dfrac{${p.a}}{\\cos^{2}x}-\\dfrac{${p.b}}{\\sin^{2}x}\\right)dx=${p.a}\\tan x-${p.b}\\left(-\\dfrac{1}{\\tan x}\\right)+C`),
+  ans(`${p.a}\\tan x+\\dfrac{${p.b}}{\\tan x}+C`),
+  pt(`$\\dfrac{1}{\\sin^{2}x}$ の積分結果には必ずマイナスがつきます。問題文のマイナスと打ち消し合ってプラスになる——この符号処理を焦らず 2 段階で書くのが安全です。`)]},
+
+/* ---------- %228 指数・対数 ---------- */
+{id:'228-2',src:'%228(2)',topic:'exp',diff:1,
+ def:{k:5},
+ gen:()=>({k:pk([2,3,7])}),
+ stmt:p=>`\\int(${p.k}^{x}-e^{x})\\,dx`,
+ sol:p=>[
+  pol(`指数関数の積分公式は 2 種類あります。$\\int e^{x}\\,dx=e^{x}+C$（そのまま）と、$\\int a^{x}\\,dx=\\dfrac{a^{x}}{\\log a}+C$（$\\log a$ で割る）です。ここでの $\\log$ は自然対数（底 $e$）を表します。`),
+  tx(`$e^{x}$ は「微分しても積分しても形が変わらない」特別な関数ですが、底が $e$ 以外の $${p.k}^{x}$ は $\\log ${p.k}$ で割る必要があります。`),
+  d(`\\int(${p.k}^{x}-e^{x})\\,dx=\\dfrac{${p.k}^{x}}{\\log ${p.k}}-e^{x}+C`),
+  ans(`\\dfrac{${p.k}^{x}}{\\log ${p.k}}-e^{x}+C`),
+  pt(`理由：$(${p.k}^{x})'=${p.k}^{x}\\log ${p.k}$ だから、微分で掛かる $\\log ${p.k}$ を、積分では割って打ち消しているのです。公式を丸暗記せず「微分の逆」として理解しましょう。`)]},
+
+{id:'228-3',src:'%228(3)',topic:'exp',diff:1,
+ def:{a:2,b:3},
+ gen:()=>({a:ri(2,6),b:ri(2,6)}),
+ stmt:p=>`\\int\\left(${p.a}e^{x}+\\dfrac{${p.b}}{x}\\right)dx`,
+ sol:p=>[
+  pol(`$\\int e^{x}\\,dx=e^{x}+C$ と、$\\int\\dfrac{1}{x}\\,dx=\\log|x|+C$ の組合せです。$\\dfrac{1}{x}=x^{-1}$ だけはべき関数の公式が使えない（$n=-1$ で分母が $0$ になる）ため、対数になるのでした。`),
+  d(`\\int\\left(${p.a}e^{x}+\\dfrac{${p.b}}{x}\\right)dx=${p.a}e^{x}+${p.b}\\log|x|+C`),
+  ans(`${p.a}e^{x}+${p.b}\\log|x|+C`),
+  pt(`$\\log|x|$ の絶対値を忘れないこと。$x<0$ の範囲でも $\\dfrac{1}{x}$ は積分できるので、定義域全体をカバーするために絶対値が必要です。`)]},
+
+/* ---------- %229 1次式の置換 ---------- */
+{id:'229-1',src:'%229(1)',topic:'linear',diff:1,
+ def:{c:1,n:3},
+ gen:()=>({c:ri(2,6),n:pk([2,4,5])}),
+ stmt:p=>`\\int(x+${p.c})^{${p.n}}\\,dx`,
+ sol:p=>[
+  pol(`$F'(x)=f(x)$ のとき $\\int f(ax+b)\\,dx=\\dfrac{1}{a}F(ax+b)+C$（1次式置換の公式）。今回は中身が $x+${p.c}$ で $x$ の係数が $1$ なので、$\\dfrac{1}{a}$ 倍の補正は不要です。`),
+  tx(`展開してから項別に積分することもできますが、かたまり $(x+${p.c})$ をひとつの文字とみなすほうが圧倒的に速く、ミスも減ります。`),
+  d(`\\int(x+${p.c})^{${p.n}}\\,dx=\\dfrac{(x+${p.c})^{${p.n+1}}}{${p.n+1}}+C`),
+  ans(`\\dfrac{1}{${p.n+1}}(x+${p.c})^{${p.n+1}}+C`),
+  pt(`検算：微分すると合成関数の微分で $\\dfrac{${p.n+1}(x+${p.c})^{${p.n}}}{${p.n+1}}\\times(x+${p.c})'=(x+${p.c})^{${p.n}}$。中身の微分が $1$ だから補正がいらない、と納得しておきましょう。`)]},
+
+{id:'229-4',src:'%229(4)',topic:'linear',diff:1,
+ def:{a:3,b:2},
+ gen:()=>({a:ri(2,6),b:pk([-3,-2,-1,1,3,4])}),
+ stmt:p=>`\\int\\cos(${p.a}t${sgn(p.b)})\\,dt`,
+ sol:p=>[
+  pol(`$\\int\\cos t\\,dt=\\sin t+C$ が土台。中身が $${p.a}t${sgn(p.b)}$ という1次式なので、$\\int f(at+b)\\,dt=\\dfrac{1}{a}F(at+b)+C$ により「$t$ の係数 $${p.a}$ で割る」補正がつきます。`),
+  d(`\\int\\cos(${p.a}t${sgn(p.b)})\\,dt=\\dfrac{1}{${p.a}}\\sin(${p.a}t${sgn(p.b)})+C`),
+  ans(`\\dfrac{1}{${p.a}}\\sin(${p.a}t${sgn(p.b)})+C`),
+  pt(`なぜ割るのか：$\\sin(${p.a}t${sgn(p.b)})$ を微分すると中身の微分 $${p.a}$ が「余分に」掛かって出てきます。それを前もって $\\dfrac{1}{${p.a}}$ で打ち消しておく、というのが公式の意味です。`)]},
+
+{id:'229-5',src:'%229(5)',topic:'linear',diff:1,
+ def:{c:2,a:1,b:3},
+ gen:()=>({c:ri(2,5),a:ri(1,4),b:ri(2,5)}),
+ stmt:p=>`\\int\\dfrac{${p.c}}{${p.a}-${p.b}x}\\,dx`,
+ sol:p=>{const co=F(-p.c,p.b);return[
+  pol(`$\\int\\dfrac{1}{x}\\,dx=\\log|x|+C$ の中身を1次式 $${p.a}-${p.b}x$ に置き換えた形です。$x$ の係数が $-${p.b}$ であることに注意して、$\\dfrac{1}{-${p.b}}$ 倍の補正をつけます。`),
+  d(`\\int\\dfrac{${p.c}}{${p.a}-${p.b}x}\\,dx=${p.c}\\times\\dfrac{1}{-${p.b}}\\log|${p.a}-${p.b}x|+C`),
+  ans(`${ctex(co)}\\log|${p.a}-${p.b}x|+C`),
+  pt(`最大の落とし穴は符号です。中身の $x$ の係数は $-${p.b}$（マイナス）。「1次式の係数で割る」の“係数”には符号まで含まれます。微分して元に戻るか必ず確認を。`)];}},
+
+{id:'229-7',src:'%229(7)',topic:'linear',diff:1,
+ def:{a:2,b:-1},
+ gen:()=>({a:pk([2,3,4]),b:pk([-3,-2,1,2,3])}),
+ stmt:p=>`\\int e^{${p.a}x${sgn(p.b)}}\\,dx`,
+ sol:p=>[
+  pol(`$\\int e^{x}\\,dx=e^{x}+C$ の1次式版です。指数の中身 $${p.a}x${sgn(p.b)}$ の $x$ の係数 $${p.a}$ で割ります。`),
+  d(`\\int e^{${p.a}x${sgn(p.b)}}\\,dx=\\dfrac{1}{${p.a}}e^{${p.a}x${sgn(p.b)}}+C`),
+  ans(`\\dfrac{1}{${p.a}}e^{${p.a}x${sgn(p.b)}}+C`),
+  pt(`定数部分（$${sgn(p.b).replace('+','+')}$ の項）は割る数に関係しません。関係するのは「$x$ に掛かっている係数」だけです。`)]},
+
+{id:'229-8',src:'%229(8)',topic:'linear',diff:2,
+ def:{k:2,a:5,b:2},
+ gen:()=>({k:pk([2,3]),a:ri(2,5),b:pk([-2,-1,1,3])}),
+ stmt:p=>`\\int ${p.k}^{${p.a}x${sgn(p.b)}}\\,dx`,
+ sol:p=>[
+  pol(`2 段階の補正が必要な問題です。①底が $e$ でない指数関数なので $\\log ${p.k}$ で割る、②中身が1次式なので $x$ の係数 $${p.a}$ で割る。この 2 つを両方行います。`),
+  d(`\\int ${p.k}^{${p.a}x${sgn(p.b)}}\\,dx=\\dfrac{1}{${p.a}}\\cdot\\dfrac{${p.k}^{${p.a}x${sgn(p.b)}}}{\\log ${p.k}}+C`),
+  ans(`\\dfrac{${p.k}^{${p.a}x${sgn(p.b)}}}{${p.a}\\log ${p.k}}+C`),
+  pt(`「$a^{x}$ 型 → $\\log a$ で割る」「中身が1次式 → 係数で割る」。補正を 1 つ忘れるミスが頻出。積分後に微分して、$\\log ${p.k}$ と $${p.a}$ の両方が打ち消されるか確認しましょう。`)]},
+
+/* ---------- %230・231 置換積分 ---------- */
+{id:'231-1',src:'%231(1)',topic:'subst',diff:2,
+ def:{a:2},
+ gen:()=>({a:pk([1,3,4,5])}),
+ stmt:p=>`\\int x\\sqrt{x+${p.a}}\\,dx`,
+ sol:p=>{const a=p.a,c2=F(2*a,3);
+  return[
+  pol(`根号の中身をまるごと置き換えます。$\\sqrt{x+${a}}=t$ とおくより、$x+${a}=t$ とおくほうが計算が軽く済みます（$dx=dt$ になるため）。`),
+  tx(`$x+${a}=t$ とおくと $x=t-${a}$、そして両辺を微分して $dx=dt$。積分の中身をすべて $t$ で書き直します。`),
+  d(`\\int x\\sqrt{x+${a}}\\,dx=\\int(t-${a})\\sqrt{t}\\,dt=\\int\\left(t^{\\frac{3}{2}}-${a}t^{\\frac{1}{2}}\\right)dt`),
+  tx(`べき関数の公式で項別に積分します。$t^{\\frac32}\\to\\dfrac{2}{5}t^{\\frac52}$、$t^{\\frac12}\\to\\dfrac{2}{3}t^{\\frac32}$ です。`),
+  d(`=\\dfrac{2}{5}t^{\\frac{5}{2}}-${ctex(c2)}t^{\\frac{3}{2}}+C`),
+  tx(`$t=x+${a}$ を戻し、共通因数 $(x+${a})\\sqrt{x+${a}}$ でくくって整理します。`),
+  d(`=\\dfrac{2}{5}(x+${a})^{2}\\sqrt{x+${a}}-${ctex(c2)}(x+${a})\\sqrt{x+${a}}+C=\\dfrac{2}{15}(3x-${2*a})(x+${a})\\sqrt{x+${a}}+C`),
+  ans(`\\dfrac{2}{15}(3x-${2*a})(x+${a})\\sqrt{x+${a}}+C`),
+  pt(`置換積分の手順は毎回同じ 4 ステップ：「①おく → ②$dx$ を $dt$ に直す → ③全部 $t$ の式にして積分 → ④$x$ に戻す」。答えは因数分解した形まで整理するのが答案の作法です。`)];}},
+
+/* ---------- %232・233 f'/f 型 ---------- */
+{id:'232-2',src:'%232(2)',topic:'fprime',diff:2,
+ def:{n:2},
+ gen:()=>({n:pk([3,4,5])}),
+ stmt:p=>`\\int\\sin^{${p.n}}x\\cos x\\,dx`,
+ sol:p=>[
+  pol(`「$\\sin x$ のかたまり」と「その微分 $\\cos x$」がセットで見えています。こういうときは $\\sin x=t$ の置換が一撃で決まります（$\\{f(x)\\}^{n}f'(x)$ 型）。`),
+  tx(`$\\sin x=t$ とおくと $\\cos x\\,dx=dt$。問題の $\\cos x\\,dx$ の部分がそっくり $dt$ に化けます。`),
+  d(`\\int\\sin^{${p.n}}x\\cos x\\,dx=\\int t^{${p.n}}\\,dt=\\dfrac{t^{${p.n+1}}}{${p.n+1}}+C`),
+  ans(`\\dfrac{1}{${p.n+1}}\\sin^{${p.n+1}}x+C`),
+  pt(`「関数のかたまりと、その微分が同時にいるか？」——被積分関数を見たら最初にチェックすべき視点です。慣れれば置換を書かずに $\\dfrac{\\sin^{${p.n+1}}x}{${p.n+1}}$ と即答できます。`)]},
+
+{id:'233-2',src:'%233(2)',topic:'fprime',diff:2,
+ def:{k:1},
+ gen:()=>({k:ri(2,5)}),
+ stmt:p=>`\\int\\dfrac{\\cos x}{${p.k}+\\sin x}\\,dx`,
+ sol:p=>[
+  pol(`分母 $${p.k}+\\sin x$ を微分すると $\\cos x$、つまり分子そのものです。$\\int\\dfrac{f'(x)}{f(x)}\\,dx=\\log|f(x)|+C$（対数微分の逆）の形になっています。`),
+  d(`\\int\\dfrac{(${p.k}+\\sin x)'}{${p.k}+\\sin x}\\,dx=\\log|${p.k}+\\sin x|+C`),
+  tx(`ここで $-1\\le\\sin x\\le1$ より $${p.k}+\\sin x${p.k>=2?'>0':'\\ge 0'}$ なので、絶対値は外せます。`),
+  ans(`\\log(${p.k}+\\sin x)+C`),
+  pt(`「分子が分母の微分になっていないか？」は分数関数を見たときの最優先チェックです。多少係数がずれていても、定数倍を調整すればこの型に持ち込めます。`)]},
+
+/* ---------- %235 部分積分 ---------- */
+{id:'235-1',src:'%235(1)',topic:'parts',diff:2,
+ def:{a:3},
+ gen:()=>({a:pk([2,4,5])}),
+ stmt:p=>`\\int x\\cos ${p.a}x\\,dx`,
+ sol:p=>{const a=p.a;return[
+  pol(`「多項式 × 三角関数」の積は部分積分 $\\int f\\,g'\\,dx=fg-\\int f'g\\,dx$ です。微分すると簡単になる $x$ を $f$、積分できる $\\cos ${a}x$ を $g'$ に選びます。`),
+  tx(`$f=x$、$g'=\\cos ${a}x$ とすると、$f'=1$、$g=\\dfrac{1}{${a}}\\sin ${a}x$（1次式置換の公式）。`),
+  d(`\\int x\\cos ${a}x\\,dx=x\\cdot\\dfrac{1}{${a}}\\sin ${a}x-\\int 1\\cdot\\dfrac{1}{${a}}\\sin ${a}x\\,dx`),
+  d(`=\\dfrac{1}{${a}}x\\sin ${a}x-\\dfrac{1}{${a}}\\left(-\\dfrac{1}{${a}}\\cos ${a}x\\right)+C`),
+  ans(`\\dfrac{1}{${a}}x\\sin ${a}x+\\dfrac{1}{${a*a}}\\cos ${a}x+C`),
+  pt(`役割分担の原則は「微分して簡単になるほう（多項式）を $f$」。逆にすると $\\int x^{2}\\cdots$ が現れて悪化します。第 2 項の符号（$-\\int$ の中のマイナスと $\\sin$ の積分のマイナスが打ち消し合ってプラス）にも注意。`)];}},
+
+{id:'235-2',src:'%235(2)',topic:'parts',diff:2,
+ def:{n:3},
+ gen:()=>({n:pk([2,4,5])}),
+ stmt:p=>`\\int x^{${p.n}}\\log x\\,dx`,
+ sol:p=>{const m=p.n+1,m2=m*m;return[
+  pol(`$\\log x$ を含む積の積分は、原則 $f=\\log x$（微分する側）に選びます。$\\log x$ は積分しにくい一方、微分すれば $\\dfrac{1}{x}$ と簡単になるからです。`),
+  tx(`$f=\\log x$、$g'=x^{${p.n}}$ とすると $f'=\\dfrac{1}{x}$、$g=\\dfrac{x^{${m}}}{${m}}$。`),
+  d(`\\int x^{${p.n}}\\log x\\,dx=\\dfrac{x^{${m}}}{${m}}\\log x-\\int\\dfrac{x^{${m}}}{${m}}\\cdot\\dfrac{1}{x}\\,dx=\\dfrac{x^{${m}}}{${m}}\\log x-\\dfrac{1}{${m}}\\int x^{${p.n}}\\,dx`),
+  d(`=\\dfrac{x^{${m}}}{${m}}\\log x-\\dfrac{x^{${m}}}{${m2}}+C`),
+  ans(`\\dfrac{x^{${m}}}{${m}}\\log x-\\dfrac{x^{${m}}}{${m2}}+C`),
+  pt(`途中の $\\dfrac{x^{${m}}}{${m}}\\cdot\\dfrac{1}{x}=\\dfrac{x^{${p.n}}}{${m}}$ という約分がこの問題の心臓部。$\\log$ が消えて、ただのべき関数の積分に戻るのが部分積分のうまみです。`)];}},
+
+{id:'235-4',src:'%235(4)',topic:'parts',diff:2,
+ def:{c:2},
+ gen:()=>({c:pk([1,3,4,5])}),
+ stmt:p=>`\\int\\log(x+${p.c})\\,dx`,
+ sol:p=>{const c=p.c;return[
+  pol(`$\\log$ 単独の積分は「$1\\times\\log(x+${c})$」とみなして部分積分します。見えない $1$ を書き足すのがコツです。`),
+  tx(`$f=\\log(x+${c})$、$g'=1$ とすると $f'=\\dfrac{1}{x+${c}}$。ここで $g$ は $x$ でもよいのですが、$g=x+${c}$ と選ぶと後の計算が劇的に楽になります（積分定数の自由度を利用）。`),
+  d(`\\int\\log(x+${c})\\,dx=(x+${c})\\log(x+${c})-\\int(x+${c})\\cdot\\dfrac{1}{x+${c}}\\,dx`),
+  d(`=(x+${c})\\log(x+${c})-\\int 1\\,dx=(x+${c})\\log(x+${c})-x+C`),
+  ans(`(x+${c})\\log(x+${c})-x+C`),
+  pt(`$g=x$ で計算しても、最後に定数を積分定数 $C$ に吸収させれば同じ答えに合流します。「$g$ は好きな定数を足してよい」という自由度は、$\\log(1$次式$)$ の積分で特に威力を発揮します。`)];}},
+
+{id:'235-3',src:'%235(3)',topic:'parts',diff:2,
+ def:{a:2,b:-1},
+ gen:()=>({a:ri(2,4),b:pk([-3,-1,1,3])}),
+ stmt:p=>`\\int(${p.a}x${sgn(p.b)})e^{x}\\,dx`,
+ sol:p=>{const c0=p.b-p.a;const inner=`${p.a}x`+(c0===0?'':sgn(c0));return[
+  pol(`「1次式 × $e^{x}$」は部分積分の典型です。微分して定数になる 1次式を $f$、何回積分しても形が変わらない $e^{x}$ を $g'$ にします。`),
+  tx(`$f=${p.a}x${sgn(p.b)}$、$g'=e^{x}$ とすると $f'=${p.a}$、$g=e^{x}$。`),
+  d(`\\int(${p.a}x${sgn(p.b)})e^{x}\\,dx=(${p.a}x${sgn(p.b)})e^{x}-\\int ${p.a}e^{x}\\,dx=(${p.a}x${sgn(p.b)})e^{x}-${p.a}e^{x}+C`),
+  tx(`$e^{x}$ でくくって整理します。`),
+  ans(`(${inner})e^{x}+C`),
+  pt(`結果を一般化すると $\\int(ax+b)e^{x}dx=(ax+b-a)e^{x}+C$。「1次式から、その傾きを引く」と覚えておくと検算が速くなります。`)];}},
+
+/* ---------- %240・241 分数関数 ---------- */
+{id:'240-1',src:'%240(1)',topic:'rational',diff:2,
+ def:{a:1,b:1},
+ gen:()=>({a:ri(1,3),b:ri(1,3)}),
+ stmt:p=>`\\int\\dfrac{(x+${p.a})^{2}}{x-${p.b}}\\,dx`,
+ sol:p=>{const q1=2*p.a+p.b,c2=(p.a+p.b)**2;return[
+  pol(`（分子の次数）≧（分母の次数）の分数関数は、まず割り算をして「多項式＋あまりの分数」の形に直します。仮分数を帯分数に直すのと同じ発想です。`),
+  tx(`$(x+${p.a})^{2}=x^{2}+${2*p.a}x+${p.a*p.a}$ を $x-${p.b}$ で割ると、商 $x+${q1}$、余り $${c2}$ になります（実際に割り算して確かめてください）。`),
+  d(`\\dfrac{(x+${p.a})^{2}}{x-${p.b}}=x+${q1}+\\dfrac{${c2}}{x-${p.b}}`),
+  tx(`右辺を検算：$(x-${p.b})(x+${q1})+${c2}$ を展開すると分子に一致します。あとは項別に積分するだけです。`),
+  d(`\\int\\left(x+${q1}+\\dfrac{${c2}}{x-${p.b}}\\right)dx=\\dfrac{x^{2}}{2}+${q1}x+${c2}\\log|x-${p.b}|+C`),
+  ans(`\\dfrac{x^{2}}{2}+${q1}x+${c2}\\log|x-${p.b}|+C`),
+  pt(`「分子の次数を分母より下げる」——分数関数積分の第一原則です。下げたあとの $\\dfrac{定数}{1次式}$ は $\\log$ になります。絶対値も忘れずに。`)];}},
+
+{id:'241-1',src:'%241(1)',topic:'rational',diff:2,
+ def:{a:2},
+ gen:()=>({a:pk([3,4,5,6])}),
+ stmt:p=>`\\int\\dfrac{dx}{x(x+${p.a})}`,
+ sol:p=>{const a=p.a;return[
+  pol(`分母が 2 つの1次式の積なら、部分分数分解で $\\dfrac{1}{x}$ と $\\dfrac{1}{x+${a}}$ の差に分けます。分けてしまえば、それぞれが $\\log$ の形です。`),
+  tx(`$\\dfrac{1}{x(x+${a})}=\\dfrac{1}{${a}}\\left(\\dfrac{1}{x}-\\dfrac{1}{x+${a}}\\right)$ と分解できます。右辺を通分すると $\\dfrac{1}{${a}}\\cdot\\dfrac{(x+${a})-x}{x(x+${a})}=\\dfrac{1}{${a}}\\cdot\\dfrac{${a}}{x(x+${a})}$ となり、確かに左辺に戻ります。`),
+  d(`\\int\\dfrac{dx}{x(x+${a})}=\\dfrac{1}{${a}}\\int\\left(\\dfrac{1}{x}-\\dfrac{1}{x+${a}}\\right)dx=\\dfrac{1}{${a}}\\left(\\log|x|-\\log|x+${a}|\\right)+C`),
+  ans(`\\dfrac{1}{${a}}\\log\\left|\\dfrac{x}{x+${a}}\\right|+C`),
+  pt(`分解の係数 $\\dfrac{1}{${a}}$ は「分母 2 つの差 $(x+${a})-x=${a}$」から来ています。分解したら必ず通分して検算する習慣を。最後は $\\log$ の差を商の形にまとめると美しい答案になります。`)];}},
+
+/* ---------- %242 三角関数の式変形 ---------- */
+{id:'242-3',src:'%242(3)',topic:'trigadv',diff:2,
+ def:{a:3,b:5},
+ gen:()=>{const[a,b]=pk([[2,5],[2,7],[3,7],[4,7],[2,3],[3,4]]);return{a,b};},
+ stmt:p=>`\\int\\cos ${p.a}x\\sin ${p.b}x\\,dx`,
+ sol:p=>{const s=p.a+p.b,w=p.b-p.a;return[
+  pol(`$\\sin$ と $\\cos$ の「積」のままでは積分できません。積和公式 $\\sin\\alpha\\cos\\beta=\\dfrac{1}{2}\\{\\sin(\\alpha+\\beta)+\\sin(\\alpha-\\beta)\\}$ で「和」に直すのが定石です。`),
+  tx(`$\\alpha=${p.b}x$、$\\beta=${p.a}x$ として適用します。`),
+  d(`\\cos ${p.a}x\\sin ${p.b}x=\\dfrac{1}{2}\\{\\sin ${s}x+\\sin ${nx(w)}\\}`),
+  tx(`和の形になれば、あとは 1 項ずつ「1次式置換」で積分できます（$\\sin kx\\to-\\dfrac{1}{k}\\cos kx$）。`),
+  d(`\\int\\cos ${p.a}x\\sin ${p.b}x\\,dx=\\dfrac{1}{2}\\left(-\\dfrac{1}{${s}}\\cos ${s}x-\\dfrac{1}{${w}}\\cos ${nx(w)}\\right)+C`),
+  ans(`-\\dfrac{1}{${2*s}}\\cos ${s}x-\\dfrac{1}{${2*w}}\\cos ${nx(w)}+C`),
+  pt(`積和公式は加法定理 $\\sin(\\alpha+\\beta)$ と $\\sin(\\alpha-\\beta)$ を足せばその場で作れます。丸暗記が不安な人は、試験中でも 10 秒で導出できるよう練習しておきましょう。`)];}},
+
+{id:'242-5',src:'%242(5)',topic:'trigadv',diff:2,
+ def:{m:2},
+ gen:()=>({m:pk([3,4])}),
+ stmt:p=>`\\int\\cos^{2}\\dfrac{x}{${p.m}}\\,dx`,
+ sol:p=>{const cf=F(p.m,4),ag=F(2,p.m);
+  const argTex=ag.n===1&&ag.d===1?'x':(ag.d===1?`${ag.n}x`:`\\dfrac{${ag.n===1?'':ag.n}x}{${ag.d}}`);
+  return[
+  pol(`$\\cos^{2}$（2 乗）のままでは積分できません。半角公式 $\\cos^{2}\\theta=\\dfrac{1+\\cos 2\\theta}{2}$ で「次数を下げて」1 乗の世界に持ち込みます。`),
+  tx(`$\\theta=\\dfrac{x}{${p.m}}$ とすると $2\\theta=${argTex==='x'?'x':`${argTex}`}$ です。`),
+  d(`\\cos^{2}\\dfrac{x}{${p.m}}=\\dfrac{1}{2}\\left(1+\\cos ${argTex}\\right)`),
+  d(`\\int\\cos^{2}\\dfrac{x}{${p.m}}\\,dx=\\dfrac{1}{2}\\int\\left(1+\\cos ${argTex}\\right)dx=\\dfrac{x}{2}+${ctex(cf)}\\sin ${argTex}+C`),
+  ans(`\\dfrac{x}{2}+${ctex(cf)}\\sin ${argTex}+C`),
+  pt(`三角関数の積分は「2 乗以上を見たら次数下げ（半角公式）」「積を見たら積和公式」。この 2 つの反射で大半の問題が動き出します。$\\cos$ の中の係数で割る補正も忘れずに。`)];}},
+
+/* ---------- %247 無理関数 ---------- */
+{id:'247-1',src:'%247(1)',topic:'irr',diff:3,
+ def:{a:1},
+ gen:()=>({a:ri(2,4)}),
+ stmt:p=>`\\int\\dfrac{dx}{\\sqrt{x+${p.a}}-\\sqrt{x}}`,
+ sol:p=>{const a=p.a,c=F(2,3*a);return[
+  pol(`分母に「根号の差」があるときは、分母の有理化が第一手です。$\\sqrt{x+${a}}+\\sqrt{x}$ を分母・分子に掛けると、分母は $(x+${a})-x=${a}$ という定数になります。`),
+  d(`\\dfrac{1}{\\sqrt{x+${a}}-\\sqrt{x}}=\\dfrac{\\sqrt{x+${a}}+\\sqrt{x}}{(\\sqrt{x+${a}})^{2}-(\\sqrt{x})^{2}}=\\dfrac{\\sqrt{x+${a}}+\\sqrt{x}}{${a}}`),
+  tx(`分数が消え、$\\sqrt{\\phantom{x}}=(\\ )^{\\frac12}$ のべき関数 2 つの和になりました。$\\sqrt{x+${a}}$ は中身が1次式（係数 $1$）なのでそのまま公式が使えます。`),
+  d(`\\int\\dfrac{\\sqrt{x+${a}}+\\sqrt{x}}{${a}}\\,dx=\\dfrac{1}{${a}}\\left\\{\\dfrac{2}{3}(x+${a})^{\\frac{3}{2}}+\\dfrac{2}{3}x^{\\frac{3}{2}}\\right\\}+C`),
+  ans(`${ctex(c)}\\left\\{(x+${a})\\sqrt{x+${a}}+x\\sqrt{x}\\right\\}+C`),
+  pt(`「割れないなら、割らずに済む形へ変形する」。有理化は中学以来の道具ですが、積分でも主役級に働きます。$(x+${a})^{\\frac32}=(x+${a})\\sqrt{x+${a}}$ の書き換えで根号入りの形に整えましょう。`)];}},
+
+/* ---------- %250 e^x × 三角関数 ---------- */
+{id:'250-1',src:'%250(1)',topic:'expTrig',diff:3,
+ def:{b:1},
+ gen:()=>({b:pk([2,3])}),
+ stmt:p=>`\\int e^{x}\\cos ${nx(p.b)}\\,dx`,
+ sol:p=>{const b=p.b,den=1+b*b;const bx=nx(b);
+  const bc=b===1?'':String(b);
+  return[
+  pol(`$e^{x}$ も $\\cos ${bx}$ も、何回微分・積分しても消えない関数どうしの積です。部分積分を 2 回行うと元の積分が再登場するので、それを方程式として解く——「ぐるっと一周作戦」を使います。`),
+  tx(`求める積分を $I=\\int e^{x}\\cos ${bx}\\,dx$ とおきます。$f=\\cos ${bx}$、$g'=e^{x}$ で部分積分すると、`),
+  d(`I=e^{x}\\cos ${bx}-\\int e^{x}\\cdot(-${bc===''?'':bc+'\\,'}\\sin ${bx})\\,dx=e^{x}\\cos ${bx}+${bc}\\int e^{x}\\sin ${bx}\\,dx`),
+  tx(`右の積分にもう一度部分積分（$f=\\sin ${bx}$、$g'=e^{x}$）を行います。`),
+  d(`\\int e^{x}\\sin ${bx}\\,dx=e^{x}\\sin ${bx}-${bc}\\int e^{x}\\cos ${bx}\\,dx=e^{x}\\sin ${bx}-${bc}I`),
+  tx(`これを代入すると $I=e^{x}\\cos ${bx}+${bc}\\,e^{x}\\sin ${bx}-${b*b===1?'':b*b}I$ となり、$I$ についての1次方程式が現れます。両辺の $I$ をまとめて、`),
+  d(`${den}I=e^{x}(\\cos ${bx}+${bc}\\sin ${bx})\\quad\\Longrightarrow\\quad I=\\dfrac{e^{x}(\\cos ${bx}+${bc}\\sin ${bx})}{${den}}`),
+  ans(`\\dfrac{e^{x}(\\cos ${bx}+${bc}\\sin ${bx})}{${den}}+C`),
+  pt(`最後に積分定数 $C$ を付け忘れないこと（方程式を解く過程で消えがちです）。2 回の部分積分で $f$・$g'$ の役割を途中で入れ替えないのも重要——入れ替えると $I=I$ という無意味な式に戻ってしまいます。`)];}},
+];
+
+/* =========================================================
+   状態管理・抽出ロジック
+========================================================= */
+const useCount={};   // セッション内の出題回数（偏り防止）
+let currentSet=[];   // 現在表示中の {tpl, params, isVariant}
+
+/* 類題パラメータ：原題と必ず異なる組を生成 */
+function genDistinct(tpl){
+  const base=JSON.stringify(tpl.def);
+  for(let i=0;i<40;i++){
+    const q=tpl.gen();
+    if(JSON.stringify(q)!==base)return q;
+  }
+  return tpl.gen();
+}
+
+/* 層化ランダム抽出：
+   選択分野ごとに問題数を比例配分（最大剰余法）→ 分野内では
+   出題回数が少ない問題を優先しつつランダムに抽出 */
+const topicUse={};   // 分野別のセッション内出題数
+function stratifiedPick(topicKeys,total){
+  const pools=topicKeys.map(t=>DB.filter(q=>q.topic===t)).filter(pl=>pl.length>0);
+  if(!pools.length)return[];
+  const sizes=pools.map(pl=>pl.length);
+  const S=sizes.reduce((x,y)=>x+y,0);
+  total=Math.min(total,S);
+  const raw=sizes.map(s=>total*s/S);
+  const quota=raw.map(Math.floor);
+  let rest=total-quota.reduce((x,y)=>x+y,0);
+  /* 端数枠は「端数の大きさ」に加えて「分野別の出題率が低い分野」を
+     優先して割り当てる（少数分野が永続的に落選しないための補正） */
+  raw.map((r,i)=>{
+      const t=pools[i][0].topic;
+      const rate=(topicUse[t]||0)/sizes[i];
+      return[r-quota[i]-rate*0.5+Math.random()*1e-6,i];
+    }).sort((x,y)=>y[0]-x[0])
+     .forEach(([,i])=>{if(rest>0){quota[i]++;rest--;}});
+  /* プール上限を超えた分を他分野へ回す */
+  for(let guard=0;guard<50;guard++){
+    let moved=false;
+    for(let i=0;i<quota.length;i++){
+      if(quota[i]>sizes[i]){
+        const j=quota.findIndex((q,k)=>q<sizes[k]);
+        if(j>=0){quota[i]--;quota[j]++;moved=true;}
+      }
+    }
+    if(!moved)break;
+  }
+  const picked=[];
+  pools.forEach((pool,i)=>{
+    const sorted=shuffle(pool.slice())
+      .sort((a,b)=>(useCount[a.id]||0)-(useCount[b.id]||0));
+    picked.push(...sorted.slice(0,quota[i]));
+  });
+  picked.forEach(q=>{
+    useCount[q.id]=(useCount[q.id]||0)+1;
+    topicUse[q.topic]=(topicUse[q.topic]||0)+1;
+  });
+  /* プリントとしては分野順→難度順に並べる */
+  const order=Object.keys(TOPICS);
+  picked.sort((a,b)=>order.indexOf(a.topic)-order.indexOf(b.topic)||a.diff-b.diff);
+  return picked;
+}
+
+/* =========================================================
+   描画
+========================================================= */
+function buildTopicList(){
+  const box=document.getElementById('topicList');
+  box.innerHTML=Object.entries(TOPICS).map(([key,t])=>{
+    const n=DB.filter(q=>q.topic===key).length;
+    return`<label><input type="checkbox" name="topic" value="${key}" checked>
+      <span>${t.name}</span><span class="cnt">${t.ref}｜${n}題</span></label>`;
+  }).join('');
+}
+function setAllTopics(on){
+  document.querySelectorAll('input[name=topic]').forEach(c=>c.checked=on);
+}
+
+function starTex(diff){return'★'.repeat(diff)+'☆'.repeat(3-diff);}
+
+function generate(){
+  const topics=[...document.querySelectorAll('input[name=topic]:checked')].map(c=>c.value);
+  const total=Math.max(1,parseInt(document.getElementById('numQ').value)||1);
+  const mode=document.querySelector('input[name=mode]:checked').value;
+  const qArea=document.getElementById('qArea');
+  if(!topics.length){
+    qArea.innerHTML=`<div class="empty"><div class="big">範囲が選ばれていません</div>少なくとも 1 つの分野にチェックを入れてください。</div>`;
+    document.getElementById('aArea').innerHTML='';
+    return;
+  }
+  const picked=stratifiedPick(topics,total);
+  currentSet=picked.map(tpl=>({
+    tpl,
+    params:mode==='variant'?genDistinct(tpl):{...tpl.def},
+    isVariant:mode==='variant',
+  }));
+  render();
+}
+
+function render(){
+  const showOrigin=document.getElementById('showOrigin').checked;
+  const qArea=document.getElementById('qArea');
+  const aArea=document.getElementById('aArea');
+  if(!currentSet.length){return;}
+
+  qArea.innerHTML=currentSet.map((item,i)=>{
+    const t=item.tpl;
+    const originChip=showOrigin
+      ?`<span class="chip origin">${item.isVariant?'類題：'+t.src:t.src}</span>`:'';
+    return`<article class="q-card" id="q${i}">
+      <div class="q-top">
+        <span class="q-no">${i+1}</span>
+        <span class="chip topic">${TOPICS[t.topic].name}</span>
+        <span class="chip diff">難度 ${starTex(t.diff)}</span>
+        ${originChip}
+        <span class="q-tools no-print">
+          <button type="button" onclick="regen(${i})">数値を替える</button>
+          <button type="button" onclick="toggleSol(${i})">解答解説</button>
+        </span>
+      </div>
+      <div class="q-body">
+        <p class="q-lead">次の不定積分を求めよ。</p>
+        <div class="q-math">$$${t.stmt(item.params)}$$</div>
+      </div>
+      <div class="sol" id="sol${i}">
+        <span class="sol-tag">解答・解説</span>
+        ${solHtml(t.sol(item.params))}
+      </div>
+    </article>`;
+  }).join('');
+
+  /* 印刷用の解答編 */
+  aArea.innerHTML=currentSet.map((item,i)=>{
+    const t=item.tpl;
+    return`<article class="q-card">
+      <div class="q-top"><span class="q-no">${i+1}</span>
+      ${document.getElementById('showOrigin').checked?`<span class="chip">${item.isVariant?'類題：'+t.src:t.src}</span>`:''}</div>
+      <div class="q-math">$$${t.stmt(item.params)}$$</div>
+      <div class="sol open">${solHtml(t.sol(item.params))}</div>
+    </article>`;
+  }).join('');
+
+  typeset();
+}
+
+function solHtml(blocks){
+  return blocks.map(b=>{
+    if(b.k==='pol') return`<div class="blk pol">${b.s}</div>`;
+    if(b.k==='p')   return`<div class="blk">${b.s}</div>`;
+    if(b.k==='d')   return`<div class="blk d">${b.s}</div>`;
+    if(b.k==='ans') return`<div class="blk ansb">${b.s}</div>`;
+    if(b.k==='pt')  return`<div class="blk pt">${b.s}</div>`;
+    return'';
+  }).join('');
+}
+
+function regen(i){
+  const item=currentSet[i];
+  item.params=genDistinct(item.tpl);
+  item.isVariant=true;
+  render();
+}
+
+function toggleSol(i){
+  document.getElementById('sol'+i).classList.toggle('open');
+}
+let allOpen=false;
+function toggleAllSol(){
+  allOpen=!allOpen;
+  document.querySelectorAll('#qArea .sol').forEach(s=>s.classList.toggle('open',allOpen));
+}
+
+function typeset(){
+  if(window.renderMathInElement){
+    renderMathInElement(document.getElementById('paper'),{
+      delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+      throwOnError:false
+    });
+  }
+}
+
+function printSheet(withAnswers){
+  if(!currentSet.length){alert('先に「プリントを生成する」を押してください。');return;}
+  document.body.classList.toggle('print-with-answers',withAnswers);
+  window.print();
+}
+window.addEventListener('afterprint',()=>document.body.classList.remove('print-with-answers'));
+
+document.getElementById('showOrigin').addEventListener('change',()=>{if(currentSet.length)render();});
+
+/* 初期化 */
+buildTopicList();
+const today=new Date();
+document.getElementById('sheetDate').textContent=
+  `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日`;
+window.addEventListener('load',()=>{ typeset(); });
+</script>
+</body>
+</html>
