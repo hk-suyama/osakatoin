@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ワールドカップ 仮想賭け勝負</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pitch:#0d3b2e;
+  --pitch-deep:#07271e;
+  --chalk:#f2f5ef;
+  --lime:#c8f04a;
+  --clay:#e8623d;
+  --sky:#4ea3d9;
+  --gold:#f2c14e;
+  --line:rgba(242,245,239,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--pitch-deep);
+  background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.012) 0 60px,transparent 60px 120px);
+  color:var(--chalk);
+  font-family:"Zen Kaku Gothic New",system-ui,sans-serif;
+  line-height:1.7;
+  padding:0 0 80px;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+/* HERO */
+header{
+  border-bottom:1px solid var(--line);
+  padding:56px 0 40px;
+  margin-bottom:48px;
+  position:relative;
+  overflow:hidden;
+}
+header::after{
+  content:"";position:absolute;right:-80px;top:-60px;
+  width:320px;height:320px;border:1px solid var(--line);border-radius:50%;
+}
+header::before{
+  content:"";position:absolute;right:60px;top:60px;
+  width:180px;height:180px;border:1px solid var(--line);border-radius:50%;
+}
+.eyebrow{
+  font-family:"Barlow Condensed",sans-serif;
+  letter-spacing:.28em;text-transform:uppercase;
+  font-size:.78rem;color:var(--lime);margin-bottom:14px;
+}
+h1{
+  font-size:clamp(2.1rem,5vw,3.4rem);
+  font-weight:900;letter-spacing:-.02em;line-height:1.15;
+}
+h1 em{font-style:normal;color:var(--lime)}
+.sub{margin-top:16px;color:rgba(242,245,239,.6);font-size:.95rem;max-width:42em}
+
+/* SECTION */
+section{margin-bottom:64px}
+h2{
+  font-size:1.05rem;font-weight:700;letter-spacing:.04em;
+  display:flex;align-items:center;gap:14px;margin-bottom:22px;
+}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+.tag{
+  font-family:"Barlow Condensed",sans-serif;
+  font-size:.72rem;letter-spacing:.18em;
+  border:1px solid var(--line);border-radius:99px;
+  padding:2px 11px;color:rgba(242,245,239,.5);font-weight:600;
+}
+
+/* ODDS */
+.odds-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media(max-width:760px){.odds-grid{grid-template-columns:1fr}}
+.odds-card{border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.odds-head{
+  background:rgba(255,255,255,.03);padding:12px 18px;
+  font-size:.85rem;font-weight:700;letter-spacing:.06em;
+  border-bottom:1px solid var(--line);
+}
+.odds-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:10px 18px;border-bottom:1px solid rgba(242,245,239,.05);
+  font-size:.92rem;
+}
+.odds-row:last-child{border-bottom:none}
+.odds-row.hot{background:rgba(200,240,74,.05)}
+.odds-val{
+  font-family:"Barlow Condensed",sans-serif;
+  font-size:1.28rem;font-weight:700;letter-spacing:.02em;
+}
+.odds-row.hot .odds-val{color:var(--lime)}
+
+/* PLAYERS */
+.players{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.pcard{
+  border:1px solid var(--line);border-radius:4px;padding:20px;
+  display:flex;flex-direction:column;gap:14px;
+  border-top:3px solid var(--pc);
+}
+.pname{font-weight:900;font-size:1.15rem;letter-spacing:.02em}
+.pstyle{font-size:.76rem;color:var(--pc);letter-spacing:.1em;font-weight:700;margin-top:-8px}
+.bet{
+  display:flex;justify-content:space-between;gap:10px;
+  font-size:.85rem;padding-bottom:8px;
+  border-bottom:1px dashed rgba(242,245,239,.1);
+}
+.bet:last-of-type{border-bottom:none}
+.bet b{font-weight:500;color:rgba(242,245,239,.85)}
+.bet span{
+  font-family:"Barlow Condensed",sans-serif;font-weight:600;
+  color:rgba(242,245,239,.5);white-space:nowrap;
+}
+.pmax{
+  margin-top:auto;padding-top:12px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:baseline;
+}
+.pmax small{font-size:.72rem;color:rgba(242,245,239,.4);letter-spacing:.08em}
+.pmax strong{
+  font-family:"Barlow Condensed",sans-serif;
+  font-size:1.5rem;font-weight:700;color:var(--pc);
+}
+
+/* SIM */
+.sim{border:1px solid var(--line);border-radius:4px;padding:26px}
+.sim-controls{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:26px}
+@media(max-width:700px){.sim-controls{grid-template-columns:1fr}}
+label{
+  display:block;font-size:.74rem;letter-spacing:.16em;
+  color:rgba(242,245,239,.45);margin-bottom:8px;font-weight:700;
+}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{
+  border:1px solid var(--line);background:transparent;color:var(--chalk);
+  padding:7px 13px;border-radius:99px;cursor:pointer;
+  font-family:inherit;font-size:.84rem;transition:.15s;
+}
+.chip:hover{border-color:rgba(242,245,239,.4)}
+.chip[aria-pressed="true"]{background:var(--lime);color:var(--pitch-deep);border-color:var(--lime);font-weight:700}
+.chip:disabled{opacity:.25;cursor:not-allowed}
+.chip:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+
+.results{display:flex;flex-direction:column;gap:9px}
+.res{
+  display:grid;grid-template-columns:110px 1fr 96px;align-items:center;gap:14px;
+}
+@media(max-width:560px){.res{grid-template-columns:82px 1fr 80px;gap:9px}}
+.res-name{font-weight:700;font-size:.9rem}
+.bar-track{height:26px;background:rgba(255,255,255,.04);border-radius:2px;overflow:hidden}
+.bar{
+  height:100%;width:0;border-radius:2px;
+  transition:width .45s cubic-bezier(.2,.7,.2,1);
+}
+.res-val{
+  font-family:"Barlow Condensed",sans-serif;font-weight:700;
+  font-size:1.12rem;text-align:right;
+}
+.res.win .res-name::before{content:"▲ ";color:var(--gold)}
+.res.win .res-val{color:var(--gold)}
+.res.zero{opacity:.35}
+.verdict{
+  margin-top:22px;padding:14px 18px;border-radius:3px;
+  background:rgba(200,240,74,.07);border-left:3px solid var(--lime);
+  font-size:.9rem;
+}
+.verdict b{color:var(--lime)}
+.verdict.dead{background:rgba(232,98,61,.07);border-left-color:var(--clay)}
+.verdict.dead b{color:var(--clay)}
+
+/* MATRIX */
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th,td{padding:9px 10px;text-align:left;border-bottom:1px solid rgba(242,245,239,.07)}
+th{
+  font-size:.7rem;letter-spacing:.14em;color:rgba(242,245,239,.45);
+  font-weight:700;border-bottom:1px solid var(--line);
+}
+td.cond{color:rgba(242,245,239,.8)}
+td.who{font-weight:700}
+.w-sogawa{color:var(--c-so)} .w-oshieru{color:var(--c-os)}
+.w-suyama{color:var(--c-su)} .w-nagaocchi{color:var(--c-na)}
+.note{
+  margin-top:26px;font-size:.86rem;color:rgba(242,245,239,.55);
+  border-left:2px solid var(--line);padding-left:16px;
+}
+.note b{color:var(--chalk);font-weight:700}
+.key{color:var(--gold);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap" style="--c-so:#c8f04a;--c-os:#4ea3d9;--c-su:#e8623d;--c-na:#f2c14e">
+
+<header>
+  <div class="eyebrow">Virtual Book · World Cup</div>
+  <h1>10,000円を、<br><em>いちばん増やした人が勝ち。</em></h1>
+  <p class="sub">全員が持ち金を使い切っています。的中しなければ0円、当たれば掛け金×オッズがそのまま最終額。決勝の2チームと優勝国が決まった瞬間、勝者が確定します。</p>
+</header>
+
+<section>
+  <h2>オッズ表 <span class="tag">BOOKMAKER</span></h2>
+  <div class="odds-grid">
+    <div class="odds-card">
+      <div class="odds-head">優勝</div>
+      <div id="oddsWin"></div>
+    </div>
+    <div class="odds-card">
+      <div class="odds-head">決勝進出</div>
+      <div id="oddsFinal"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>4人の賭け方 <span class="tag">POSITIONS</span></h2>
+  <div class="players" id="players"></div>
+</section>
+
+<section>
+  <h2>結果シミュレーター <span class="tag">TAP TO SIMULATE</span></h2>
+  <div class="sim">
+    <div class="sim-controls">
+      <div>
+        <label>決勝に進む2チーム</label>
+        <div class="chips" id="finalChips"></div>
+      </div>
+      <div>
+        <label>優勝するチーム</label>
+        <div class="chips" id="champChips"></div>
+      </div>
+    </div>
+    <div class="results" id="results"></div>
+    <div class="verdict" id="verdict"></div>
+  </div>
+</section>
+
+<section>
+  <h2>勝敗の条件 <span class="tag">WHO WINS WHEN</span></h2>
+  <table>
+    <thead><tr><th>条件</th><th>勝者</th><th style="text-align:right">最終額</th></tr></thead>
+    <tbody id="matrix"></tbody>
+  </table>
+
+  <div class="note">
+    <p><b>この勝負の構造</b></p>
+    <p style="margin-top:10px">① <span class="key">ノルウェーが決勝に上がれば、そがわさんの単独勝ち。</span>優勝国が誰であっても関係なく60,000円で、他の誰も届きません。ノルウェーは唯一「1チームで勝負が決まる」ボタンです。</p>
+    <p style="margin-top:10px">② ノルウェーが落ちた時点で、そがわさんとおしえるさんの半分（5,000円）が同時に死にます。おしえるさんは<b>スペイン優勝</b>という一本足だけで残り、しかもその25,000円はすやまさんと完全に同額。おしえるさんが単独で勝つ目はゼロで、<b>最大でも同点1位止まり</b>です。</p>
+    <p style="margin-top:10px">③ すやまさんの当たり札は<b>スペイン対イングランドの決勝</b>。優勝がスペインなら25,000＋12,500で37,500円、この勝負の中で2番目に大きい配当です。</p>
+    <p style="margin-top:10px">④ ながおっちさんはフランス優勝が本線ですが、イングランドとアルゼンチンにも足を伸ばしているので、<b>フランス・アルゼンチン決勝でフランス優勝</b>が最大値の18,850円（フランス優勝＋アルゼンチン決勝進出）。ただしその18,850円ですら、ノルウェーが決勝に来た場合の そがわさん には遠く及びません。</p>
+    <p style="margin-top:10px">⑤ ベルギー・モロッコ・スイスが2枠を占めた決勝では、<b>全員が0円</b>。誰も賭けていないので、その時は引き分けです。</p>
+  </div>
+</section>
+
+</div>
+
+<script>
+const T={FRA:"フランス",ESP:"スペイン",ARG:"アルゼンチン",ENG:"イングランド",NOR:"ノルウェー",MAR:"モロッコ",BEL:"ベルギー",SUI:"スイス"};
+const winOdds={FRA:2.87,ESP:5.00,ARG:5.00,ENG:5.50,NOR:15.00,MAR:29.00,BEL:34.00,SUI:34.00};
+const finOdds={FRA:1.91,ARG:2.25,ENG:2.50,ESP:2.62,NOR:6.00,BEL:10.00,MAR:11.00,SUI:11.00};
+const ORDER=["FRA","ESP","ARG","ENG","NOR","BEL","MAR","SUI"];
+
+const P=[
+ {id:"sogawa",name:"そがわ",style:"ALL IN / 一点勝負",color:"var(--c-so)",bets:[["final","NOR",10000]]},
+ {id:"oshieru",name:"おしえる",style:"BARBELL / 中と外",color:"var(--c-os)",bets:[["win","ESP",5000],["final","NOR",5000]]},
+ {id:"suyama",name:"すやま",style:"COMBO / 決勝を当てにいく",color:"var(--c-su)",bets:[["win","ESP",5000],["final","ENG",5000]]},
+ {id:"nagaocchi",name:"ながおっち",style:"SPREAD / 三分割",color:"var(--c-na)",bets:[["win","FRA",5000],["final","ENG",3000],["final","ARG",2000]]},
+];
+const odd=(t,tm)=>t==="win"?winOdds[tm]:finOdds[tm];
+const yen=n=>n.toLocaleString("ja-JP")+"円";
+
+// odds tables
+const hotW=["FRA","ESP"], hotF=["FRA","NOR","ENG"];
+oddsWin.innerHTML=Object.entries(winOdds).sort((a,b)=>a[1]-b[1]).map(([k,v])=>
+ `<div class="odds-row${hotW.includes(k)?" hot":""}"><span>${T[k]}</span><span class="odds-val">${v.toFixed(2)}</span></div>`).join("");
+oddsFinal.innerHTML=Object.entries(finOdds).sort((a,b)=>a[1]-b[1]).map(([k,v])=>
+ `<div class="odds-row${hotF.includes(k)?" hot":""}"><span>${T[k]}</span><span class="odds-val">${v.toFixed(2)}</span></div>`).join("");
+
+// player cards — max possible payout
+function maxFor(p){
+  let best=0;
+  for(let i=0;i<ORDER.length;i++)for(let j=i+1;j<ORDER.length;j++)for(const c of [ORDER[i],ORDER[j]])
+    best=Math.max(best,payout(p,[ORDER[i],ORDER[j]],c));
+  return best;
+}
+function payout(p,fin,champ){
+  return p.bets.reduce((s,[t,tm,st])=>
+    s+((t==="final"&&fin.includes(tm))||(t==="win"&&tm===champ)?st*odd(t,tm):0),0);
+}
+players.innerHTML=P.map(p=>`
+ <div class="pcard" style="--pc:${p.color}">
+   <div><div class="pname">${p.name}</div><div class="pstyle">${p.style}</div></div>
+   <div>${p.bets.map(([t,tm,st])=>
+     `<div class="bet"><b>${T[tm]}${t==="win"?"優勝":"決勝進出"}</b><span>${st.toLocaleString()} × ${odd(t,tm).toFixed(2)}</span></div>`).join("")}</div>
+   <div class="pmax"><small>最大配当</small><strong>${Math.round(maxFor(p)).toLocaleString()}</strong></div>
+ </div>`).join("");
+
+// simulator
+let fin=["ESP","ENG"], champ="ESP";
+function chips(){
+  finalChips.innerHTML=ORDER.map(k=>
+   `<button class="chip" role="button" aria-pressed="${fin.includes(k)}" data-f="${k}">${T[k]}</button>`).join("");
+  champChips.innerHTML=ORDER.map(k=>
+   `<button class="chip" aria-pressed="${champ===k}" data-c="${k}" ${fin.includes(k)?"":"disabled"}>${T[k]}</button>`).join("");
+}
+finalChips.onclick=e=>{
+  const k=e.target.dataset?.f; if(!k)return;
+  if(fin.includes(k)){ if(fin.length>1) fin=fin.filter(x=>x!==k); }
+  else fin=[fin[1],k];
+  if(!fin.includes(champ)) champ=fin[0];
+  render();
+};
+champChips.onclick=e=>{const k=e.target.dataset?.c; if(k&&fin.includes(k)){champ=k;render();}};
+
+function render(){
+  chips();
+  const rows=P.map(p=>({...p,v:payout(p,fin,champ)}));
+  const max=Math.max(...rows.map(r=>r.v));
+  results.innerHTML=rows.map(r=>`
+   <div class="res ${r.v===max&&max>0?"win":""} ${r.v===0?"zero":""}">
+     <div class="res-name">${r.name}</div>
+     <div class="bar-track"><div class="bar" style="background:${r.color};width:${max?r.v/max*100:0}%"></div></div>
+     <div class="res-val">${Math.round(r.v).toLocaleString()}</div>
+   </div>`).join("");
+
+  const w=rows.filter(r=>r.v===max&&max>0);
+  const t=`${T[fin[0]]} 対 ${T[fin[1]]}、優勝は${T[champ]}。`;
+  verdict.className="verdict"+(max===0?" dead":"");
+  verdict.innerHTML= max===0
+    ? `${t} 誰の賭けにも掛からず、<b>全員0円で引き分け</b>。`
+    : w.length>1
+      ? `${t} <b>${w.map(x=>x.name).join(" と ")}</b> が ${yen(Math.round(max))} で同点1位。`
+      : `${t} <b>${w[0].name}さんの勝ち</b>（${yen(Math.round(max))}）。`;
+}
+render();
+
+// matrix
+const M=[
+ ["ノルウェーが決勝に進出（優勝国は不問）","そがわ","sogawa","60,000"],
+ ["スペイン 対 イングランドの決勝 → スペイン優勝","すやま","suyama","37,500"],
+ ["スペインが優勝（ノルウェー・イングランドが決勝に不在）","おしえる と すやま","oshieru","25,000 で同点"],
+ ["フランス 対 アルゼンチンの決勝 → フランス優勝","ながおっち","nagaocchi","18,850"],
+ ["フランス 対 イングランドの決勝 → フランス優勝","ながおっち","nagaocchi","21,850"],
+ ["フランス 対 イングランドの決勝 → イングランド優勝","すやま","suyama","12,500"],
+ ["イングランドが決勝進出（スペイン・ノルウェー・フランス・アルゼンチンが不在）","すやま","suyama","12,500"],
+ ["アルゼンチン 対 イングランドの決勝（優勝国は不問）","すやま","suyama","12,500"],
+ ["フランスが優勝（イングランド・アルゼンチン・ノルウェーが決勝に不在）","ながおっち","nagaocchi","14,350"],
+ ["ベルギー・モロッコ・スイスの中から2チームが決勝","全員0円で引き分け","","0"],
+];
+matrix.innerHTML=M.map(([c,w,id,v])=>
+ `<tr><td class="cond">${c}</td><td class="who ${id?"w-"+id:""}">${w}</td><td style="text-align:right;font-family:'Barlow Condensed';font-weight:700">${v}</td></tr>`).join("");
+</script>
+</body>
+</html>
