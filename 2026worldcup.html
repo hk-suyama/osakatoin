@@ -91,6 +91,8 @@ label{display:block;font-size:.7rem;letter-spacing:.14em;color:rgba(242,245,239,
 .ft{font-family:"Barlow Condensed",sans-serif;font-size:.66rem;letter-spacing:.16em;color:var(--gold);border:1px solid rgba(242,193,78,.4);border-radius:99px;padding:1px 7px;margin-left:8px;font-weight:700}
 .when{font-family:"Barlow Condensed",sans-serif;font-size:.68rem;letter-spacing:.12em;color:rgba(242,245,239,.3);margin-top:5px}
 .slot{border:1px dashed rgba(242,245,239,.18);border-radius:3px;padding:11px 14px;font-size:.85rem;color:rgba(242,245,239,.5)}
+.slot.done{border-style:solid;border-color:rgba(242,193,78,.4)}
+.slot.done .who{color:rgba(242,245,239,.9)}
 .slot .pair{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .slot .vs{margin:0 4px;color:rgba(242,245,239,.3)}
 .slot.final{border:1px solid var(--gold);padding:20px 16px;text-align:center;background:rgba(242,193,78,.05)}
@@ -141,7 +143,7 @@ footer{margin-top:40px;font-size:.76rem;color:rgba(242,245,239,.28);border-top:1
 <div class="wrap">
 
 <header>
-  <div class="eyebrow">Virtual Book · Semifinals</div>
+  <div class="eyebrow">Virtual Book · Final</div>
   <h1>2026 <em>World Cup</em></h1>
 </header>
 
@@ -210,7 +212,7 @@ footer{margin-top:40px;font-size:.76rem;color:rgba(242,245,239,.28);border-top:1
     <div class="odds-card"><div class="odds-head">優勝</div><div id="oddsWin"></div></div>
     <div class="odds-card"><div class="odds-head">決勝進出</div><div id="oddsFinal"></div></div>
   </div>
-  <footer>試合開始時刻はすべて日本時間。準々決勝は全て終了。準決勝は フランス 対 スペイン（7/15）、イングランド 対 アルゼンチン（7/16）。</footer>
+  <footer>試合開始時刻はすべて日本時間。スペインが決勝進出（フランス 0-2 スペイン）。もう一つの準決勝はイングランド 対 アルゼンチン（7/16）。</footer>
 </section>
 
 </div>
@@ -241,6 +243,10 @@ const RESULT={
  2:{win:"ENG",score:{NOR:1,ENG:2}},  // 延長
  3:{win:"ARG",score:{ARG:3,SUI:1}},  // 延長
 };
+// 準決勝の結果: slot 0 = 上の山(FRA/ESP), slot 1 = 下の山(ENG/ARG)
+const SFRESULT={
+ 0:{win:"ESP",score:{FRA:0,ESP:2}},  // フランス 0-2 スペイン
+};
 const PIP={FRA:"var(--c-na)",ESP:"var(--c-os)",NOR:"var(--c-so)",ENG:"var(--c-su)",ARG:"var(--c-na)"};
 
 const P=[
@@ -268,16 +274,29 @@ document.querySelectorAll("[data-tie]").forEach(el=>{
 });
 const side=i=>RESULT[i]?`${flag(RESULT[i].win,"sm")}<b style="color:var(--chalk);font-weight:700">${T[RESULT[i].win]}</b>`
                        :`${flag(QF[i][0],"sm")}${flag(QF[i][1],"sm")}`;
-const pair=(i,j)=>`<div class="pair">${side(i)}<span class="vs">vs</span>${side(j)}</div>`;
-sfslot0.innerHTML=pair(0,1)+`<div class="when">7/15(水) 4:00 ダラス</div>`;
-sfslot1.innerHTML=pair(2,3)+`<div class="when">7/16(木) 4:00 アトランタ</div>`;
+// finalists per semifinal slot: [teamA, teamB]
+const SFPOOL=[[RESULT[0].win,RESULT[1].win],[RESULT[2].win,RESULT[3].win]];
+function sfSlot(slot,when){
+  const r=SFRESULT[slot], pool=SFPOOL[slot];
+  if(r){
+    const inner=pool.map(k=>{
+      const w=r.win===k;
+      return `<span class="team ${w?"thru":"out"}" style="display:inline-flex;padding:0;gap:6px">${flag(k,"sm")}<span class="who" style="flex:none">${T[k]}</span><span class="sc" style="width:auto">${r.score[k]}</span></span>`;
+    }).join(`<span class="vs">vs</span>`);
+    return `<div class="pair">${inner}</div><div class="when">${when}<span class="ft">FT</span></div>`;
+  }
+  return `<div class="pair">${flag(pool[0],"sm")}${T[pool[0]]}<span class="vs">vs</span>${flag(pool[1],"sm")}${T[pool[1]]}</div><div class="when">${when}</div>`;
+}
+sfslot0.innerHTML=sfSlot(0,"7/15(水) 4:00 ダラス");
+sfslot1.innerHTML=sfSlot(1,"7/16(木) 4:00 アトランタ");
+if(SFRESULT[0])document.getElementById("sfslot0").classList.add("tie","done");
+if(SFRESULT[1])document.getElementById("sfslot1").classList.add("tie","done");
 
-// players — reflect locked QF results
-const eliminated=Object.values(RESULT).map(r=>r.win); // teams still alive = winners so far
-const aliveTeams=new Set(eliminated); // teams that advanced from decided rounds
+// players — reflect locked QF + SF results
 const decidedOut=new Set();           // teams knocked out
 Object.entries(RESULT).forEach(([i,r])=>QF[+i].forEach(k=>{if(k!==r.win)decidedOut.add(k);}));
-// a final-progression bet is dead if that team is already out; a win bet is dead likewise
+Object.entries(SFRESULT).forEach(([i,r])=>SFPOOL[+i].forEach(k=>{if(k!==r.win)decidedOut.add(k);}));
+// a bet is dead if that team is already eliminated
 const betDead=(t,tm)=>decidedOut.has(tm);
 players.innerHTML=P.map(p=>{
   const allDead=p.bets.every(([t,tm])=>betDead(t,tm));
@@ -299,8 +318,9 @@ oddsWin.innerHTML=oddsRows(winOdds,hotW);
 oddsFinal.innerHTML=oddsRows(finOdds,hotF);
 
 // simulator
-let qw=["FRA","ESP","ENG","ARG"],sf=["FRA","ENG"],champ="FRA";
+let qw=["FRA","ESP","ENG","ARG"],sf=["ESP","ENG"],champ="ESP";
 Object.entries(RESULT).forEach(([i,r])=>{qw[+i]=r.win;});
+Object.entries(SFRESULT).forEach(([i,r])=>{sf[+i]=r.win;});
 const chip=(k,on,attr,lock)=>`<button class="chip${lock?" locked":""}" aria-pressed="${on}" ${attr} ${lock?"disabled":""}>${flag(k,"sm")}${T[k]}${lock&&on?'<span class="lock">FT</span>':""}</button>`;
 function draw(){
   if(!qw.slice(0,2).includes(sf[0])) sf[0]=qw[0];
@@ -311,8 +331,8 @@ function draw(){
     const i=+el.dataset.qf;
     el.innerHTML=QF[i].map(k=>chip(k,qw[i]===k,`data-q="${i}" data-t="${k}"`,!!RESULT[i])).join("");
   });
-  sf0.innerHTML=qw.slice(0,2).map(k=>chip(k,sf[0]===k,`data-s="0" data-t="${k}"`)).join("");
-  sf1.innerHTML=qw.slice(2,4).map(k=>chip(k,sf[1]===k,`data-s="1" data-t="${k}"`)).join("");
+  sf0.innerHTML=qw.slice(0,2).map(k=>chip(k,sf[0]===k,`data-s="0" data-t="${k}"`,!!SFRESULT[0])).join("");
+  sf1.innerHTML=qw.slice(2,4).map(k=>chip(k,sf[1]===k,`data-s="1" data-t="${k}"`,!!SFRESULT[1])).join("");
   document.getElementById("champ").innerHTML=sf.map(k=>chip(k,champ===k,`data-c="${k}"`)).join("");
 
   const rows=P.map(p=>({...p,v:payout(p,sf,champ)}));
@@ -335,21 +355,17 @@ document.querySelector(".sim").addEventListener("click",e=>{
   const b=e.target.closest(".chip"); if(!b)return;
   const d=b.dataset;
   if(d.q!==undefined){ if(RESULT[+d.q])return; qw[+d.q]=d.t; }
-  else if(d.s!==undefined) sf[+d.s]=d.t;
+  else if(d.s!==undefined){ if(SFRESULT[+d.s])return; sf[+d.s]=d.t; }
   else if(d.c) champ=d.c;
   draw();
 });
 draw();
 
 const M=[
- ["スペイン 対 イングランドの決勝 → スペイン優勝","すやま","suyama","37,500"],
- ["フランス 対 イングランドの決勝 → フランス優勝","ながおっち","nagaocchi","21,850"],
- ["フランス 対 アルゼンチンの決勝 → フランス優勝","ながおっち","nagaocchi","18,850"],
- ["スペイン 対 アルゼンチンの決勝 → スペイン優勝","おしえる と すやま","oshieru","25,000 で同点"],
- ["スペイン 対 イングランドの決勝 → イングランド優勝","すやま","suyama","12,500"],
- ["フランス 対 イングランドの決勝 → イングランド優勝","すやま","suyama","12,500"],
- ["フランス 対 アルゼンチンの決勝 → アルゼンチン優勝","ながおっち","nagaocchi","4,500"],
- ["スペイン 対 アルゼンチンの決勝 → アルゼンチン優勝","ながおっち","nagaocchi","4,500"],
+ ["決勝の相手がイングランド → スペイン優勝","すやま","suyama","37,500"],
+ ["決勝の相手がイングランド → イングランド優勝","すやま","suyama","12,500"],
+ ["決勝の相手がアルゼンチン → スペイン優勝","おしえる と すやま","oshieru","25,000 で同点"],
+ ["決勝の相手がアルゼンチン → アルゼンチン優勝","ながおっち","nagaocchi","4,500"],
 ];
 matrix.innerHTML=M.map(([c,w,id,v])=>
  `<tr><td class="cond">${c}</td><td class="who2 ${id?"w-"+id:""}">${w}</td><td class="num">${v}</td></tr>`).join("");
