@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>こしをまもれ！荷物もちあげゲーム</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { touch-action: manipulation; }   /* ダブルタップズーム抑止 */
+  button, input, .stage-card { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    background: linear-gradient(180deg, #fef9ec 0%, #fdf3dd 100%);
+    color: #2c3e50;
+    display: flex; flex-direction: column; align-items: center;
+    min-height: 100vh; padding: 14px;
+  }
+  h1 { font-size: 26px; margin: 6px 0 2px; color: #1a3a5c; }
+  .subtitle { font-size: 14px; color: #7a6a4f; margin-bottom: 10px; }
+  .wrap { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  .stage-card, .panel {
+    background: #fff; border-radius: 18px; padding: 14px;
+    box-shadow: 0 4px 14px rgba(90,70,30,.12);
+  }
+  .stage-card { position: relative; }
+  svg { display: block; }
+  .panel { width: 330px; display: flex; flex-direction: column; gap: 14px; }
+  @media (max-width: 1010px) {
+    .wrap { flex-direction: column; align-items: center; }
+    .panel { width: min(620px, 92vw); }
+    h1 { font-size: 22px; }
+  }
+  .level-row { display: flex; align-items: center; justify-content: space-between; }
+  .level-badge { font-size: 18px; font-weight: bold; color: #1a3a5c; }
+  .weight-chip {
+    background: #c98a4b; color: #fff; font-weight: bold;
+    border-radius: 999px; padding: 4px 14px; font-size: 16px;
+  }
+  .slider-block label { font-weight: bold; font-size: 15px; display: block; margin-bottom: 6px; }
+  input[type=range] {
+    width: 100%; height: 48px; -webkit-appearance: none; appearance: none;
+    background: transparent; touch-action: pan-x;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    height: 16px; border-radius: 8px;
+    background: linear-gradient(90deg, #e74c3c, #f1c40f, #2ecc71);
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 44px; height: 44px; border-radius: 50%;
+    background: #fff; border: 5px solid #1a3a5c; margin-top: -14px; cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,.25);
+  }
+  input[type=range]::-moz-range-track {
+    height: 16px; border-radius: 8px;
+    background: linear-gradient(90deg, #e74c3c, #f1c40f, #2ecc71);
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: #fff; border: 5px solid #1a3a5c; cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,.25);
+  }
+  .slider-ends { display: flex; justify-content: space-between; font-size: 12px; color: #7a6a4f; }
+  .formula {
+    background: #f6f2e8; border-radius: 12px; padding: 10px 12px; font-size: 14px;
+    line-height: 1.7;
+  }
+  .formula .big { font-size: 20px; font-weight: bold; }
+  .arm-val { color: #c0392b; font-weight: bold; }
+  .force-val { font-weight: bold; }
+  .gauge-block { }
+  .gauge-label { display:flex; justify-content: space-between; font-size: 13px; font-weight: bold; margin-bottom: 4px; }
+  .gauge {
+    position: relative; height: 26px; background: #eee; border-radius: 13px; overflow: hidden;
+  }
+  .gauge-fill {
+    height: 100%; width: 0%; border-radius: 13px;
+    background: #2ecc71; transition: width .15s, background .15s;
+  }
+  .gauge-line {
+    position: absolute; top: -4px; bottom: -4px; width: 3px; background: #c0392b;
+    left: 70%;
+  }
+  .gauge-line::after {
+    content: "ぎっくりライン"; position: absolute; top: -18px; left: -38px;
+    font-size: 11px; color: #c0392b; font-weight: bold; white-space: nowrap;
+  }
+  .gauge-wrap { position: relative; padding-top: 20px; }
+  button.lift {
+    font-size: 26px; font-weight: bold; color: #fff; border: none; cursor: pointer;
+    background: linear-gradient(180deg, #ff9f43, #f2841c);
+    border-radius: 999px; padding: 18px; min-height: 64px; box-shadow: 0 5px 0 #c96a10;
+    transition: transform .08s;
+  }
+  button.lift:active { transform: translateY(3px); box-shadow: 0 1px 0 #c96a10; }
+  button.lift:disabled { background: #ccc; box-shadow: none; cursor: default; }
+  .msg {
+    min-height: 52px; font-size: 15px; font-weight: bold; text-align: center;
+    display: flex; align-items: center; justify-content: center; border-radius: 12px; padding: 6px;
+  }
+  .msg.ok { background: #e8f8ee; color: #1e8e4e; }
+  .msg.ng { background: #fdecea; color: #c0392b; }
+  .msg.info { background: #eef3fa; color: #1a3a5c; }
+  .hakase {
+    max-width: 1010px; margin-top: 14px; background: #fff; border-radius: 14px;
+    padding: 12px 16px; font-size: 14px; line-height: 1.9; box-shadow: 0 4px 14px rgba(90,70,30,.1);
+  }
+  .hakase summary { font-weight: bold; cursor: pointer; font-size: 15px; color: #1a3a5c; }
+  .stars-row { text-align: center; font-size: 22px; letter-spacing: 6px; min-height: 28px; }
+  .shake { animation: shake .5s; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-7px); } 40% { transform: translateX(7px); }
+    60% { transform: translateX(-5px); } 80% { transform: translateX(5px); }
+  }
+  ruby rt { font-size: 9px; }
+</style>
+</head>
+<body>
+<h1>こしをまもれ！<ruby>荷物<rt>にもつ</rt></ruby>もちあげゲーム</h1>
+<div class="subtitle">スライダーでポーズを変えて、<ruby>腰<rt>こし</rt></ruby>をいためずに荷物をもちあげよう！</div>
+
+<div class="wrap">
+  <div class="stage-card">
+    <svg id="stage" viewBox="0 0 620 560" style="width:min(620px, 92vw); height:auto;"></svg>
+  </div>
+
+  <div class="panel">
+    <div class="level-row">
+      <div class="level-badge" id="levelLabel">レベル 1</div>
+      <div class="weight-chip" id="weightChip">2kg</div>
+      <div class="stars-row" id="starsRow"></div>
+    </div>
+
+    <div class="slider-block">
+      <label>ポーズをえらぼう（<ruby>膝<rt>ひざ</rt></ruby>とかがみ<ruby>方<rt>かた</rt></ruby>）</label>
+      <input type="range" id="pose" min="0" max="100" value="0">
+      <div class="slider-ends"><span>◀ 腰だけ曲げる</span><span>ひざを曲げて近づく ▶</span></div>
+    </div>
+
+    <div class="formula">
+      てんびんの「つり合いの<ruby>式<rt>しき</rt></ruby>」<br>
+      <ruby>背筋<rt>はいきん</rt></ruby>の力 ＝ 荷物 × アーム ÷ 5cm<br>
+      ＝ <span id="fW">2</span>kg × <span id="fArm" class="arm-val">45</span>cm ÷ 5cm
+      ＝ <span id="fForce" class="big force-val">18</span><span class="force-val">kg分</span>
+    </div>
+
+    <div class="gauge-block">
+      <div class="gauge-label"><span><ruby>腰<rt>こし</rt></ruby>への<ruby>負担<rt>ふたん</rt></ruby></span><span id="gaugeNum">18kg分</span></div>
+      <div class="gauge-wrap">
+        <div class="gauge">
+          <div class="gauge-fill" id="gaugeFill"></div>
+        </div>
+        <div class="gauge-line"></div>
+      </div>
+    </div>
+
+    <button class="lift" id="liftBtn">💪 もちあげる！</button>
+    <div class="msg info" id="msg">アーム（支点から荷物までのきょり）が<br>短いほど、腰はラクだよ</div>
+  </div>
+</div>
+
+<details class="hakase">
+  <summary>🧑‍🔬 はかせの解説 ―「モーメントアーム」ってなに？</summary>
+  <p>
+    <ruby>腰<rt>こし</rt></ruby>の<ruby>骨<rt>ほね</rt></ruby>は、体の中の「シーソーの<ruby>支点<rt>してん</rt></ruby>」。
+    支点から荷物までの<ruby>水平<rt>すいへい</rt></ruby>のきょりを<b>モーメントアーム</b>とよぶよ。
+    ものを回すチカラ（モーメント）は「<b>力 × アームの長さ</b>」で決まるんだ。<br>
+    ところが、体をささえる<ruby>背筋<rt>はいきん</rt></ruby>は<ruby>背骨<rt>せぼね</rt></ruby>のすぐ近く（アーム 約5cm）にしかついていない。
+    だから <b>荷物の重さ × 長いアーム ＝ 背筋の力 × 5cm</b> をつり合わせるために、
+    背筋は荷物の<b>何倍もの力</b>を出すことになる。これが腰の負担の正体！<br>
+    → <b>荷物に近づいて、ひざを曲げて、荷物を体にくっつける</b>と、アームが短くなって腰がまもれるよ。
+    （※かんたんにするため、上半身じしんの重さは考えていません）
+  </p>
+</details>
+
+<script>
+"use strict";
+// ================= 検証済みポーズ座標（図1・図2と同一） =================
+const GROUND = 470;
+const STOOP = {
+  heel:[153,462], toe:[240,462], ankle:[183,452],
+  knee:[235,365], hip:[165,290],
+  shoulder:[329,246], head:[379,230],
+  elbow:[337,322], hand:[365,398],
+};
+const SQUAT = {
+  heel:[163,462], toe:[255,462], ankle:[195,452],
+  knee:[270,370], hip:[165,380],
+  shoulder:[274,250], head:[307,210],
+  elbow:[278,322], hand:[283,394],
+};
+const STAND = {
+  heel:[140,462], toe:[215,462], ankle:[168,452],
+  knee:[172,357], hip:[165,260],
+  shoulder:[172,95], head:[182,58],
+  elbow:[196,168], hand:[208,242],
+};
+const JOINTS = Object.keys(STOOP);
+
+// アーム換算: STOOP時の水平距離 → 45cm, SQUAT時 → 20cm（線形）
+const ARM_CM_STOOP = 45, ARM_CM_SQUAT = 20;
+const MUSCLE_ARM = 5;           // 背筋のアーム(cm)
+const PAIN_LIMIT = 70;          // ぎっくりライン(kg分) → ゲージは100kg分満タン
+const LEVELS = [
+  { w: 2,  label: "レベル 1" },
+  { w: 10, label: "レベル 2" },
+  { w: 15, label: "レベル 3" },
+];
+
+// ================= ユーティリティ =================
+const lerp = (a, b, t) => a + (b - a) * t;
+const lerpP = (p, q, t) => [lerp(p[0], q[0], t), lerp(p[1], q[1], t)];
+const mixPose = (A, B, t) => {
+  const o = {};
+  for (const k of JOINTS) o[k] = lerpP(A[k], B[k], t);
+  return o;
+};
+const trunkUnit = (J) => {
+  const dx = J.shoulder[0] - J.hip[0], dy = J.shoulder[1] - J.hip[1];
+  const L = Math.hypot(dx, dy);
+  return [dx / L, dy / L];
+};
+const pivotOf = (J) => {
+  const u = trunkUnit(J);
+  return [J.hip[0] + u[0] * 28, J.hip[1] + u[1] * 28];
+};
+const easeInOut = (t) => t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2;
+
+// ================= SVG ステージ構築 =================
+const NS = "http://www.w3.org/2000/svg";
+const stage = document.getElementById("stage");
+function el(name, attrs, parent) {
+  const e = document.createElementNS(NS, name);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  (parent || stage).appendChild(e);
+  return e;
+}
+// 背景・地面
+el("ellipse", { id:"shadow", cx:280, cy:GROUND+2, rx:160, ry:9, fill:"#000", opacity:0.07 });
+el("line", { x1:40, y1:GROUND, x2:580, y2:GROUND, stroke:"#b9b2a1", "stroke-width":4, "stroke-linecap":"round" });
+// 寸法線グループ（体の下に）
+const dimG = el("g", { id:"dim" });
+// 人体グループ
+const bodyG = el("g", { id:"body" });
+const BODY_COL = "#3f5875", ARM_COL = "#5f7fa3";
+function strokePath(color, width, parent) {
+  return el("path", { fill:"none", stroke:color, "stroke-width":width,
+    "stroke-linecap":"round", "stroke-linejoin":"round" }, parent);
+}
+const pFoot  = strokePath(BODY_COL, 16, bodyG);
+const pShin  = strokePath(BODY_COL, 26, bodyG);
+const pThigh = strokePath(BODY_COL, 32, bodyG);
+const pTorso = strokePath(BODY_COL, 46, bodyG);
+const pNeck  = strokePath(BODY_COL, 18, bodyG);
+const cHead  = el("circle", { r:30, fill:BODY_COL }, bodyG);
+const cEye   = el("circle", { r:3.5, fill:"#fff" }, bodyG);
+const spineDots = [0.06,0.22,0.38,0.54,0.70,0.86].map((t,i) =>
+  el("circle", { r:4.6, fill: i===0 ? "#ffd0c8" : "#fff", opacity:0.95 }, bodyG));
+const pUpArm = strokePath(ARM_COL, 20, bodyG);
+const pFoArm = strokePath(ARM_COL, 18, bodyG);
+// 箱
+const boxG = el("g", {});
+const boxRect = el("rect", { width:74, height:60, rx:6, fill:"#c98a4b", stroke:"#8a5a26", "stroke-width":3 }, boxG);
+const boxLid  = el("line", { stroke:"#8a5a26", "stroke-width":2.5 }, boxG);
+const boxTxt  = el("text", { "font-size":15, "font-weight":"bold", fill:"#fff",
+  "text-anchor":"middle", "font-family":"Meiryo, sans-serif" }, boxG);
+// 支点
+const pivRing = el("circle", { r:13, fill:"none", stroke:"#e74c3c", "stroke-width":2.5 });
+const pivDot  = el("circle", { r:6.5, fill:"#e74c3c" });
+const pivLbl  = el("text", { "font-size":14, "font-weight":"bold", fill:"#c0392b",
+  "text-anchor":"middle", "font-family":"Meiryo, sans-serif" });
+pivLbl.textContent = "支点（腰）";
+// 痛みスター
+function starPath(cx, cy, ro, ri, n=8, rot=0.22) {
+  const pts = [];
+  for (let i = 0; i < 2*n; i++) {
+    const r = i % 2 === 0 ? ro : ri, a = Math.PI*i/n + rot;
+    pts.push(`${(cx + r*Math.sin(a)).toFixed(1)},${(cy - r*Math.cos(a)).toFixed(1)}`);
+  }
+  return "M" + pts.join(" L") + " Z";
+}
+const painStar = el("path", { fill:"#e74c3c", stroke:"#fff", "stroke-width":2, visibility:"hidden" });
+// 成功スター
+const cheers = Array.from({length:5}, () =>
+  el("text", { "font-size":26, visibility:"hidden" }));
+cheers.forEach(c => c.textContent = "⭐");
+
+// ================= 描画 =================
+function armPx(J, boxCx) { return boxCx - pivotOf(J)[0]; }
+function armCm(t) { return Math.round(lerp(ARM_CM_STOOP, ARM_CM_SQUAT, t)); }
+
+let poseT = 0;                 // スライダー 0..1
+let state = "aim";             // aim | lifting | fail | success | clear
+let level = 0;
+let liftAnim = null;
+
+function boxCenterFloor(t) {   // 床置きの箱位置（姿勢に連動して近づく）
+  return [lerp(383, 290, t), 438];
+}
+
+function draw(J, boxC, opts = {}) {
+  const d = (pts) => "M" + pts.map(p => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" L");
+  pFoot.setAttribute("d", d([J.heel, J.toe]));
+  pShin.setAttribute("d", d([J.ankle, J.knee]));
+  pThigh.setAttribute("d", d([J.knee, J.hip]));
+  pTorso.setAttribute("d", d([J.hip, J.shoulder]));
+  pNeck.setAttribute("d", d([J.shoulder, J.head]));
+  cHead.setAttribute("cx", J.head[0]); cHead.setAttribute("cy", J.head[1]);
+  const u = trunkUnit(J);
+  cEye.setAttribute("cx", J.head[0] + 14); cEye.setAttribute("cy", J.head[1] - 4);
+  spineDots.forEach((c, i) => {
+    const t = [0.06,0.22,0.38,0.54,0.70,0.86][i];
+    c.setAttribute("cx", lerp(J.hip[0], J.shoulder[0], t));
+    c.setAttribute("cy", lerp(J.hip[1], J.shoulder[1], t));
+  });
+  pUpArm.setAttribute("d", d([J.shoulder, J.elbow]));
+  pFoArm.setAttribute("d", d([J.elbow, J.hand]));
+  // 箱
+  boxRect.setAttribute("x", boxC[0] - 37); boxRect.setAttribute("y", boxC[1] - 30);
+  boxLid.setAttribute("x1", boxC[0] - 37); boxLid.setAttribute("x2", boxC[0] + 37);
+  boxLid.setAttribute("y1", boxC[1] - 12); boxLid.setAttribute("y2", boxC[1] - 12);
+  boxTxt.setAttribute("x", boxC[0]); boxTxt.setAttribute("y", boxC[1] + 14);
+  boxTxt.textContent = LEVELS[level].w + "kg";
+  // 支点
+  const P = pivotOf(J);
+  pivRing.setAttribute("cx", P[0]); pivRing.setAttribute("cy", P[1]);
+  pivDot.setAttribute("cx", P[0]);  pivDot.setAttribute("cy", P[1]);
+  pivLbl.setAttribute("x", P[0] - 60); pivLbl.setAttribute("y", P[1] - 30);
+  // 寸法線
+  dimG.innerHTML = "";
+  if (opts.dims !== false) {
+    const y = 505, color = opts.dimColor || "#c0392b";
+    const mk = (n, a) => { const e = document.createElementNS(NS, n);
+      for (const k in a) e.setAttribute(k, a[k]); dimG.appendChild(e); return e; };
+    mk("line", { x1:P[0], y1:P[1]+15, x2:P[0], y2:y+8, stroke:color, "stroke-width":1.6, "stroke-dasharray":"4 4" });
+    mk("line", { x1:boxC[0], y1:boxC[1]+32, x2:boxC[0], y2:y+8, stroke:color, "stroke-width":1.6, "stroke-dasharray":"4 4" });
+    mk("line", { x1:P[0]+11, y1:y, x2:boxC[0]-11, y2:y, stroke:color, "stroke-width":3 });
+    mk("path", { d:`M${P[0]},${y} L${P[0]+11},${y-5} L${P[0]+11},${y+5} Z`, fill:color });
+    mk("path", { d:`M${boxC[0]},${y} L${boxC[0]-11},${y-5} L${boxC[0]-11},${y+5} Z`, fill:color });
+    const t = mk("text", { x:(P[0]+boxC[0])/2, y:y+26, "font-size":16, "font-weight":"bold",
+      fill:color, "text-anchor":"middle", "font-family":"Meiryo, sans-serif" });
+    t.textContent = "アーム " + (opts.armCm ?? "") + "cm";
+  }
+  return P;
+}
+
+// ================= パネル更新 =================
+const $ = (id) => document.getElementById(id);
+function forceOf(t, w) { return Math.round(w * lerp(ARM_CM_STOOP, ARM_CM_SQUAT, t) / MUSCLE_ARM); }
+
+function refreshPanel() {
+  const w = LEVELS[level].w;
+  const a = armCm(poseT), f = forceOf(poseT, w);
+  $("fW").textContent = w; $("fArm").textContent = a; $("fForce").textContent = f;
+  $("gaugeNum").textContent = f + "kg分";
+  const pct = Math.min(100, f);
+  const fill = $("gaugeFill");
+  fill.style.width = pct + "%";
+  fill.style.background = f >= PAIN_LIMIT ? "#e74c3c" : f >= PAIN_LIMIT*0.7 ? "#f1c40f" : "#2ecc71";
+  $("levelLabel").textContent = LEVELS[level].label;
+  $("weightChip").textContent = w + "kg";
+  const safe = f < PAIN_LIMIT;
+  const dimColor = safe ? "#1e8e4e" : "#c0392b";
+  const J = mixPose(STOOP, SQUAT, poseT);
+  draw(J, boxCenterFloor(poseT), { armCm: a, dimColor });
+}
+
+function setMsg(text, cls) {
+  const m = $("msg"); m.className = "msg " + cls; m.innerHTML = text;
+}
+
+// ================= もちあげアニメーション =================
+function liftAction() {
+  if (state !== "aim") return;
+  state = "lifting";
+  $("liftBtn").disabled = true;
+  const w = LEVELS[level].w;
+  const f = forceOf(poseT, w);
+  const willFail = f >= PAIN_LIMIT;
+  const startPose = mixPose(STOOP, SQUAT, poseT);
+  const startBox = boxCenterFloor(poseT);
+  const dur = willFail ? 500 : 950;
+  const t0 = performance.now();
+
+  function frame(now) {
+    let t = Math.min(1, (now - t0) / dur);
+    const e = easeInOut(t);
+    const prog = willFail ? e * 0.32 : e;   // 失敗時は32%で止まる
+    const J = mixPose(startPose, STAND, prog);
+    // 箱は手についていく
+    const grab = Math.min(1, prog * 4);   // 序盤でつかみ、以後は手に追従
+    const boxC = [ lerp(startBox[0], J.hand[0] + 12, grab),
+                   lerp(startBox[1], J.hand[1] + 36, grab) ];
+    const P = draw(J, boxC, { dims:false });
+    if (t < 1) { liftAnim = requestAnimationFrame(frame); return; }
+    if (willFail) failEnd(P); else successEnd(J);
+  }
+  liftAnim = requestAnimationFrame(frame);
+}
+
+function failEnd(P) {
+  state = "fail";
+  painStar.setAttribute("d", starPath(P[0]-7, P[1]-31, 22, 9));
+  painStar.setAttribute("visibility", "visible");
+  stage.parentElement.classList.add("shake");
+  setTimeout(() => stage.parentElement.classList.remove("shake"), 550);
+  setMsg("💥 ぎっくり<ruby>腰<rt>ごし</rt></ruby>…！ アームが長すぎたみたい。<br>もっとひざを曲げて、荷物に近づこう", "ng");
+  $("liftBtn").textContent = "🔁 もういちど";
+  $("liftBtn").disabled = false;
+}
+
+function successEnd(J) {
+  state = "success";
+  setMsg("🎉 じょうずに持ち上げた！ 腰はへっちゃら！", "ok");
+  // 星の演出
+  cheers.forEach((c, i) => {
+    c.setAttribute("x", 120 + i * 90);
+    c.setAttribute("y", 180 - (i % 2) * 30);
+    c.setAttribute("visibility", "visible");
+  });
+  $("starsRow").textContent = "★".repeat(level + 1);
+  if (level < LEVELS.length - 1) {
+    $("liftBtn").textContent = "▶ つぎのレベルへ（" + LEVELS[level+1].w + "kg）";
+  } else {
+    $("liftBtn").textContent = "🏆 さいしょから";
+    setMsg("🏆 <b>もちあげマスター認定！</b><br>重い荷物ほど「アームを短く」が大事だとわかったね", "ok");
+    state = "clear";
+  }
+  $("liftBtn").disabled = false;
+}
+
+function resetRound(nextLevel) {
+  if (nextLevel !== undefined) level = nextLevel;
+  state = "aim";
+  painStar.setAttribute("visibility", "hidden");
+  cheers.forEach(c => c.setAttribute("visibility", "hidden"));
+  $("liftBtn").textContent = "💪 もちあげる！";
+  setMsg("アームが短いほど、腰はラクだよ", "info");
+  refreshPanel();
+}
+
+// ================= イベント =================
+$("pose").addEventListener("input", (e) => {
+  if (state === "lifting" || state === "success" || state === "clear") return;
+  if (state === "fail") resetRound();
+  poseT = e.target.value / 100;
+  refreshPanel();
+});
+$("liftBtn").addEventListener("click", () => {
+  if (state === "aim") { liftAction(); return; }
+  if (state === "fail") { resetRound(); return; }
+  if (state === "success") { $("pose").value = 0; poseT = 0; resetRound(level + 1); return; }
+  if (state === "clear") { $("pose").value = 0; poseT = 0; $("starsRow").textContent = ""; resetRound(0); return; }
+});
+
+// 初期描画
+refreshPanel();
+</script>
+</body>
+</html>
