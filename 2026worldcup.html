@@ -107,6 +107,13 @@ label{display:block;font-size:.7rem;letter-spacing:.14em;color:rgba(242,245,239,
 .bet:last-child{border-bottom:none;padding-bottom:0}
 .bet .lft{display:flex;align-items:center;gap:8px;color:rgba(242,245,239,.85)}
 .bet .amt{font-family:"Barlow Condensed",sans-serif;font-weight:600;color:rgba(242,245,239,.5);white-space:nowrap}
+.pcard.dead{opacity:.5}
+.pcard.dead .pname{text-decoration:line-through;text-decoration-thickness:1px}
+.pcard .status{font-family:"Barlow Condensed",sans-serif;font-size:.64rem;letter-spacing:.16em;font-weight:700;border-radius:99px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+.pcard .status.out{color:var(--clay);border:1px solid rgba(232,98,61,.45)}
+.bet.hit .lft{color:var(--gold)}
+.bet.miss{opacity:.35}
+.bet.miss .lft{text-decoration:line-through;text-decoration-thickness:1px}
 
 /* TABLE / ODDS */
 table{width:100%;border-collapse:collapse;font-size:.85rem}
@@ -134,7 +141,7 @@ footer{margin-top:40px;font-size:.76rem;color:rgba(242,245,239,.28);border-top:1
 <div class="wrap">
 
 <header>
-  <div class="eyebrow">Virtual Book</div>
+  <div class="eyebrow">Virtual Book · Semifinals</div>
   <h1>2026 <em>World Cup</em></h1>
 </header>
 
@@ -203,7 +210,7 @@ footer{margin-top:40px;font-size:.76rem;color:rgba(242,245,239,.28);border-top:1
     <div class="odds-card"><div class="odds-head">優勝</div><div id="oddsWin"></div></div>
     <div class="odds-card"><div class="odds-head">決勝進出</div><div id="oddsFinal"></div></div>
   </div>
-  <footer>試合開始時刻はすべて日本時間。2026年7月10日時点。</footer>
+  <footer>試合開始時刻はすべて日本時間。準々決勝は全て終了。準決勝は フランス 対 スペイン（7/15）、イングランド 対 アルゼンチン（7/16）。</footer>
 </section>
 
 </div>
@@ -228,7 +235,12 @@ const finOdds={FRA:1.91,ARG:2.25,ENG:2.50,ESP:2.62,NOR:6.00,BEL:10.00,MAR:11.00,
 const QF=[["FRA","MAR"],["ESP","BEL"],["NOR","ENG"],["ARG","SUI"]];
 const QFINFO=["7/10(金) 5:00 ボストン","7/11(土) 4:00 ロサンゼルス","7/12(日) 6:00 マイアミ","7/12(日) 10:00 カンザスシティ"];
 // 確定した結果: [勝者, スコア{チーム:得点}]
-const RESULT={0:{win:"FRA",score:{FRA:2,MAR:0}}};
+const RESULT={
+ 0:{win:"FRA",score:{FRA:2,MAR:0}},
+ 1:{win:"ESP",score:{ESP:2,BEL:1}},
+ 2:{win:"ENG",score:{NOR:1,ENG:2}},  // 延長
+ 3:{win:"ARG",score:{ARG:3,SUI:1}},  // 延長
+};
 const PIP={FRA:"var(--c-na)",ESP:"var(--c-os)",NOR:"var(--c-so)",ENG:"var(--c-su)",ARG:"var(--c-na)"};
 
 const P=[
@@ -260,13 +272,24 @@ const pair=(i,j)=>`<div class="pair">${side(i)}<span class="vs">vs</span>${side(
 sfslot0.innerHTML=pair(0,1)+`<div class="when">7/15(水) 4:00 ダラス</div>`;
 sfslot1.innerHTML=pair(2,3)+`<div class="when">7/16(木) 4:00 アトランタ</div>`;
 
-// players
-players.innerHTML=P.map(p=>`
- <div class="pcard" style="--pc:${p.color}">
-   <div class="pname">${p.name}</div>
-   ${p.bets.map(([t,tm,st])=>
-     `<div class="bet"><span class="lft">${flag(tm)}${T[tm]}${t==="win"?"優勝":"決勝進出"}</span><span class="amt">${st.toLocaleString()} × ${odd(t,tm).toFixed(2)}</span></div>`).join("")}
- </div>`).join("");
+// players — reflect locked QF results
+const eliminated=Object.values(RESULT).map(r=>r.win); // teams still alive = winners so far
+const aliveTeams=new Set(eliminated); // teams that advanced from decided rounds
+const decidedOut=new Set();           // teams knocked out
+Object.entries(RESULT).forEach(([i,r])=>QF[+i].forEach(k=>{if(k!==r.win)decidedOut.add(k);}));
+// a final-progression bet is dead if that team is already out; a win bet is dead likewise
+const betDead=(t,tm)=>decidedOut.has(tm);
+players.innerHTML=P.map(p=>{
+  const allDead=p.bets.every(([t,tm])=>betDead(t,tm));
+  return `
+ <div class="pcard${allDead?" dead":""}" style="--pc:${p.color}">
+   <div class="pname">${p.name}${allDead?'<span class="status out">敗退</span>':""}</div>
+   ${p.bets.map(([t,tm,st])=>{
+     const dead=betDead(t,tm);
+     return `<div class="bet${dead?" miss":""}"><span class="lft">${flag(tm)}${T[tm]}${t==="win"?"優勝":"決勝進出"}</span><span class="amt">${st.toLocaleString()} × ${odd(t,tm).toFixed(2)}</span></div>`;
+   }).join("")}
+ </div>`;
+}).join("");
 
 // odds
 const hotW=["FRA","ESP"],hotF=["FRA","NOR","ENG"];
@@ -276,7 +299,7 @@ oddsWin.innerHTML=oddsRows(winOdds,hotW);
 oddsFinal.innerHTML=oddsRows(finOdds,hotF);
 
 // simulator
-let qw=["FRA","ESP","ENG","ARG"],sf=["ESP","ENG"],champ="ESP";
+let qw=["FRA","ESP","ENG","ARG"],sf=["FRA","ENG"],champ="FRA";
 Object.entries(RESULT).forEach(([i,r])=>{qw[+i]=r.win;});
 const chip=(k,on,attr,lock)=>`<button class="chip${lock?" locked":""}" aria-pressed="${on}" ${attr} ${lock?"disabled":""}>${flag(k,"sm")}${T[k]}${lock&&on?'<span class="lock">FT</span>':""}</button>`;
 function draw(){
@@ -319,16 +342,14 @@ document.querySelector(".sim").addEventListener("click",e=>{
 draw();
 
 const M=[
- ["ノルウェーが決勝進出（優勝国は不問）","そがわ","sogawa","60,000"],
  ["スペイン 対 イングランドの決勝 → スペイン優勝","すやま","suyama","37,500"],
- ["スペイン優勝、決勝の相手がアルゼンチンかスイス","おしえる と すやま","oshieru","25,000 で同点"],
  ["フランス 対 イングランドの決勝 → フランス優勝","ながおっち","nagaocchi","21,850"],
  ["フランス 対 アルゼンチンの決勝 → フランス優勝","ながおっち","nagaocchi","18,850"],
- ["フランス 対 スイスの決勝 → フランス優勝","ながおっち","nagaocchi","14,350"],
+ ["スペイン 対 アルゼンチンの決勝 → スペイン優勝","おしえる と すやま","oshieru","25,000 で同点"],
+ ["スペイン 対 イングランドの決勝 → イングランド優勝","すやま","suyama","12,500"],
  ["フランス 対 イングランドの決勝 → イングランド優勝","すやま","suyama","12,500"],
- ["イングランドが決勝進出（相手がスペイン・フランス以外）","すやま","suyama","12,500"],
- ["アルゼンチンが決勝進出（イングランド・スペイン・フランスが不在）","ながおっち","nagaocchi","4,500"],
- ["決勝がベルギー 対 スイス","全員0円で引き分け","","0"],
+ ["フランス 対 アルゼンチンの決勝 → アルゼンチン優勝","ながおっち","nagaocchi","4,500"],
+ ["スペイン 対 アルゼンチンの決勝 → アルゼンチン優勝","ながおっち","nagaocchi","4,500"],
 ];
 matrix.innerHTML=M.map(([c,w,id,v])=>
  `<tr><td class="cond">${c}</td><td class="who2 ${id?"w-"+id:""}">${w}</td><td class="num">${v}</td></tr>`).join("");
