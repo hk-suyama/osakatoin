@@ -25,7 +25,7 @@
   }
   .stage-card { position: relative; display: flex; justify-content: center; align-items: center; }
   svg { display: block; }
-  #stage { display: block; width: min(620px, 92vw); height: auto; max-height: 76vh; max-height: 76dvh; }
+  #stage { display: block; width: 100%; height: auto; }  /* 実サイズはJS(fitStage)が設定 */
   .panel { width: 330px; display: flex; flex-direction: column; gap: 14px; }
 
   /* --- 縦持ちタブレット/スマホ: ステージを画面高で抑え、操作＋ボタンを1画面に収める --- */
@@ -35,8 +35,6 @@
     .subtitle { font-size: 12px; margin-bottom: 5px; }
     .wrap { flex-direction: column; align-items: center; gap: 8px; width: 100%; }
     .stage-card { width: 100%; padding: 6px; }
-    /* グラフィックが消えないよう最低高さを保証しつつ、画面に収まる高さに */
-    #stage { width: auto; max-width: 96vw; max-height: 42vh; max-height: clamp(200px, calc(100dvh - 512px), 46dvh); }
     /* パネルを2カラム化して縦を圧縮 */
     .panel {
       width: min(680px, 96vw); padding: 9px;
@@ -63,7 +61,6 @@
     body { justify-content: flex-start; padding: 8px; }
     h1 { font-size: 20px; margin: 2px 0 0; }
     .subtitle { margin-bottom: 6px; }
-    #stage { max-height: calc(100dvh - 118px); }
     .panel { max-height: calc(100dvh - 96px); overflow-y: auto; }
   }
   .level-row { display: flex; align-items: center; justify-content: space-between; }
@@ -759,6 +756,32 @@ $("liftBtn").addEventListener("click", () => {
   if (state === "success") { $("pose").value = 0; poseT = 0; resetRound(level + 1); return; }
   if (state === "clear") { $("pose").value = 0; poseT = 0; $("starsRow").textContent = ""; resetRound(0); return; }
 });
+
+// ================= ステージの明示サイズ設定（Safari対応） =================
+// SafariはviewBoxだけのSVGを width:auto / max-height から正しく寸法導出できない
+// ことがあるため、CSS任せにせずJSでピクセル値を直接設定する。
+const STAGE_AR = 620 / 560;   // 横/縦
+function fitStage() {
+  const vw = window.innerWidth, vh = window.innerHeight;
+  let h;
+  if (vw <= 1010) {
+    // 縦積みレイアウト: パネル+タイトルに必要な高さ(約512px)を除いた残りをステージに
+    h = Math.max(200, Math.min(vh - 512, vh * 0.46));
+    const maxW = vw * 0.96 - 16;
+    h = Math.min(h, maxW / STAGE_AR);
+  } else {
+    // 横並びレイアウト
+    h = Math.max(300, Math.min(560, vh - 170));
+    const maxW = Math.min(620, vw * 0.92);
+    h = Math.min(h, maxW / STAGE_AR);
+  }
+  stage.style.width = (h * STAGE_AR).toFixed(0) + "px";
+  stage.style.height = h.toFixed(0) + "px";
+}
+window.addEventListener("resize", fitStage);
+window.addEventListener("orientationchange", () => setTimeout(fitStage, 150));
+if (window.visualViewport) window.visualViewport.addEventListener("resize", fitStage);
+fitStage();
 
 // 初期描画
 refreshPanel();
