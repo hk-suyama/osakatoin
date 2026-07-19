@@ -329,8 +329,10 @@ Object.entries(RESULT).forEach(([i,r])=>QF[+i].forEach(k=>{if(k!==r.win)decidedO
 Object.entries(SFRESULT).forEach(([i,r])=>SFPOOL[+i].forEach(k=>{if(k!==r.win)decidedOut.add(k);}));
 // finalists (reached the final) — a "決勝進出" bet on them is already WON
 const finalists=(SFRESULT[0]&&SFRESULT[1])?[SFRESULT[0].win,SFRESULT[1].win]:[];
+const champion=FINALRESULT?FINALRESULT.win:null;
 const betDead=(t,tm)=>decidedOut.has(tm);
-const betWon=(t,tm)=>t==="final"&&finalists.includes(tm); // 決勝進出が確定
+// 的中: 決勝進出→決勝に到達 / 優勝→優勝が確定
+const betWon=(t,tm)=>(t==="final"&&finalists.includes(tm))||(t==="win"&&champion===tm);
 players.innerHTML=P.map(p=>{
   const allDead=p.bets.every(([t,tm])=>betDead(t,tm));
   const anyLive=p.bets.some(([t,tm])=>!betDead(t,tm));
