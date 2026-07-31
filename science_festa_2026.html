@@ -912,11 +912,21 @@ refreshPanel();
   ];
   let quiz = false, mys = null, revealed = false;
   const QUIZ_D = 1.0;          // なぞのどうぶつは1.0m固定
+  let bag = [];                // シャッフル袋: 全員が一巡するまで同じゲストは出ない
 
   function newMystery() {
-    let idx = Math.floor(Math.random() * MYSTERY.length);
-    if (mys && MYSTERY[idx] === mys) idx = (idx + 1) % MYSTERY.length;   // 同じゲストの連続を回避
-    mys = MYSTERY[idx];
+    if (bag.length === 0) {
+      bag = MYSTERY.map((_, i) => i);
+      for (let i = bag.length - 1; i > 0; i--) {         // Fisher-Yates シャッフル
+        const j = Math.floor(Math.random() * (i + 1));
+        [bag[i], bag[j]] = [bag[j], bag[i]];
+      }
+      // 新しい山の1人目(末尾からpop)が直前のゲストと同じなら入れ替えて連続を回避
+      if (mys && MYSTERY[bag[bag.length - 1]] === mys && bag.length > 1) {
+        [bag[bag.length - 1], bag[0]] = [bag[0], bag[bag.length - 1]];
+      }
+    }
+    mys = MYSTERY[bag.pop()];
     revealed = false;
     $g("ssNext").style.display = "none";
     $g("ssGuess").innerHTML = "";
