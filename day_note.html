@@ -236,11 +236,13 @@ input.pin{font-family:"Barlow Condensed",monospace;font-size:24px;font-weight:60
       </div>
     </div>
 
-    <h2>Effort <small>この回の手ごたえ</small></h2>
-    <div class="card">
-      <label>きつさ</label>
-      <div class="scale" id="s-rpe"></div>
-      <p class="hint">1＝楽だった　5＝出し切った。同じ日に何回やっても、回ごとに付けます。</p>
+    <div id="box-effort">
+      <h2>Effort <small>この回の手ごたえ</small></h2>
+      <div class="card">
+        <label>きつさ</label>
+        <div class="scale" id="s-rpe"></div>
+        <p class="hint">1＝楽だった　5＝出し切った。同じ日に何回やっても、回ごとに付けます。</p>
+      </div>
     </div>
 
     <h2>Note</h2>
@@ -601,8 +603,11 @@ $("#s-type").addEventListener("click",e=>{
   const b=e.target.closest(".chip"); if(!b) return;
   state.type=b.textContent;
   $$("#s-type .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  $("#s-save").textContent = state.type==="休養" ? "休養を記録する" : "この練習を記録する";
   $("#box-lift").hidden   = state.type!=="筋トレ";
   $("#box-cardio").hidden = state.type!=="有酸素";
+  $("#box-effort").hidden = state.type==="休養";
+  if(state.type==="休養"){ state.rpe=0; paintScale("#s-rpe","rpe",true); }
 });
 $("#s-cardio").innerHTML = CARDIO.map(c=>`<button type="button" class="chip" aria-pressed="${c===state.cardio}">${c}</button>`).join("");
 $("#s-cardio").addEventListener("click",e=>{
@@ -641,7 +646,8 @@ $("#s-save").addEventListener("click", async ()=>{
     date:$("#s-date").value||today(), type:state.type,
     cardio: state.type==="有酸素" ? state.cardio : "",
     sets, minutes:$("#s-min").value, km:$("#s-km").value,
-    rpe:state.rpe, note:$("#s-note").value.trim()
+    rpe: state.type==="休養" ? "" : state.rpe,
+    note:$("#s-note").value.trim()
   };
   $("#s-save").disabled=true; $("#s-save").textContent="保存しています…";
   try{
@@ -654,7 +660,8 @@ $("#s-save").addEventListener("click", async ()=>{
     state.rpe=0; paintScale("#s-rpe","rpe",true);
     toast("記録しました");
   }catch(err){ toast("保存できません："+err.message); }
-  finally{ $("#s-save").disabled=false; $("#s-save").textContent="この練習を記録する"; }
+  finally{ $("#s-save").disabled=false;
+    $("#s-save").textContent = state.type==="休養" ? "休養を記録する" : "この練習を記録する"; }
 });
 
 /* --------- 1日の記録 --------- */
