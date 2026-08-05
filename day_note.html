@@ -275,6 +275,7 @@ input.pin{font-family:"Barlow Condensed",monospace;font-size:24px;font-weight:60
   <div id="m-daily" hidden>
     <h2>Date <small>1日ひとつだけ。あとから書き直せます</small></h2>
     <div class="card stack">
+      <div class="notice">ここに書いたことは<b>自分だけ</b>が見られます。他のメンバーには届きません。</div>
       <div><label for="d-date">日付</label><input type="date" id="d-date"></div>
       <div class="notice" id="d-exists" hidden>この日はすでに書いてあります。読み込んだ内容を直して、上書きできます。</div>
     </div>
@@ -292,14 +293,8 @@ input.pin{font-family:"Barlow Condensed",monospace;font-size:24px;font-weight:60
       <div><label>睡眠の質</label><div class="scale" id="d-sq"></div><p class="hint">1＝浅い　5＝ぐっすり</p></div>
     </div>
 
-    <h2>Meals <small>公開するかどうか選べます</small></h2>
+    <h2>Meals</h2>
     <div class="card stack">
-      <div><label>この日の食事を</label>
-        <div class="chips" id="d-pub">
-          <button type="button" class="chip">自分だけ</button>
-          <button type="button" class="chip">みんなに見せる</button>
-        </div>
-        <p class="hint">「自分だけ」にすると、食事の中身は他のメンバーには届きません。</p></div>
       <div><label for="d-b">朝</label><input type="text" id="d-b" placeholder="ごはん・納豆・卵2個"></div>
       <div><label for="d-l">昼</label><input type="text" id="d-l"></div>
       <div><label for="d-d">夕</label><input type="text" id="d-d"></div>
@@ -396,7 +391,7 @@ const FCOL = ["var(--none)","var(--f1)","var(--f2)","var(--f3)","var(--f4)","var
 const WD = ["日","月","火","水","木","金","土"];
 
 const state = { me:null, token:null, hasPass:{}, sessions:[], dailies:[], comments:{}, cheers:{}, exercises:[], allExercises:[], exMap:{},
-                type:"筋トレ", cardio:"ラン", rpe:0, fat:0, sq:0, newPart:"体幹", mealsPublic:false, demo:!GAS_URL };
+                type:"筋トレ", cardio:"ラン", rpe:0, fat:0, sq:0, newPart:"体幹", demo:!GAS_URL };
 
 const $ = s=>document.querySelector(s), $$ = s=>[...document.querySelectorAll(s)];
 const esc = s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -448,17 +443,17 @@ const demoSessions = [
 ].map((e,i)=>({...e,id:"s"+i,date:shift(today(),-e.ago),sets:e.sets||[],km:e.km||""}));
 
 const demoDailies = [
- {ago:0,member:"陶山",fatigue:3,bedTime:"00:10",wakeTime:"06:10",sleepHours:6,sleepQuality:3,weight:63.2,protein:120,mealsPublic:true,
+ {ago:0,member:"陶山",fatigue:3,bedTime:"00:10",wakeTime:"06:10",sleepHours:6,sleepQuality:3,weight:63.2,protein:120,
   meals:{b:"ごはん・納豆・卵2個",l:"職員室で弁当",d:"鶏むね・ごはん・味噌汁",s:"プロテイン"},note:"寝足りないが体は動いた。"},
- {ago:1,member:"中村",fatigue:2,bedTime:"23:00",wakeTime:"06:30",sleepHours:7.5,sleepQuality:4,weight:"",protein:100,mealsPublic:false,
+ {ago:1,member:"中村",fatigue:2,bedTime:"23:00",wakeTime:"06:30",sleepHours:7.5,sleepQuality:4,weight:"",protein:100,
   meals:{b:"おにぎり2個",l:"そば",d:"カレー",s:""},note:""},
- {ago:2,member:"陶山",fatigue:4,bedTime:"01:00",wakeTime:"06:30",sleepHours:5.5,sleepQuality:2,weight:63.5,protein:"",mealsPublic:false,
+ {ago:2,member:"陶山",fatigue:4,bedTime:"01:00",wakeTime:"06:30",sleepHours:5.5,sleepQuality:2,weight:63.5,protein:"",
   meals:{b:"パン・コーヒー",l:"うどん",d:"豚汁・ごはん",s:""},note:"夜の会議が長引いた。"},
- {ago:3,member:"佐藤",fatigue:3,bedTime:"23:30",wakeTime:"06:30",sleepHours:7,sleepQuality:4,weight:"",protein:90,mealsPublic:true,
+ {ago:3,member:"佐藤",fatigue:3,bedTime:"23:30",wakeTime:"06:30",sleepHours:7,sleepQuality:4,weight:"",protein:90,
   meals:{b:"シリアル",l:"定食",d:"鍋",s:"ナッツ"},note:""},
- {ago:4,member:"中村",fatigue:1,bedTime:"22:45",wakeTime:"06:45",sleepHours:8,sleepQuality:5,weight:"",protein:"",mealsPublic:false,
+ {ago:4,member:"中村",fatigue:1,bedTime:"22:45",wakeTime:"06:45",sleepHours:8,sleepQuality:5,weight:"",protein:"",
   meals:{b:"和食",l:"パスタ",d:"焼き魚定食",s:""},note:"完全休養。よく寝た。"},
- {ago:5,member:"陶山",fatigue:2,bedTime:"23:50",wakeTime:"06:20",sleepHours:6.5,sleepQuality:3,weight:63.0,protein:130,mealsPublic:true,
+ {ago:5,member:"陶山",fatigue:2,bedTime:"23:50",wakeTime:"06:20",sleepHours:6.5,sleepQuality:3,weight:63.0,protein:130,
   meals:{b:"ごはん・卵・味噌汁",l:"弁当",d:"ステーキ・サラダ",s:"ゼリー"},note:""}
 ].map((e,i)=>({...e,id:"y"+i,date:shift(today(),-e.ago)}));
 
@@ -486,7 +481,7 @@ function demoApi(a,p){
   }
   if(a==="passwd"){ demoPass[state.me]=p.next; return Promise.resolve({ok:true}); }
   if(a==="list"){
-    const dv = demoDailies.map(e=>(e.member===state.me||truthy(e.mealsPublic))?e:{...e,meals:{}});
+    const dv = demoDailies.filter(e=>e.member===state.me);   // 本人のぶんだけ
     return Promise.resolve({ok:true,sessions:demoSessions.slice(),dailies:dv,comments:demoComments,cheers:demoCheers,exercises:demoExercises});
   }
   if(a==="addSession"){ demoSessions.unshift({...p.entry,member:state.me,id:"s"+Date.now()}); return Promise.resolve({ok:true}); }
@@ -685,12 +680,6 @@ $("#s-save").addEventListener("click", async ()=>{
 });
 
 /* --------- 1日の記録 --------- */
-(function(){
-  const el=$("#d-pub"), btns=[...el.children];
-  el.addEventListener("click",e=>{ const b=e.target.closest(".chip"); if(!b) return;
-    state.mealsPublic = btns.indexOf(b)===1; paintPub(); });
-})();
-function paintPub(){ [...$("#d-pub").children].forEach((b,i)=>b.setAttribute("aria-pressed",(i===1)===state.mealsPublic)); }
 function hm2min(v){ const m=/^(\d{1,2}):(\d{2})$/.exec(String(v||"").trim()); return m?(+m[1]*60 + +m[2]):null; }
 function sleepMinutes(bed,wake){
   const b=hm2min(bed), w=hm2min(wake);
@@ -722,8 +711,7 @@ function loadDailyIntoForm(){
   $("#d-pro").value = d?(d.protein||""):"";
   $("#d-note").value = d?(d.note||""):"";
   state.fat = d?(+d.fatigue||0):0; state.sq = d?(+d.sleepQuality||0):0;
-  state.mealsPublic = d?truthy(d.mealsPublic):false;
-  paintScale("#d-fat","fat",true); paintScale("#d-sq","sq",false); paintPub();
+  paintScale("#d-fat","fat",true); paintScale("#d-sq","sq",false);
   $("#d-save").textContent = d ? "この日の記録を上書きする" : "この日の記録を保存する";
 }
 $("#d-save").addEventListener("click", async ()=>{
@@ -735,7 +723,7 @@ $("#d-save").addEventListener("click", async ()=>{
                              return m===null ? "" : Math.round(m/60*100)/100; })(),
     sleepQuality:state.sq, weight:$("#d-weight").value,
     meals:{b:$("#d-b").value.trim(),l:$("#d-l").value.trim(),d:$("#d-d").value.trim(),s:$("#d-s").value.trim()},
-    mealsPublic:state.mealsPublic, protein:$("#d-pro").value, note:$("#d-note").value.trim()
+    protein:$("#d-pro").value, note:$("#d-note").value.trim()
   };
   $("#d-save").disabled=true; const orig=$("#d-save").textContent; $("#d-save").textContent="保存しています…";
   try{ await api("saveDaily",{entry}); await load(); loadDailyIntoForm(); toast("保存しました"); }
@@ -810,10 +798,9 @@ function sessionCard(e,mine,showName){
 }
 function dailyCard(e,mine,showName){
   const m=e.meals||{}, hasMeal=m.b||m.l||m.d||m.s, f=+e.fatigue||0;
-  const priv = mine && !truthy(e.mealsPublic) && hasMeal;
   return `<article class="entry body" style="border-left-color:${FCOL[f]}">
-    <div class="entry-top">${showName?`<span class="name">${esc(e.member)}</span>`:""}
-      <span class="tag body">からだ</span>
+    <div class="entry-top"><span class="tag body">からだ</span>
+      <span class="tag" style="background:none;border:1px solid var(--line);color:var(--ink3)">自分だけ</span>
       ${showName?"":`<span class="date">${md(e.date)}</span>`}</div>
     <div class="metrics" style="border-top:none;padding-top:2px">
       ${f?`<div class="metric"><b style="color:${FCOL[f]}">${f}</b>起床時の疲労</div>`:""}
@@ -823,12 +810,13 @@ function dailyCard(e,mine,showName){
       ${e.protein?`<div class="metric"><b>${esc(e.protein)}</b>たんぱくg</div>`:""}
     </div>
     ${e.note?`<div class="note">${esc(e.note)}</div>`:""}
-    ${hasMeal?`<button class="linkish" data-meal="${e.id}">食事を見る${priv?"（自分だけ）":""}</button>
+    ${hasMeal?`<button class="linkish" data-meal="${e.id}">食事を見る</button>
       <div class="meals" id="meal-${e.id}" hidden>
         ${m.b?`<div><em>朝</em>${esc(m.b)}</div>`:""}${m.l?`<div><em>昼</em>${esc(m.l)}</div>`:""}
         ${m.d?`<div><em>夕</em>${esc(m.d)}</div>`:""}${m.s?`<div><em>補食</em>${esc(m.s)}</div>`:""}
       </div>`:""}
-    ${footer(e,mine)}</article>`;
+    <div class="foot"><button class="linkish" data-del="${e.id}" data-kind="daily" style="margin-left:auto;color:var(--f5)">削除</button></div>
+  </article>`;
 }
 const card = (e,mine,showName)=> e.kind==="daily" ? dailyCard(e,mine,showName) : sessionCard(e,mine,showName);
 
@@ -836,8 +824,7 @@ document.addEventListener("click", async e=>{
   const t=e.target.closest("[data-meal],[data-cheer],[data-del],[data-cm],[data-post],[data-uncomment],[data-exdel],[data-exuse],[data-starter]");
   if(!t) return;
   if(t.dataset.meal){ const b=$("#meal-"+t.dataset.meal);
-    const tail = t.textContent.indexOf("自分だけ")>-1 ? "（自分だけ）" : "";
-    b.hidden=!b.hidden; t.textContent=(b.hidden?"食事を見る":"食事を閉じる")+tail; }
+    b.hidden=!b.hidden; t.textContent=b.hidden?"食事を見る":"食事を閉じる"; }
   if(t.dataset.cm){ const b=$("#cm-"+t.dataset.cm); b.hidden=!b.hidden; if(!b.hidden) $("#cmin-"+t.dataset.cm).focus(); }
   if(t.dataset.cheer){ t.disabled=true;
     try{ await api("cheer",{id:t.dataset.cheer}); await load(); }
@@ -885,7 +872,7 @@ function dayBlocks(list,{showName}){
   </div>`).join("");
 }
 function renderFeed(){
-  const all=[...state.sessions,...state.dailies];
+  const all=state.sessions;   // からだの記録は本人だけのものなので、ここには出しません
   const days=byDay(all).slice(0,14).map(g=>g.date);
   const shown=all.filter(e=>days.indexOf(e.date)>-1);
   $("#feed").innerHTML = shown.length ? dayBlocks(shown,{showName:true})
