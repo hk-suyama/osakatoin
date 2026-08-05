@@ -417,7 +417,7 @@ async function api(action,payload){
   const d = await res.json();
   if(!d.ok){
     if(d.reauth){ state.token=null; $("#gate").style.display="flex"; $("#g-msg").textContent="もう一度ログインしてください。"; }
-    throw new Error(d.error||"通信に失敗しました");
+    const err = new Error(d.error||"通信に失敗しました"); err.data = d; throw err;
   }
   return d;
 }
@@ -472,18 +472,22 @@ const demoExercises = [
 ].map((r,i)=>({id:"e"+i,member:r[0],name:r[1],part:r[2]}));
 
 const demoPass = {};
+function demoApiSync(a){
+  if(a==="list") return {sessions:demoSessions.slice(),
+    dailies:demoDailies.filter(e=>e.member===state.me),   // 本人のぶんだけ
+    comments:demoComments,cheers:demoCheers,exercises:demoExercises};
+  return {};
+}
 function demoApi(a,p){
   if(a==="status") return Promise.resolve({ok:true,users:MEMBERS.reduce((o,m)=>(o[m]=!!demoPass[m],o),{})});
-  if(a==="signup"){ demoPass[p.member]=p.password; return Promise.resolve({ok:true,token:"demo",member:p.member}); }
-  if(a==="login"){
-    if(demoPass[p.member] && demoPass[p.member]!==p.password) return Promise.resolve({ok:false,error:"パスワードが違います"});
-    return Promise.resolve({ok:true,token:"demo",member:p.member});
+  if(a==="signup"){ demoPass[p.member]=p.password; return Promise.resolve({ok:true,token:"demo",member:p.member,...demoApiSync("list")}); }
+  if(a==="auth"){
+    if(!demoPass[p.member]) return Promise.resolve({ok:false,needConfirm:true,error:"はじめてのログインです。同じ番号をもう一度入れてください。"});
+    if(demoPass[p.member]!==p.password) return Promise.resolve({ok:false,error:"暗証番号が違います"});
+    return Promise.resolve({ok:true,token:"demo",member:p.member,...demoApiSync("list")});
   }
   if(a==="passwd"){ demoPass[state.me]=p.next; return Promise.resolve({ok:true}); }
-  if(a==="list"){
-    const dv = demoDailies.filter(e=>e.member===state.me);   // 本人のぶんだけ
-    return Promise.resolve({ok:true,sessions:demoSessions.slice(),dailies:dv,comments:demoComments,cheers:demoCheers,exercises:demoExercises});
-  }
+  if(a==="list") return Promise.resolve({ok:true,...demoApiSync("list")});
   if(a==="addSession"){ demoSessions.unshift({...p.entry,member:state.me,id:"s"+Date.now()}); return Promise.resolve({ok:true}); }
   if(a==="saveDaily"){
     const i=demoDailies.findIndex(x=>x.member===state.me && x.date===p.entry.date);
@@ -514,51 +518,65 @@ const onlyDigits = el => el.addEventListener("input",()=>{
 });
 ["#g-pass","#g-pass2","#a-cur","#a-new","#a-new2"].forEach(id=>onlyDigits($(id)));
 
-// 分かるまでは「はじめて」の画面を出しておく。登録済みと分かったら通常ログインに戻す。
-state.hasPass = {};
+// 登録済みかどうかは押した時点でサーバーが判定します。
+// 起動時の問い合わせは「先に分かっていれば確認欄を先出しできる」ための補助で、待ちません。
+state.hasPass = null;
 paintGate();
 async function loadStatus(){
-  try{ const d=await api("status",{}); state.hasPass=d.users||{}; }catch{ /* そのまま */ }
-  paintGate();
+  try{ const d=await api("status",{}); state.hasPass=d.users||{}; paintGate(); }catch{ /* 押したときに判定します */ }
 }
 function paintGate(){
   const m=$("#g-member").value;
-  const first = !state.hasPass[m];
+  const first = !!state.hasPass && !state.hasPass[m];
   $("#g-wrap2").hidden = !first;
   $("#g-plabel").textContent = first ? "暗証番号を決める（数字5桁）" : "暗証番号（数字5桁）";
   $("#g-note").textContent = first
-    ? "はじめてのログインです。5桁の数字を決めてください。誕生日など人に見当のつく数字は避けてください。"
+    ? "はじめてのログインです。5桁の数字を決めてください。誕生日など見当のつく数字は避けてください。"
     : "";
-  $("#g-go").textContent = first ? "登録してはじめる" : "ログイン";
+  $("#g-go").textContent = first ? "登録してはじめる" : "はじめる";
 }
 $("#g-member").addEventListener("change",()=>{ $("#g-msg").textContent=""; $("#g-pass").value=""; $("#g-pass2").value=""; paintGate(); });
 loadStatus();
 
-// 5桁そろったら次へ進む
 $("#g-pass").addEventListener("input",()=>{
   if($("#g-pass").value.length!==5) return;
-  if(!state.hasPass[$("#g-member").value]) $("#g-pass2").focus(); else $("#g-go").click();
+  if($("#g-wrap2").hidden) $("#g-go").click(); else $("#g-pass2").focus();
 });
 $("#g-pass2").addEventListener("input",()=>{ if($("#g-pass2").value.length===5) $("#g-go").click(); });
 
+function enterApp(d, member){
+  state.token=d.token; state.me=d.member||member;
+  applyData(d);                       // ログイン応答に中身が入っているので取り直しません
+  $("#g-pass").value=""; $("#g-pass2").value="";
+  $("#gate").style.display="none"; $("#me-name").textContent=state.me;
+  loadDailyIntoForm();
+  if(state.demo) toast("お試しモードです（保存先は未設定）");
+}
 $("#g-go").addEventListener("click", async ()=>{
   const member=$("#g-member").value, pass=$("#g-pass").value;
-  const first = !state.hasPass[member];
+  const confirming = !$("#g-wrap2").hidden;
   if(!PIN.test(pass)){ $("#g-msg").textContent="数字5桁で入れてください。"; return; }
-  if(first && pass!==$("#g-pass2").value){ $("#g-msg").textContent="2つの番号が違います。"; $("#g-pass2").value=""; $("#g-pass2").focus(); return; }
+  if(confirming && pass!==$("#g-pass2").value){
+    $("#g-msg").textContent="2つの番号が違います。"; $("#g-pass2").value=""; $("#g-pass2").focus(); return; }
   $("#g-go").disabled=true; $("#g-msg").textContent="確認しています…";
   try{
-    const d = await api(first?"signup":"login",{member,password:pass});
-    state.token=d.token; state.me=d.member||member;
-    await load();
-    $("#g-pass").value=""; $("#g-pass2").value="";
-    $("#gate").style.display="none"; $("#me-name").textContent=state.me;
-    loadDailyIntoForm();
-    if(state.demo) toast("お試しモードです（保存先は未設定）");
-  }catch(err){ $("#g-msg").textContent=err.message; $("#g-pass").value=""; $("#g-pass2").value=""; await loadStatus(); }
-  finally{ $("#g-go").disabled=false; }
+    const d = await api(confirming?"signup":"auth",{member,password:pass});
+    enterApp(d, member);
+  }catch(err){
+    if(err.data && err.data.needConfirm){          // 未登録だった → 確認欄を出す
+      if(!state.hasPass) state.hasPass={};
+      state.hasPass[member]=false; paintGate();
+      $("#g-msg").textContent=""; $("#g-pass2").focus();
+    }else{
+      $("#g-msg").textContent=err.message; $("#g-pass").value=""; $("#g-pass2").value="";
+    }
+  }finally{ $("#g-go").disabled=false; }
 });
-$("#switch").addEventListener("click",()=>{ state.token=null; $("#g-msg").textContent=""; $("#g-pass").value=""; $("#g-pass2").value=""; $("#gate").style.display="flex"; loadStatus(); });
+$("#switch").addEventListener("click",()=>{
+  state.token=null; state.hasPass=null;
+  $("#g-msg").textContent=""; $("#g-pass").value=""; $("#g-pass2").value="";
+  paintGate(); $("#gate").style.display="flex"; loadStatus();
+});
 
 $("#a-save").addEventListener("click", async ()=>{
   const cur=$("#a-cur").value, next=$("#a-new").value;
@@ -733,8 +751,8 @@ $("#d-save").addEventListener("click", async ()=>{
 
 /* --------- 読み込み --------- */
 function safeJSON(s,f){ try{ return JSON.parse(s)||f; }catch{ return f; } }
-async function load(){
-  const d = await api("list",{});
+async function load(){ applyData(await api("list",{})); }
+function applyData(d){
   state.sessions = (d.sessions||[]).map(e=>({...e, kind:"session",
     sets: typeof e.sets==="string" ? safeJSON(e.sets,[]) : (e.sets||[]) }));
   state.dailies = (d.dailies||[]).map(e=>({...e, kind:"daily",
