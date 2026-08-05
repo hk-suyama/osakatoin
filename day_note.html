@@ -157,6 +157,8 @@ table.pr td.dim{font-size:12px;color:var(--ink3)}
 .gate label{color:#8FA8BC}
 .gate input,.gate select{background:#1D2733;border-color:#3A4A5A;color:#fff}
 .gate .btn{margin-top:18px}.gate .hint{color:#6E829A}
+input.pin{font-family:"Barlow Condensed",monospace;font-size:24px;font-weight:600;
+  letter-spacing:.55em;text-indent:.55em;text-align:center;padding:10px}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;
   padding:11px 20px;border-radius:99px;font-size:13.5px;z-index:200;opacity:0;transition:.28s;pointer-events:none;box-shadow:0 6px 20px rgba(0,0,0,.25)}
 .toast.on{transform:translateX(-50%) translateY(0);opacity:1}
@@ -174,10 +176,10 @@ table.pr td.dim{font-size:12px;color:var(--ink3)}
     <div class="logo" data-logo></div>
     <div class="stack">
       <div><label for="g-member">名前</label><select id="g-member"></select></div>
-      <div><label for="g-pass" id="g-plabel">パスワード</label>
-        <input type="password" id="g-pass" autocomplete="current-password"></div>
+      <div><label for="g-pass" id="g-plabel">暗証番号（数字5桁）</label>
+        <input type="password" id="g-pass" class="pin" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="•••••"></div>
       <div id="g-wrap2" hidden><label for="g-pass2">もう一度</label>
-        <input type="password" id="g-pass2" autocomplete="new-password"></div>
+        <input type="password" id="g-pass2" class="pin" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="•••••"></div>
       <p class="hint" id="g-note"></p>
     </div>
     <button class="btn" id="g-go">ログイン</button>
@@ -325,10 +327,10 @@ table.pr td.dim{font-size:12px;color:var(--ink3)}
 
   <h2>Account</h2>
   <div class="card stack">
-    <div><label for="a-cur">いまのパスワード</label><input type="password" id="a-cur" autocomplete="current-password"></div>
-    <div><label for="a-new">新しいパスワード</label><input type="password" id="a-new" autocomplete="new-password"></div>
-    <div><label for="a-new2">もう一度</label><input type="password" id="a-new2" autocomplete="new-password"></div>
-    <button class="btn" id="a-save">パスワードを変える</button>
+    <div><label for="a-cur">いまの暗証番号</label><input type="password" id="a-cur" class="pin" inputmode="numeric" maxlength="5" autocomplete="off"></div>
+    <div><label for="a-new">新しい暗証番号（数字5桁）</label><input type="password" id="a-new" class="pin" inputmode="numeric" maxlength="5" autocomplete="off"></div>
+    <div><label for="a-new2">もう一度</label><input type="password" id="a-new2" class="pin" inputmode="numeric" maxlength="5" autocomplete="off"></div>
+    <button class="btn" id="a-save">暗証番号を変える</button>
   </div>
 </section>
 
@@ -488,30 +490,45 @@ function demoApi(a,p){
 /* --------- 入口 --------- */
 $("#g-member").innerHTML = MEMBERS.map(m=>`<option>${esc(m)}</option>`).join("");
 
+const PIN = /^[0-9]{5}$/;
+const onlyDigits = el => el.addEventListener("input",()=>{
+  const v = el.value.replace(/[^0-9]/g,"").slice(0,5);
+  if(v!==el.value) el.value=v;
+});
+["#g-pass","#g-pass2","#a-cur","#a-new","#a-new2"].forEach(id=>onlyDigits($(id)));
+
+// 分かるまでは「はじめて」の画面を出しておく。登録済みと分かったら通常ログインに戻す。
+state.hasPass = {};
+paintGate();
 async function loadStatus(){
-  const base={}; MEMBERS.forEach(m=>base[m]=false);   // 未登録の人は初回設定の画面に
-  try{ const d=await api("status",{}); state.hasPass={...base,...(d.users||{})}; }
-  catch{ state.hasPass=base; }
+  try{ const d=await api("status",{}); state.hasPass=d.users||{}; }catch{ /* そのまま */ }
   paintGate();
 }
 function paintGate(){
   const m=$("#g-member").value;
-  const first = state.hasPass[m]===false;
+  const first = !state.hasPass[m];
   $("#g-wrap2").hidden = !first;
-  $("#g-plabel").textContent = first ? "パスワードを決める" : "パスワード";
+  $("#g-plabel").textContent = first ? "暗証番号を決める（数字5桁）" : "暗証番号（数字5桁）";
   $("#g-note").textContent = first
-    ? "はじめてのログインです。自分のパスワードを決めてください（4文字以上）。"
+    ? "はじめてのログインです。5桁の数字を決めてください。誕生日など人に見当のつく数字は避けてください。"
     : "";
   $("#g-go").textContent = first ? "登録してはじめる" : "ログイン";
 }
-$("#g-member").addEventListener("change",()=>{ $("#g-msg").textContent=""; paintGate(); });
+$("#g-member").addEventListener("change",()=>{ $("#g-msg").textContent=""; $("#g-pass").value=""; $("#g-pass2").value=""; paintGate(); });
 loadStatus();
+
+// 5桁そろったら次へ進む
+$("#g-pass").addEventListener("input",()=>{
+  if($("#g-pass").value.length!==5) return;
+  if(!state.hasPass[$("#g-member").value]) $("#g-pass2").focus(); else $("#g-go").click();
+});
+$("#g-pass2").addEventListener("input",()=>{ if($("#g-pass2").value.length===5) $("#g-go").click(); });
 
 $("#g-go").addEventListener("click", async ()=>{
   const member=$("#g-member").value, pass=$("#g-pass").value;
-  const first = state.hasPass[member]===false;
-  if(pass.length<4){ $("#g-msg").textContent="パスワードは4文字以上にしてください。"; return; }
-  if(first && pass!==$("#g-pass2").value){ $("#g-msg").textContent="2つのパスワードが違います。"; return; }
+  const first = !state.hasPass[member];
+  if(!PIN.test(pass)){ $("#g-msg").textContent="数字5桁で入れてください。"; return; }
+  if(first && pass!==$("#g-pass2").value){ $("#g-msg").textContent="2つの番号が違います。"; $("#g-pass2").value=""; $("#g-pass2").focus(); return; }
   $("#g-go").disabled=true; $("#g-msg").textContent="確認しています…";
   try{
     const d = await api(first?"signup":"login",{member,password:pass});
@@ -521,17 +538,15 @@ $("#g-go").addEventListener("click", async ()=>{
     $("#gate").style.display="none"; $("#me-name").textContent=state.me;
     loadDailyIntoForm();
     if(state.demo) toast("お試しモードです（保存先は未設定）");
-  }catch(err){ $("#g-msg").textContent=err.message; await loadStatus(); }
+  }catch(err){ $("#g-msg").textContent=err.message; $("#g-pass").value=""; $("#g-pass2").value=""; await loadStatus(); }
   finally{ $("#g-go").disabled=false; }
 });
-$("#g-pass").addEventListener("keydown",e=>{if(e.key==="Enter")$("#g-go").click();});
-$("#g-pass2").addEventListener("keydown",e=>{if(e.key==="Enter")$("#g-go").click();});
-$("#switch").addEventListener("click",()=>{ state.token=null; $("#g-msg").textContent=""; $("#gate").style.display="flex"; loadStatus(); });
+$("#switch").addEventListener("click",()=>{ state.token=null; $("#g-msg").textContent=""; $("#g-pass").value=""; $("#g-pass2").value=""; $("#gate").style.display="flex"; loadStatus(); });
 
 $("#a-save").addEventListener("click", async ()=>{
   const cur=$("#a-cur").value, next=$("#a-new").value;
-  if(next.length<4){ toast("新しいパスワードは4文字以上に"); return; }
-  if(next!==$("#a-new2").value){ toast("2つのパスワードが違います"); return; }
+  if(!PIN.test(next)){ toast("新しい暗証番号は数字5桁で"); return; }
+  if(next!==$("#a-new2").value){ toast("2つの番号が違います"); return; }
   $("#a-save").disabled=true;
   try{ await api("passwd",{current:cur,next}); ["#a-cur","#a-new","#a-new2"].forEach(s=>$(s).value=""); toast("変更しました"); }
   catch(err){ toast(err.message); }
