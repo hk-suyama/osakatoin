@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -324,23 +323,25 @@ function tbl(t,plain){if(!t)return'';const d=tb(t);let h='<div class="tt">'+d.n+
 const W=()=>P[s][p].w,N=()=>W().length;
 const ex=i=>X[s+'-'+p+'-'+i]||{};
 const aboveBa=i=>{const b=W()[i+1];return!!b&&b[0].startsWith('ば')};
-function stages(i){const w=W(),x=w[i],o=ex(i),a=[];if(o.d)a.push('w');if(x[0].includes('／'))a.push('c');if(x[3]&&aboveBa(i))a.push('p');if(x[3]||i===w.length-1)a.push('f');if(x[3])a.push('e');return a}
+const hasU=j=>{const w=W(),x=w[j];return!!x&&(x[0]==='す／さす'||x[0]==='る／らる')&&j>0&&!w[j-1][0].includes('／')&&!!w[j-1][3]};
+const rdg=x=>x[1]+(x[5]?'（'+x[5]+'）':'');
+function stages(i){const w=W(),x=w[i],o=ex(i),a=[];if(o.d)a.push('w');if(hasU(i))a.push('u');if(x[0].includes('／'))a.push('c');if(x[3]&&aboveBa(i))a.push('p');if(x[3]||i===w.length-1)a.push('f');if(x[3]&&!hasU(i+1))a.push('e');return a}
 const fidx=i=>{const o=ex(i),x=W()[i];return o.f!==undefined?o.f:x[3]?x[3][2]:2};
 function split(i){const x=W()[i],cell=tb(x[3]).r[x[3][1]][x[3][2]+1].replace(/[()]/g,''),c=cell.split('・').find(f=>x[1].endsWith(f));return c?[x[1].slice(0,-c.length),[c]]:[x[1].slice(0,-1),[cell,x[1].slice(-1)].concat(ex(i).x||[])]}
 const cur=()=>N()-1-pr.k;
 function correct(){const i=cur(),x=W()[i],t=stages(i)[pr.st];
 if(t==='w')return ex(i).d[0];if(t==='c')return{su:'す',sasu:'さす',raru:'らる',ri:'り',tari:'たり'}[x[3][0]];
-if(t==='p')return'0,4';if(t==='f')return String(fidx(i));return split(i)[1][0]}
-function isok(v){const i=cur(),t=stages(i)[pr.st];if(t==='w')return ex(i).d.includes(v);if(t==='e'){const[st,e]=split(i);return e.includes(v)||e.some(z=>st+z===v)}return v===correct()}
+if(t==='p')return'0,4';if(t==='f')return String(fidx(i));return split(t==='u'?i-1:i)[1][0]}
+function isok(v){const i=cur(),t=stages(i)[pr.st];if(t==='w')return ex(i).d.includes(v);if(t==='e'||t==='u'){const[st,e]=split(t==='u'?i-1:i);return e.includes(v)||e.some(z=>st+z===v)}return v===correct()}
 function autos(){while(pr.k<N()&&stages(cur()).length===0)pr.k++}
 function resetP(){pr={k:0,st:0,miss:0,peek:0,wrong:0,dis:[],conf:[],fb:'',rev:false};autos()}
 function pass(shown){const i=cur(),t=stages(i)[pr.st],c=correct();
-if(t!=='e')pr.conf.push(t==='f'?H[+c]+'形':t==='w'?'単語は「'+c+'」':t==='p'?'可能性は未然形か已然形':'「'+c+'」');
+if(t!=='e')pr.conf.push(t==='u'?'上の「'+W()[i-1][0]+'」の未然形は「'+rdg(W()[i-1])+'」':t==='f'?H[+c]+'形':t==='w'?'単語は「'+c+'」':t==='p'?'可能性は未然形か已然形':'「'+c+'」');
 pr.st++;pr.wrong=0;pr.dis=[];pr.fb='';pr.rev=false;
 if(pr.st>=stages(i).length){pr.k++;pr.st=0;pr.conf=[];pr.fb='';autos();if(pr.k===N())save()}}
 function submit(v){v=String(v).replace(/\s/g,'');if(!v)return;const t=stages(cur())[pr.st];
 if(isok(v))pass(false);else{pr.miss++;pr.wrong++;if(t==='c'||t==='f')pr.dis.push(v);
-if(pr.wrong>=2)pr.rev=true;else pr.fb=t==='e'?'ちがいます。活用表をチラ見して、もう一度。':'ちがいます。もう一度。'}draw()}
+if(pr.wrong>=2)pr.rev=true;else pr.fb=t==='e'||t==='u'?'ちがいます。活用表をチラ見して、もう一度。':'ちがいます。もう一度。'}draw()}
 function giveup(){pr.miss++;pr.rev=true;draw()}
 function save(){try{const key='kbt2425_'+s+'_'+p,v=pr.miss+pr.peek,old=localStorage.getItem(key);if(old===null||v<+old)localStorage.setItem(key,v)}catch(e){}}
 function mark(a,i){try{const v=localStorage.getItem('kbt2425_'+a+'_'+i);return v===null?'':+v===0?' pf':' dn'}catch(e){return''}}
@@ -348,6 +349,7 @@ function where(i){const w=W(),b=w[i+1];if(ex(i).h)return ex(i).h;if(!b)return'�
 function reveal(i){const w=W(),x=w[i],t=stages(i)[pr.st],o=ex(i),c=correct();let a,r;
 const full=x[2].replace('<em>ここからスタート</em>',''),ci=full.indexOf('を選ぶ'),cs=ci<0?'':full.slice(0,full.indexOf('。',ci)+1);
 if(t==='w'){a=c;r='「'+o.m+'」＝<em>'+c+'</em>。'}
+else if(t==='u'){const u=w[i-1];a=rdg(u);r=u[2]+tbl([u[3][0],u[3][1],0])}
 else if(t==='c'){a=c;r=cs}
 else if(t==='p'){a='未然形と已然形';r='「ば」には、「未然形＋ば（もし〜ならば）」と「已然形＋ば（〜ので・〜と）」がある。'}
 else if(t==='f'){a=H[+c]+'形';r=(aboveBa(i)?w[i+1][2].split('<div')[0]+'。<br>':'')+(o.r||need(w,i)||full.split('。').filter(z=>/文末|はじめから/.test(z)).map(z=>z+'。').join(''))}
@@ -355,10 +357,12 @@ else{a=x[1]+(x[5]?'（'+x[5]+'）':'');r=need(w,i)+full.slice(cs.length)+tbl(x[3
 return'<div class="rv"><b>正解は「'+a+'」</b><div>'+r+'</div><button class="go" id="nxq">次へ</button></div>'}
 function tblc(t,i,auto){if(!t)return'';if(auto)return tbl(t);const d=tb(t),o=opn.has(i),lab=d.n.split('　')[0]+'・'+(d.r.length>1?d.r[t[1]][0]+'の':'')+H[t[2]]+'形';
 return'<button class="tg" data-i="'+i+'">'+(o?'▾ ':'▸ ')+lab+(o?'（閉じる）':'（活用表を開く）')+'</button>'+(o?tbl(t).replace(/^<div class="tt">.*?<\/div>/,''):'')}
+function hintC(i){const w=W(),x=w[i],u=w[i-1];if(x[0]==='り／たり')return'上は「'+u[0]+'」やで';if(hasU(i))return'未然形がａの音かどうかやで';return'上は「'+u[0]+'」。どっちでも未然形は「せ」「させ」やで'}
 function qhtml(i){const x=W()[i],t=stages(i)[pr.st],o=ex(i);let h=pr.conf.length?'<div class="cf">'+pr.conf.join(' ／ ')+'</div>':'';if(pr.rev)return h+reveal(i);const sp='<span class="sp">STEP '+(pr.st+1)+'／'+stages(i).length+'</span>';
 const btn=(v,l)=>'<button data-v="'+v+'"'+(pr.dis.includes(String(v))?' disabled':'')+'>'+l+'</button>';
 if(t==='w')h+='<div class="ql">'+sp+'「'+o.m+'」にあたる古文単語は？<small>（終止形で）</small></div><div class="in"><input id="ai" class="wd" autocomplete="off" autocapitalize="off"><button class="go" id="go">決定</button><button class="gu" id="gu">わからない</button></div>';
-if(t==='c')h+='<div class="ql">'+sp+'どちらを使う？</div><div class="ch">'+x[0].split('／').map(v=>btn(v,v)).join('')+'</div>';
+if(t==='u'){const u=W()[i-1],[st]=split(i-1);h+='<div class="ql">'+sp+'上の「'+u[0]+'」の未然形は？<small>　「'+x[0]+'」を選ぶ前に確かめるで</small></div><div class="in"><span class="stem">'+st+'</span><input id="ai" autocomplete="off" autocapitalize="off"><button class="go" id="go">決定</button><button class="gu" id="gu">わからない</button></div><button class="pk" id="pk">活用表チラ見（押している間）</button><div class="pkp" id="pkp">'+tbl(u[3],1)+'</div>'}
+if(t==='c')h+='<div class="ql">'+sp+'どちらを使う？<small>　'+hintC(i)+'</small></div><div class="ch">'+x[0].split('／').map(v=>btn(v,v)).join('')+'</div>';
 if(t==='p')h+='<div class="ql">'+sp+'「ば」の上やで。可能性は何形と何形がある？<small>　2つ選んで決定</small></div><div class="ch">'+H.map((v,j)=>'<button data-t="'+j+'">'+v+'形</button>').join('')+'</div><div class="in" style="margin-top:6px"><button class="go" id="gp">決定</button><button class="gu" id="gu">わからない</button></div>';
 if(t==='f')h+='<div class="ql">'+sp+'何形にする？<small>　'+where(i)+'</small></div><div class="ch">'+H.map((v,j)=>aboveBa(i)&&j!==0&&j!==4?'':btn(j,v+'形')).join('')+'</div>';
 if(t==='e'){const[st]=split(i);h+='<div class="ql">'+sp+''+H[fidx(i)]+'形は？</div><div class="in"><span class="stem">'+st+'</span><input id="ai" autocomplete="off" autocapitalize="off"><button class="go" id="go">決定</button><button class="gu" id="gu">わからない</button></div><button class="pk" id="pk">活用表チラ見（押している間）</button><div class="pkp" id="pkp">'+tbl(x[3],1)+'</div>'}
