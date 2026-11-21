@@ -1,1 +1,400 @@
 
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>古典文法のトレーニング 024・025 詳解</title>
+<style>
+:root{--nowbg:#fff4ea;--bg:#f6f5f1;--card:#fff;--tx:#1f1f1d;--sub:#63625c;--mut:#9a988f;--line:#dcdad2;--cell:#efede6;--ac:#1a5fa8;--acbg:#e3effb;--acline:#9cc3ec;--rq:#7a4a05;--rqbg:#fbedd2;--now:#c8501e}
+@media (prefers-color-scheme:dark){:root{--nowbg:#3a2a20;--bg:#1c1c1a;--card:#262624;--tx:#f0efe9;--sub:#b9b7ae;--mut:#85837b;--line:#3c3c38;--cell:#33332f;--ac:#8fc0f2;--acbg:#16324f;--acline:#2f5f8f;--rq:#f3c77a;--rqbg:#47300a;--now:#f0906a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",Meiryo,sans-serif;line-height:1.7;font-size:16px}
+main{max-width:760px;margin:0 auto;padding:16px 14px 200px}
+h1{font-size:20px;margin:4px 0 2px}
+.how{font-size:14px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ac);border-radius:8px;padding:10px 14px;margin:8px 0 14px}.how b{display:block;font-size:13px;color:var(--ac)}.how small{display:block;font-size:12px;color:var(--sub);margin-top:4px}
+.nav{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-bottom:6px}
+.nav b{font-size:13px;width:38px;color:var(--sub)}
+.nav button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--tx);font-size:15px;cursor:pointer;padding:0}
+.nav button.on{background:var(--ac);border-color:var(--ac);color:var(--card);font-weight:700}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:14px 0 6px}
+.q .yaku{font-size:17px;font-weight:700}
+.q .gun{font-size:13px;color:var(--sub)}
+.rw{display:grid;grid-template-columns:30px 230px minmax(0,1fr);gap:12px;align-items:center;padding:10px 6px;border-radius:10px;border:2px solid transparent}
+.rw.now{border-color:var(--now);background:var(--card)}
+.rw.ask{background:var(--nowbg)}
+.sp{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--now);border-radius:10px;padding:1px 9px;margin-right:8px;vertical-align:2px;white-space:nowrap}
+.rv{border-left:4px solid var(--now);background:var(--card);padding:8px 12px;border-radius:0 8px 8px 0}
+.rv>b{display:block;color:var(--now);font-size:16px;margin-bottom:2px}
+.rv .go{margin-top:10px;min-width:120px}
+.tg{display:block;margin-top:4px;border:0;background:none;color:var(--ac);font-size:12px;padding:5px 0;cursor:pointer;text-align:left}
+.rw.wait{opacity:.45}
+.no{width:26px;height:26px;border-radius:50%;background:var(--cell);color:var(--sub);font-size:12px;display:flex;align-items:center;justify-content:center}
+.now .no{background:var(--now);color:#fff}
+.tl{display:flex;align-items:center;gap:6px;font-size:16px;flex-wrap:wrap}
+.a,.b{padding:4px 9px;border-radius:8px;border:1px solid var(--line);white-space:nowrap}
+.a{color:var(--sub)}
+.b{background:var(--acbg);border-color:var(--acline);color:var(--ac);font-weight:700}
+.b small{font-weight:400;font-size:12px}
+.ar{color:var(--mut)}
+.rs{font-size:14px;color:var(--sub);line-height:1.6}
+.rs em{font-style:normal;color:var(--ac);font-weight:700}
+.st{display:grid;grid-template-columns:64px repeat(6,minmax(0,1fr));gap:2px;font-size:12px;margin-top:5px;text-align:center}
+.st span{padding:3px 0;border-radius:4px;background:var(--cell);color:var(--sub)}
+.st .h{background:none;color:var(--mut);font-size:11px}
+.st .on{background:var(--ac);color:var(--card);font-weight:700}
+.tt{font-size:12px;color:var(--mut);margin-top:6px}
+.op{display:flex;gap:6px;margin-top:5px;font-size:12px;flex-wrap:wrap}
+.op span{padding:3px 8px;border-radius:4px;background:var(--cell);color:var(--mut)}
+.op .on{background:var(--ac);color:var(--card);font-weight:700}
+.rq{margin:0 0 0 48px;font-size:13px;color:var(--rq);background:var(--rqbg);padding:2px 10px;border-radius:8px;display:inline-block}
+.rqw{min-height:6px}
+.mode{display:flex;gap:6px;margin:0 0 12px}
+.mode button{flex:1;height:40px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--sub);font-size:15px;cursor:pointer}
+.mode button.on{background:var(--ac);border-color:var(--ac);color:var(--card);font-weight:700}
+.nav button.dn{border-color:var(--ac);color:var(--ac)}
+.nav button.pf{background:var(--acbg);border-color:var(--ac);color:var(--ac)}
+.ql{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:6px}
+.ql small{font-weight:400;color:var(--sub)}
+.cf{font-size:12px;color:var(--ac);margin-bottom:4px}
+.ch{display:flex;flex-wrap:wrap;gap:6px}
+.ch button,.go,.gu{height:40px;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--tx);font-size:15px;cursor:pointer;white-space:nowrap}
+.ch button.sl{background:var(--acbg);border-color:var(--ac);color:var(--ac);font-weight:700}
+.ch button:disabled{opacity:.35;text-decoration:line-through}
+.go{background:var(--ac);border-color:var(--ac);color:var(--card);font-weight:700}
+.gu{color:var(--sub);font-size:13px}
+.in{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.in .stem{font-size:18px;font-weight:700;color:var(--tx)}
+.in input{height:40px;width:7.5em;font-size:18px;padding:0 8px;border-radius:8px;border:1px solid var(--acline);background:var(--card);color:var(--tx)}
+.in input.wd{width:11em}
+.pk{margin-top:8px;height:40px;padding:0 14px;border-radius:20px;border:1px dashed var(--now);background:var(--card);color:var(--now);font-size:14px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none;-webkit-touch-callout:none}
+.pkp{display:none;margin-top:4px;padding:6px 8px;border:1px dashed var(--now);border-radius:8px;background:var(--card)}
+.fb{font-size:13px;color:var(--now);margin-top:6px;min-height:20px}
+.stat{font-size:13px;color:var(--sub);flex:1}
+.stat b{color:var(--ac)}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:8px 14px 10px}
+.bar .bin{max-width:760px;margin:0 auto}
+.sofar{font-size:18px;font-weight:700;min-height:32px}
+.sofar i{font-style:normal;font-weight:400;font-size:12px;color:var(--sub);margin-right:8px}
+.sofar .yet{color:var(--mut);font-weight:400}
+.sofar .ok{color:var(--ac)}
+.ctl{display:flex;gap:8px;align-items:center;margin-top:4px}
+.ctl button{white-space:nowrap;height:40px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--tx);font-size:14px;cursor:pointer}
+.ctl #nx{background:var(--ac);border-color:var(--ac);color:var(--card);font-weight:700;flex:1}
+.ctl #nx{height:46px;font-size:16px}
+.ctl #rs,.ctl #al,.ctl #rp{height:34px;font-size:12px;padding:0 8px;color:var(--sub)}
+.ctl #np{background:var(--ac);border-color:var(--ac);color:var(--card);font-weight:700}
+.ctl button:disabled{opacity:.4;cursor:default}
+.ctl .cnt{font-size:12px;color:var(--sub);min-width:44px;text-align:center}
+@media (max-width:600px){.ctl{gap:6px}.ctl button{padding:0 9px}.ctl .cnt{min-width:36px}h1{font-size:17px}.sofar{font-size:16px}.rw{grid-template-columns:30px minmax(0,1fr)}.rs{grid-column:2}.rq{margin-left:42px}}
+</style>
+</head>
+<body>
+<main>
+<h1>古典文法のトレーニング 024・025 詳解</h1>
+<div class="mode"><button id="mE">解説モード</button><button id="mP">演習モード</button></div>
+<div class="how" id="how"></div>
+<div class="nav" id="n0"><b>024</b></div>
+<div class="nav" id="n1"><b>025</b></div>
+<div class="q"><div class="yaku" id="yaku"></div><div class="gun" id="gun"></div></div>
+<div id="rows"></div>
+</main>
+<div class="bar"><div class="bin">
+<div class="sofar" id="sofar"></div>
+<div class="ctl" id="cE"><button id="rs">最初から</button><button id="pv">戻る</button><span class="cnt" id="cnt"></span><button id="nx">スタート</button><button id="al">全部</button></div>
+<div class="ctl" id="cP"><span class="stat" id="stat"></span><button id="np">次の問題へ</button><button id="rp">最初から</button></div>
+</div></div>
+<script>
+const H=['未然','連用','終止','連体','已然','命令'];
+const G={カ:'かきくけ',サ:'さしすせ',タ:'たちつて',ハ:'はひふへ',マ:'まみむめ',ラ:'らりるれ'};
+const yd=(stem,g,c)=>[{n:g+'行四段活用',r:[[stem,G[g][0],G[g][1],G[g][2],G[g][2],G[g][3],G[g][3]]]},0,c];
+const v=(n,lab,f,c)=>[{n:n,r:[[lab,...f]]},0,c];
+const TB={
+mu:{n:'助動詞「む」',r:[['む','○','○','む','む','め','○']]},
+muzu:{n:'助動詞「むず」',r:[['むず','○','○','むず','むずる','むずれ','○']]},
+zu:{n:'助動詞「ず」',r:[['本活用','ず','ず','ず','ぬ','ね','○'],['補助活用','ざら','ざり','○','ざる','ざれ','ざれ']]},
+ku:{n:'形容詞（ク活用）',r:[['本活用','く','く','し','き','けれ','○'],['補助活用','から','かり','○','かる','○','かれ']]},
+shiku:{n:'形容詞（シク活用）　語幹は「〜し」まで',r:[['本活用','く','く','Φ','き','けれ','○'],['補助活用','から','かり','○','かる','○','かれ']]},
+nari:{n:'形容動詞（ナリ活用）',r:[['なり','なら','なり・に','なり','なる','なれ','なれ']]},
+tari:{n:'助動詞「たり」',r:[['たり','たら','たり','たり','たる','たれ','たれ']]},
+ri:{n:'助動詞「り」',r:[['り','ら','り','り','る','れ','れ']]},
+keri:{n:'助動詞「けり」',r:[['けり','けら','けり','けり','ける','けれ','けれ']]},
+ki:{n:'助動詞「き」',r:[['き','せ','○','き','し','しか','○']]},
+tsu:{n:'助動詞「つ」',r:[['つ','て','て','つ','つる','つれ','てよ']]},
+nu:{n:'助動詞「ぬ」',r:[['ぬ','な','に','ぬ','ぬる','ぬれ','ね']]},
+su:{n:'助動詞「す」',r:[['す','せ','せ','す','する','すれ','せよ']]},
+sasu:{n:'助動詞「さす」',r:[['さす','させ','させ','さす','さする','さすれ','させよ']]},
+raru:{n:'助動詞「らる」',r:[['らる','られ','られ','らる','らるる','らるれ','られよ']]}
+};
+const E2=['え','え','ゆ','ゆる','ゆれ','えよ'],D2=['で','で','づ','づる','づれ','でよ'],K1=['け','け','ける','ける','けれ','けよ'],KA=['こ','き','く','くる','くれ','こ(よ)'];
+const ba=(k,y,z)=>'訳は「'+y+'」→ '+(z?'<em>'+z+'</em>':k?'確定の順接':'仮定の順接')+'<div class="op"><span'+(k?'':' class="on"')+'>未然形＋ば（もし〜ならば）</span><span'+(k?' class="on"':'')+'>已然形＋ば（〜ので・〜と）</span></div>';
+const END='文末なのでそのまま（終止形）。<em>ここからスタート</em>';
+const SONO='活用しない語。そのまま上に載せる。';
+const QM=n=>'「'+n+'」の上接は未然形',QY=n=>'「'+n+'」の上接は連用形',QT=n=>'「'+n+'」は体言 → 上は連体形';
+const RENTAI='文中の「む」は仮定・婉曲（〜としたら）。下に続くので連体形だが、形は「む」のまま。';
+const P=[
+[
+{y:'人が来ないので退屈だろう。',w:[
+['人','人',SONO],
+['来','来','カ行変格活用。',v('カ行変格活用','来',KA,0),,'こ'],
+['ず','ね','下の「ば」は助詞（助動詞ではない）→ <em>本活用</em>の已然形。',['zu',0,4],QM('ず')],
+['ば','ば',ba(1,'来ない<em>ので</em>'),,'この「ば」の上接は已然形'],
+['つれづれなり','つれづれなら','形容動詞。',['nari',0,0]],
+['む','む',END,,QM('む')]]},
+{y:'月が見えるとしたら、それは、とても趣深いだろう。',w:[
+['月','月',SONO],
+['見ゆ','見え','ヤ行下二段活用。',v('ヤ行下二段活用','見',E2,0)],
+['む','む',RENTAI,['mu',0,3],QM('む')],
+['は、','は、','助詞。「〜としたら、<em>それ</em>は」の「それ」にあたる体言が省かれている。',,'「は」の上は連体形（体言の代わり）'],
+['いと','いと',SONO],
+['をかし','をかしから','シク活用の形容詞。下の「む」は助動詞 → <em>補助活用</em>の未然形。',['shiku',1,0]],
+['む','む',END,,QM('む')]]},
+{y:'まだ読んでいない手紙を破らせる。',w:[
+['まだ','まだ',SONO],
+['読む','読ま','マ行四段活用。',yd('読','マ',0)],
+['ず','ぬ','下の「文」は体言（助動詞ではない）→ <em>本活用</em>の連体形。',['zu',0,3],QM('ず')],
+['文','文',SONO,,QT('文')],
+['を','を',SONO],
+['破る','破ら','ラ行四段活用。',yd('破','ラ',0)],
+['す／さす','す','上の「破る」の未然形は「破ら」で<em>ａの音</em> → <em>「す」</em>を選ぶ。文末なので終止形。<em>ここからスタート</em>',['su',0,2],QM('す')]]},
+{y:'花が咲いているとしたら、それは、とてもかわいらしいだろう。',w:[
+['花','花',SONO],
+['咲く','咲け','カ行四段活用。',yd('咲','カ',4)],
+['り','ら','存続（〜ている）の助動詞。',['ri',0,0],'「り」の上接は四段の已然形（命令形とも）'],
+['む','む',RENTAI,['mu',0,3],QM('む')],
+['は、','は、','助詞。「それは」の「それ」にあたる体言が省かれている。',,'「は」の上は連体形（体言の代わり）'],
+['いと','いと',SONO],
+['うつくし','うつくしから','シク活用の形容詞。下の「む」は助動詞 → <em>補助活用</em>の未然形。',['shiku',1,0]],
+['む','む',END,,QM('む')]]},
+{y:'鞠を蹴ることができない。',w:[
+['鞠','鞠',SONO],
+['蹴る','蹴','<em>カ行下一段活用</em>（下一段は「蹴る」一語だけ）。四段ではないので「蹴ら」にはならない。',v('カ行下一段活用','(蹴)',K1,0),,'け'],
+['る／らる','られ','上の「蹴る」の未然形は「蹴（け）」で<em>ａ以外の音</em> → <em>「らる」</em>を選ぶ。打消を伴って可能の意味。',['raru',0,0],QM('らる')],
+['ず','ず',END,,QM('ず')]]},
+{y:'会うことができないとしたら、そのことは、とても気がかりだ。',w:[
+['え','え','副詞。「え〜ず」で「〜できない」。そのまま上に載せる。'],
+['会ふ','会は','ハ行四段活用。',yd('会','ハ',0)],
+['ず','ざら','下の「む」は助動詞 → <em>補助活用</em>の未然形。',['zu',1,0],QM('ず')],
+['む','む',RENTAI,['mu',0,3],QM('む')],
+['こと、','こと、',SONO,,QT('こと')],
+['いと','いと',SONO],
+['おぼつかなし','おぼつかなし','ク活用の形容詞。'+END,['ku',0,2]]]},
+{y:'長年待っている人に会うだろう。',w:[
+['年ごろ','年ごろ',SONO],
+['待つ','待ち','タ行四段活用。',yd('待','タ',1)],
+['たり','たる','存続（〜ている）の助動詞。',['tari',0,3],QY('たり')],
+['人','人',SONO,,QT('人')],
+['に','に',SONO],
+['会ふ','会は','ハ行四段活用。',yd('会','ハ',0)],
+['む','む',END,,QM('む')]]},
+{y:'その人に大声で騒がせると、みんな目を覚ましたそうだ。',w:[
+['その人に','その人に',SONO],
+['ののしる','ののしら','ラ行四段活用。',yd('ののし','ラ',0)],
+['す／さす','すれ','上の「ののしる」の未然形は「ののしら」で<em>ａの音</em> → <em>「す」</em>を選ぶ。その已然形。',['su',0,4],QM('す')],
+['ば、','ば、',ba(1,'騒がせる<em>と</em>','偶然条件（確定の順接）'),,'この「ば」の上接は已然形'],
+['皆','皆',SONO],
+['おどろく','おどろき','カ行四段活用。',yd('おどろ','カ',1)],
+['けり','けり','伝聞過去（〜たそうだ）。'+END,,QY('けり')]]},
+{y:'風が止んでいるとしたら、その時は、すぐに外へ出るのがよい。',w:[
+['風','風',SONO],
+['やむ','やみ','マ行四段活用。',yd('や','マ',1)],
+['たり','たら','存続（〜ている）の助動詞。',['tari',0,0],QY('たり')],
+['む','む',RENTAI,['mu',0,3],QM('む')],
+['時、','時、',SONO,,QT('時')],
+['やがて','やがて',SONO],
+['外へ','外へ',SONO],
+['出づ','出で','ダ行下二段活用。',v('ダ行下二段活用','出',D2,0)],
+['む','む','適当（〜のがよい）。'+END,,QM('む')]]},
+{y:'手紙が書いてあるならば、それを読め。',w:[
+['文','文',SONO],
+['書く','書き','カ行四段活用。',yd('書','カ',1)],
+['たり','たら','存続（〜てある）の助動詞。',['tari',0,0],QY('たり')],
+['ば、','ば、',ba(0,'書いてある<em>ならば</em>'),,'この「ば」の上接は未然形'],
+['それを','それを',SONO],
+['読め','読め','はじめから命令形で与えられている。文末なのでそのまま。<em>ここからスタート</em>']]}
+],
+[
+{y:'立派でない馬をあてにしているとしたら、それは、つらいだろう。',w:[
+['＊＊＊','かしこから','「立派だ」＝<em>かしこし</em>（ク活用）。下の「ず」は助動詞 → <em>補助活用</em>の未然形。',['ku',1,0]],
+['ず','ぬ','下の「馬」は体言（助動詞ではない）→ <em>本活用</em>の連体形。',['zu',0,3],QM('ず')],
+['馬','馬',SONO,,QT('馬')],
+['を','を',SONO],
+['便りにす','便りにせ','「す」はサ行変格活用。',v('サ行変格活用','便りに',['せ','し','す','する','すれ','せよ'],0)],
+['む','む',RENTAI,['mu',0,3],QM('む')],
+['は、','は、','助詞。「それは」の「それ」にあたる体言が省かれている。',,'「は」の上は連体形（体言の代わり）'],
+['心憂し','心憂から','ク活用の形容詞。下の「む」は助動詞 → <em>補助活用</em>の未然形。',['ku',1,0]],
+['む','む',END,,QM('む')]]},
+{y:'粗末な家に住んでいる翁に手紙を書かせる。',w:[
+['＊＊＊','あやしき','「粗末だ」＝<em>あやし</em>（シク活用）。下の「家」は体言（助動詞ではない）→ <em>本活用</em>の連体形。',['shiku',0,3]],
+['家','家',SONO,,QT('家')],
+['に','に',SONO],
+['居る','居','ワ行上一段活用。',v('ワ行上一段活用','(居)',['ゐ','ゐ','ゐる','ゐる','ゐれ','ゐよ'],1),,'ゐ'],
+['り／たり','たる','上の「居る」は上一段 → <em>「たり」</em>を選ぶ（「り」の上接は四段とサ変だけ）。その連体形。',['tari',0,3],QY('たり')],
+['翁に','翁に',SONO,,QT('翁')],
+['文','文',SONO],
+['書く','書か','カ行四段活用。',yd('書','カ',0)],
+['す／さす','す','上の「書く」の未然形は「書か」で<em>ａの音</em> → <em>「す」</em>を選ぶ。文末なので終止形。<em>ここからスタート</em>',['su',0,2],QM('す')]]},
+{y:'急に花が咲くとしたら、そのことは、とても趣深いだろう。',w:[
+['＊＊＊','にはかに','「急だ」＝<em>にはかなり</em>（形容動詞）。「咲く」（用言）にかかるので連用形「に」。',['nari',0,1]],
+['花','花',SONO],
+['咲く','咲か','カ行四段活用。',yd('咲','カ',0)],
+['む','む',RENTAI,['mu',0,3],QM('む')],
+['こと、','こと、',SONO,,QT('こと')],
+['いと','いと',SONO],
+['＊＊＊','をかしから','「趣深い」＝<em>をかし</em>（シク活用）。下の「む」は助動詞 → <em>補助活用</em>の未然形。',['shiku',1,0]],
+['む','む',END,,QM('む')]]},
+{y:'鞠を蹴らせることができなかったそうだ。',w:[
+['鞠','鞠',SONO],
+['蹴る','蹴','<em>カ行下一段活用</em>（下一段は「蹴る」一語だけ）。',v('カ行下一段活用','(蹴)',K1,0),,'け'],
+['す／さす','させ','上の「蹴る」の未然形は「蹴（け）」で<em>ａ以外の音</em> → <em>「さす」</em>を選ぶ。その未然形。',['sasu',0,0],QM('さす')],
+['る／らる','られ','上は「す／さす」で、まだどちらか決まっていない。しかし、どちらになっても未然形は「せ」「させ」で<em>ａ以外の音</em> → <em>「らる」</em>を選ぶ。打消を伴って可能の意味。その未然形。',['raru',0,0],QM('らる')],
+['ず','ざり','下の「けり」は助動詞 → <em>補助活用</em>の連用形。',['zu',1,1],QM('ず')],
+['けり','けり','伝聞過去（〜たそうだ）。'+END,,QY('けり')]]},
+{y:'去年死んだ猫が自然に思い出されるので、とてもつらかった。',w:[
+['去年','去年',SONO,,,'こぞ'],
+['死ぬ','死に','ナ行変格活用。',v('ナ行変格活用','死',['な','に','ぬ','ぬる','ぬれ','ね'],1)],
+['たり','たる','完了（〜た）の助動詞。',['tari',0,3],QY('たり')],
+['猫','猫',SONO,,QT('猫')],
+['思ひ出づ','思ひ出で','ダ行下二段活用。',v('ダ行下二段活用','思ひ出',D2,0)],
+['る／らる','らるれ','上の「思ひ出づ」の未然形は「思ひ出で」で<em>ａ以外の音</em> → <em>「らる」</em>を選ぶ。「自然に〜される」＝自発。その已然形。',['raru',0,4],QM('らる')],
+['ば、','ば、',ba(1,'思い出される<em>ので</em>'),,'この「ば」の上接は已然形'],
+['いと','いと',SONO],
+['憂し','憂かり','ク活用の形容詞。下の「き」は助動詞 → <em>補助活用</em>の連用形。',['ku',1,1]],
+['き','き','過去（〜た）。'+END,,QY('き')]]},
+{y:'翁が中から出て来なかったら、きっと退屈だろう。',w:[
+['翁','翁',SONO],
+['内より','内より',SONO],
+['出で来','出で来','「来」はカ行変格活用。',v('カ行変格活用','出で来',KA,0),,'いでこ'],
+['ず','ず','下の「ば」は助詞（助動詞ではない）→ <em>本活用</em>の未然形。形は「ず」のまま。',['zu',0,0],QM('ず')],
+['ば、','ば、',ba(0,'出て来<em>なかったら</em>'),,'この「ば」の上接は未然形'],
+['＊＊＊','つれづれなり','「退屈だ」＝<em>つれづれなり</em>（形容動詞）。連用形は「なり」と「に」の二つ。下に助動詞が続くときは<em>「なり」</em>。',['nari',0,1]],
+['ぬ','な','「な＋む」で「きっと〜だろう」（強意＋推量）。',['nu',0,0],QY('ぬ')],
+['む','む',END,,QM('む')]]},
+{y:'とても心配りが行き届いていたので、少しも嘆かなかった。',w:[
+['いと','いと',SONO],
+['＊＊＊','ねんごろなり','「心配りが行き届いている」＝<em>ねんごろなり</em>（形容動詞）。下に助動詞が続くので連用形は「なり」。',['nari',0,1]],
+['き','しか','過去（〜た）の助動詞。',['ki',0,4],QY('き')],
+['ば、','ば、',ba(1,'行き届いていた<em>ので</em>'),,'この「ば」の上接は已然形'],
+['＊＊＊','つゆも','「少しも（〜ない）」＝<em>つゆも</em>。下の「ず」と組になる副詞。活用しない。'],
+['嘆く','嘆か','カ行四段活用。',yd('嘆','カ',0)],
+['ず','ざり','下の「き」は助動詞 → <em>補助活用</em>の連用形。',['zu',1,1],QM('ず')],
+['き','き','過去（〜た）。'+END,,QY('き')]]},
+{y:'仲良くない人に大声で騒がせると、なんでか知らんけど、火が消えてしまったそうだ。',w:[
+['＊＊＊','疎き','「仲良くない」＝<em>疎し</em>（ク活用）。下の「人」は体言（助動詞ではない）→ <em>本活用</em>の連体形。',['ku',0,3]],
+['人に','人に',SONO,,QT('人')],
+['ののしる','ののしら','ラ行四段活用。',yd('ののし','ラ',0)],
+['す／さす','すれ','上の「ののしる」の未然形は「ののしら」で<em>ａの音</em> → <em>「す」</em>を選ぶ。その已然形。',['su',0,4],QM('す')],
+['ば、','ば、',ba(1,'騒がせる<em>と</em>','偶然条件'),,'この「ば」の上接は已然形'],
+['いかがしたりけん、','いかがしたりけん、','はさみこまれた句（なんでか知らんけど）。そのまま上に載せる。'],
+['火','火',SONO],
+['消ゆ','消え','ヤ行下二段活用。',v('ヤ行下二段活用','消',E2,1)],
+['つ','て','完了（〜てしまった）の助動詞。',['tsu',0,1],QY('つ')],
+['けり','けり','伝聞過去（〜たそうだ）。'+END,,QY('けり')]]},
+{y:'翁の思いが中途半端だとしたら、そのことは、とても残念だろう。',w:[
+['翁が思ひ','翁が思ひ',SONO],
+['＊＊＊','おろかなら','「中途半端だ」＝<em>おろかなり</em>（形容動詞）。',['nari',0,0]],
+['む','む',RENTAI,['mu',0,3],QM('む')],
+['こと、','こと、',SONO,,QT('こと')],
+['いと','いと',SONO],
+['くちをし','くちをしから','シク活用の形容詞。下の「む」は助動詞 → <em>補助活用</em>の未然形。',['shiku',1,0]],
+['む','む',END,,QM('む')]]},
+{y:'何年も強く思っていることを、果たすつもりだ。',w:[
+['＊＊＊','年ごろ','「何年も」＝<em>年ごろ</em>。活用しない。'],
+['念ず','念じ','サ行変格活用（「念ず」と濁る）。',v('サ行変格活用','念',['ぜ','じ','ず','ずる','ずれ','ぜよ'],1)],
+['たり','たる','存続（〜ている）の助動詞。',['tari',0,3],QY('たり')],
+['こと、','こと、',SONO,,QT('こと')],
+['果たす','果たさ','サ行四段活用。',yd('果た','サ',0)],
+['むず','むず','意志（〜つもりだ）。'+END,,QM('むず')]]}
+]
+];
+const MARU='①②③④⑤⑥⑦⑧⑨⑩';
+const X={'0-9-5':{f:5},'1-1-3':{x:['い']},
+'1-0-0':{m:'立派だ',d:['かしこし','賢し','畏し']},'1-1-0':{m:'粗末だ',d:['あやし','賤し','怪し']},
+'1-2-0':{h:'「咲く」にかかるで',r:'「咲く」（用言）にかかるので、<em>連用形</em>にしなければならない。',m:'急だ',d:['にはかなり','俄なり']},'1-2-6':{m:'趣深い',d:['をかし']},
+'1-5-5':{m:'退屈だ',d:['つれづれなり','徒然なり']},'1-6-1':{m:'心配りが行き届いている',d:['ねんごろなり','懇ろなり']},
+'1-6-4':{m:'少しも（〜ない）',d:['つゆも','露も']},'1-7-0':{m:'仲良くない',d:['うとし','疎し']},
+'1-8-1':{m:'中途半端だ',d:['おろかなり','疎かなり','愚かなり']},'1-9-0':{m:'何年も',d:['としごろ','年ごろ','年頃']}};
+const HOW={e:'問題を選んで、【スタート】を押すと、下（文末）から順番に一段ずつ上がっていきます。その順序が、考える順序です。',
+p:'問題を選んで、下（文末）から順番に、自分で答えていきます。一段ごとに「何形にする？」→「その形は？」の順に聞かれます（「ば」の上では、まず可能性を2つ挙げます）。活用表は【活用表チラ見】を押さえている間（パソコンではクリックし続けている間）だけ見られます。チラ見なし・ミスなしを目指そう。'};
+let s=0,p=0,k=0,mode='e',pr;const opn=new Set();
+const $=id=>document.getElementById(id);
+const tb=t=>typeof t[0]==='string'?TB[t[0]]:t[0];
+function need(w,i){const b=w[i+1];if(!b||!b[4]||!w[i][3])return'';const nm=b[4].match(/「(.+?)」/)[1],fm=b[4].match(/未然形|連用形|連体形|已然形/)[0];return(b[4].includes('体言 →')?'体言':'')+'「'+nm+'」に上接しているので、<em>'+fm+'</em>にしなければならない。<br>'}
+function tbl(t,plain){if(!t)return'';const d=tb(t);let h='<div class="tt">'+d.n+'</div><div class="st"><span class="h"></span>'+H.map(x=>'<span class="h">'+x+'</span>').join('');d.r.forEach((r,i)=>{h+='<span class="h">'+r[0]+'</span>'+r.slice(1).map((c,j)=>'<span'+(!plain&&i===t[1]&&j===t[2]?' class="on"':'')+'>'+c.replace('・','<br>')+'</span>').join('')});return h+'</div>'}
+const W=()=>P[s][p].w,N=()=>W().length;
+const ex=i=>X[s+'-'+p+'-'+i]||{};
+const aboveBa=i=>{const b=W()[i+1];return!!b&&b[0].startsWith('ば')};
+function stages(i){const w=W(),x=w[i],o=ex(i),a=[];if(o.d)a.push('w');if(x[0].includes('／'))a.push('c');if(x[3]&&aboveBa(i))a.push('p');if(x[3]||i===w.length-1)a.push('f');if(x[3])a.push('e');return a}
+const fidx=i=>{const o=ex(i),x=W()[i];return o.f!==undefined?o.f:x[3]?x[3][2]:2};
+function split(i){const x=W()[i],cell=tb(x[3]).r[x[3][1]][x[3][2]+1].replace(/[()]/g,''),c=cell.split('・').find(f=>x[1].endsWith(f));return c?[x[1].slice(0,-c.length),[c]]:[x[1].slice(0,-1),[cell,x[1].slice(-1)].concat(ex(i).x||[])]}
+const cur=()=>N()-1-pr.k;
+function correct(){const i=cur(),x=W()[i],t=stages(i)[pr.st];
+if(t==='w')return ex(i).d[0];if(t==='c')return{su:'す',sasu:'さす',raru:'らる',ri:'り',tari:'たり'}[x[3][0]];
+if(t==='p')return'0,4';if(t==='f')return String(fidx(i));return split(i)[1][0]}
+function isok(v){const i=cur(),t=stages(i)[pr.st];if(t==='w')return ex(i).d.includes(v);if(t==='e'){const[st,e]=split(i);return e.includes(v)||e.some(z=>st+z===v)}return v===correct()}
+function autos(){while(pr.k<N()&&stages(cur()).length===0)pr.k++}
+function resetP(){pr={k:0,st:0,miss:0,peek:0,wrong:0,dis:[],conf:[],fb:'',rev:false};autos()}
+function pass(shown){const i=cur(),t=stages(i)[pr.st],c=correct();
+if(t!=='e')pr.conf.push(t==='f'?H[+c]+'形':t==='w'?'単語は「'+c+'」':t==='p'?'可能性は未然形か已然形':'「'+c+'」');
+pr.st++;pr.wrong=0;pr.dis=[];pr.fb='';pr.rev=false;
+if(pr.st>=stages(i).length){pr.k++;pr.st=0;pr.conf=[];pr.fb='';autos();if(pr.k===N())save()}}
+function submit(v){v=String(v).replace(/\s/g,'');if(!v)return;const t=stages(cur())[pr.st];
+if(isok(v))pass(false);else{pr.miss++;pr.wrong++;if(t==='c'||t==='f')pr.dis.push(v);
+if(pr.wrong>=2)pr.rev=true;else pr.fb=t==='e'?'ちがいます。活用表をチラ見して、もう一度。':'ちがいます。もう一度。'}draw()}
+function giveup(){pr.miss++;pr.rev=true;draw()}
+function save(){try{const key='kbt2425_'+s+'_'+p,v=pr.miss+pr.peek,old=localStorage.getItem(key);if(old===null||v<+old)localStorage.setItem(key,v)}catch(e){}}
+function mark(a,i){try{const v=localStorage.getItem('kbt2425_'+a+'_'+i);return v===null?'':+v===0?' pf':' dn'}catch(e){return''}}
+function where(i){const w=W(),b=w[i+1];if(ex(i).h)return ex(i).h;if(!b)return'文末やで';if(aboveBa(i))return'今は現代語訳「'+b[2].match(/訳は「(.+?)」→/)[1]+'」やで';const m=b[4]&&b[4].match(/「(.+?)」/);return'「'+(m?m[1]:b[0].replace('、',''))+'」の上やで'}
+function reveal(i){const w=W(),x=w[i],t=stages(i)[pr.st],o=ex(i),c=correct();let a,r;
+const full=x[2].replace('<em>ここからスタート</em>',''),ci=full.indexOf('を選ぶ'),cs=ci<0?'':full.slice(0,full.indexOf('。',ci)+1);
+if(t==='w'){a=c;r='「'+o.m+'」＝<em>'+c+'</em>。'}
+else if(t==='c'){a=c;r=cs}
+else if(t==='p'){a='未然形と已然形';r='「ば」には、「未然形＋ば（もし〜ならば）」と「已然形＋ば（〜ので・〜と）」がある。'}
+else if(t==='f'){a=H[+c]+'形';r=(aboveBa(i)?w[i+1][2].split('<div')[0]+'。<br>':'')+(o.r||need(w,i)||full.split('。').filter(z=>/文末|はじめから/.test(z)).map(z=>z+'。').join(''))}
+else{a=x[1]+(x[5]?'（'+x[5]+'）':'');r=need(w,i)+full.slice(cs.length)+tbl(x[3])}
+return'<div class="rv"><b>正解は「'+a+'」</b><div>'+r+'</div><button class="go" id="nxq">次へ</button></div>'}
+function tblc(t,i,auto){if(!t)return'';if(auto)return tbl(t);const d=tb(t),o=opn.has(i),lab=d.n.split('　')[0]+'・'+(d.r.length>1?d.r[t[1]][0]+'の':'')+H[t[2]]+'形';
+return'<button class="tg" data-i="'+i+'">'+(o?'▾ ':'▸ ')+lab+(o?'（閉じる）':'（活用表を開く）')+'</button>'+(o?tbl(t).replace(/^<div class="tt">.*?<\/div>/,''):'')}
+function qhtml(i){const x=W()[i],t=stages(i)[pr.st],o=ex(i);let h=pr.conf.length?'<div class="cf">'+pr.conf.join(' ／ ')+'</div>':'';if(pr.rev)return h+reveal(i);const sp='<span class="sp">STEP '+(pr.st+1)+'／'+stages(i).length+'</span>';
+const btn=(v,l)=>'<button data-v="'+v+'"'+(pr.dis.includes(String(v))?' disabled':'')+'>'+l+'</button>';
+if(t==='w')h+='<div class="ql">'+sp+'「'+o.m+'」にあたる古文単語は？<small>（終止形で）</small></div><div class="in"><input id="ai" class="wd" autocomplete="off" autocapitalize="off"><button class="go" id="go">決定</button><button class="gu" id="gu">わからない</button></div>';
+if(t==='c')h+='<div class="ql">'+sp+'どちらを使う？</div><div class="ch">'+x[0].split('／').map(v=>btn(v,v)).join('')+'</div>';
+if(t==='p')h+='<div class="ql">'+sp+'「ば」の上やで。可能性は何形と何形がある？<small>　2つ選んで決定</small></div><div class="ch">'+H.map((v,j)=>'<button data-t="'+j+'">'+v+'形</button>').join('')+'</div><div class="in" style="margin-top:6px"><button class="go" id="gp">決定</button><button class="gu" id="gu">わからない</button></div>';
+if(t==='f')h+='<div class="ql">'+sp+'何形にする？<small>　'+where(i)+'</small></div><div class="ch">'+H.map((v,j)=>aboveBa(i)&&j!==0&&j!==4?'':btn(j,v+'形')).join('')+'</div>';
+if(t==='e'){const[st]=split(i);h+='<div class="ql">'+sp+''+H[fidx(i)]+'形は？</div><div class="in"><span class="stem">'+st+'</span><input id="ai" autocomplete="off" autocapitalize="off"><button class="go" id="go">決定</button><button class="gu" id="gu">わからない</button></div><button class="pk" id="pk">活用表チラ見（押している間）</button><div class="pkp" id="pkp">'+tbl(x[3],1)+'</div>'}
+return h+'<div class="fb">'+pr.fb+'</div>'}
+function stat(){$('stat').innerHTML='ミス <b>'+pr.miss+'</b>回・チラ見 <b>'+pr.peek+'</b>回'+(pr.k===N()?(pr.miss+pr.peek===0?'　<b>チラ見なし・ミスなし！</b>':'　クリア'):'')}
+function draw(noscroll){const q=P[s][p],w=q.w,n=w.length,pm=mode==='p',kk=pm?pr.k:k;
+$('how').innerHTML='<b>使い方</b>'+HOW[mode]+'<small>※問題の【　】内の語は、すべて終止形で与えられています。</small>';
+$('mE').className=pm?'':'on';$('mP').className=pm?'on':'';$('cE').style.display=pm?'none':'';$('cP').style.display=pm?'':'none';
+$('yaku').textContent=MARU[p]+' '+q.y;$('gun').textContent='【'+w.map(x=>x[0].replace('、','')).join('／')+'】';
+let h='';w.forEach((x,i)=>{const shown=i>=n-kk,now=pm?i===n-1-kk:(i===n-kk&&kk>0);
+h+='<div class="rqw">'+(shown&&x[4]&&i>0&&(!pm||i-1>=n-kk)?'<span class="rq">↑ '+x[4]+'</span>':'')+'</div>';
+h+='<div class="rw'+(now?' now':'')+(now&&pm?' ask':'')+(shown||now?'':' wait')+'"><div class="no">'+(n-i)+'</div><div class="tl"><span class="a">'+x[0]+'</span>'+(shown?'<span class="ar">→</span><span class="b">'+x[1]+(x[5]?'<small>（'+x[5]+'）</small>':'')+'</span>':'')+'</div><div class="rs">'+(shown?(pm&&x[0].startsWith('ば')&&i-1<n-kk?'活用しない語。そのまま上に載せる。':need(w,i)+x[2]+tblc(x[3],i,i===n-kk)):now&&pm?qhtml(i):'')+'</div></div>'});
+$('rows').innerHTML=h;
+const done=w.slice(n-kk).map(x=>x[1]).join('');
+$('sofar').innerHTML=kk===0?'<i>ここまでで</i><span class="yet">（まだ何も置いていない）</span>':kk===n?'<i>答え</i><span class="ok">'+done+'。</span>':'<i>ここまでで</i><span class="yet">……</span>'+done+'。';
+$('cnt').textContent=k+' / '+n;$('nx').textContent=k===0?'スタート':'次へ';$('pv').disabled=$('rs').disabled=k===0;$('nx').disabled=$('al').disabled=k===n;
+[0,1].forEach(a=>[...$('n'+a).querySelectorAll('button')].forEach((b,i)=>b.className=(a===s&&i===p?'on':'')+(pm?mark(a,i):'')));
+bindTg();if(pm){stat();bind()}
+$('np').style.display=pm&&pr.k===n&&!(s===1&&p===9)?'':'none';
+if(!noscroll)toNow(pm)}
+function toNow(pm){const c=document.querySelector('.rw.now');if(!c||(pm&&!(pr.k>0||pr.st>0||pr.miss>0)))return;
+const r=c.getBoundingClientRect(),av=innerHeight-document.querySelector('.bar').offsetHeight;if(r.top>=8&&r.bottom<=av-8)return;
+scrollBy({top:r.height>av-16?r.top-8:r.top-(av-r.height)/2,behavior:'smooth'})}
+function bindTg(){document.querySelectorAll('.tg').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;opn.has(i)?opn.delete(i):opn.add(i);const a=$('ai'),v=a?a.value:null;draw(true);if(v!==null&&$('ai'))$('ai').value=v})}
+function bind(){const nq=$('nxq');if(nq)nq.onclick=()=>{pass(true);draw()};const a=$('ai');if(a){a.onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing)submit(a.value)};$('go').onclick=()=>submit(a.value);$('gu').onclick=giveup;if(pr.k>0||pr.st>0||pr.miss>0)a.focus({preventScroll:true})}
+document.querySelectorAll('.ch button[data-v]').forEach(b=>b.onclick=()=>submit(b.dataset.v));document.querySelectorAll('.ch button[data-t]').forEach(b=>b.onclick=()=>b.classList.toggle('sl'));
+const gp=$('gp');if(gp){gp.onclick=()=>{const v=[...document.querySelectorAll('.ch button.sl')].map(b=>b.dataset.t);if(v.length!==2){document.querySelector('.fb').textContent='2つ選んでください。';return}submit(v.join(','))};$('gu').onclick=giveup}
+const pk=$('pk');if(pk){let on=false;const show=()=>{if(on)return;on=true;pr.peek++;$('pkp').style.display='block';stat()},hide=()=>{on=false;$('pkp').style.display='none'};
+pk.onpointerdown=e=>{e.preventDefault();show()};pk.onpointerup=pk.onpointercancel=pk.onpointerleave=hide;pk.oncontextmenu=e=>e.preventDefault()}}
+[0,1].forEach(a=>{for(let i=0;i<10;i++){const b=document.createElement('button');b.textContent=MARU[i];b.onclick=()=>{s=a;p=i;k=0;opn.clear();resetP();draw();scrollTo(0,0)};$('n'+a).appendChild(b)}});
+$('nx').onclick=()=>{if(k<N()){k++;draw()}};$('pv').onclick=()=>{if(k>0){k--;draw()}};$('rs').onclick=()=>{k=0;opn.clear();draw()};$('al').onclick=()=>{k=N();draw()};
+$('rp').onclick=()=>{opn.clear();resetP();draw()};
+$('np').onclick=()=>{if(p<9)p++;else{s=1;p=0}k=0;opn.clear();resetP();draw();scrollTo(0,0)};
+$('mE').onclick=()=>{mode='e';draw()};$('mP').onclick=()=>{mode='p';draw()};
+document.addEventListener('keydown',e=>{if(mode==='p')return;if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();$('nx').click()}if(e.key==='ArrowLeft')$('pv').click()});
+resetP();draw();
+</script>
+</body>
+</html>
