@@ -22,6 +22,8 @@ h1{font-size:20px;margin:4px 0 2px}
 .rw{display:grid;grid-template-columns:30px 230px minmax(0,1fr);gap:12px;align-items:center;padding:10px 6px;border-radius:10px;border:2px solid transparent}
 .rw.now{border-color:var(--now);background:var(--card)}
 .rw.ask{background:var(--nowbg)}
+.dc{padding:4px 9px;border-radius:8px;border:2px solid var(--now);color:var(--now);font-weight:700;background:var(--card);white-space:nowrap}
+.dc small{font-weight:400;font-size:12px;margin-left:4px}
 .sp{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--now);border-radius:10px;padding:1px 9px;margin-right:8px;vertical-align:2px;white-space:nowrap}
 .rv{border-left:4px solid var(--now);background:var(--card);padding:8px 12px;border-radius:0 8px 8px 0}
 .rv>b{display:block;color:var(--now);font-size:16px;margin-bottom:2px}
@@ -336,7 +338,7 @@ function isok(v){const i=cur(),t=stages(i)[pr.st];if(t==='w')return ex(i).d.incl
 function autos(){while(pr.k<N()&&stages(cur()).length===0)pr.k++}
 function resetP(){pr={k:0,st:0,miss:0,peek:0,wrong:0,dis:[],conf:[],fb:'',rev:false};autos()}
 function pass(shown){const i=cur(),t=stages(i)[pr.st],c=correct();
-if(t!=='e')pr.conf.push(t==='u'?'上の「'+W()[i-1][0]+'」の未然形は「'+rdg(W()[i-1])+'」':t==='f'?H[+c]+'形':t==='w'?'単語は「'+c+'」':t==='p'?'可能性は未然形か已然形':'「'+c+'」');
+if(t!=='e')pr.conf.push(t==='u'?'上の「'+W()[i-1][0]+'」の未然形は「'+rdg(W()[i-1])+'」':t==='f'?H[+c]+'形':t==='w'?'単語は「'+c+'」':t==='p'?'可能性は未然形か已然形':'「'+c+'」に決定');
 pr.st++;pr.wrong=0;pr.dis=[];pr.fb='';pr.rev=false;
 if(pr.st>=stages(i).length){pr.k++;pr.st=0;pr.conf=[];pr.fb='';autos();if(pr.k===N())save()}}
 function submit(v){v=String(v).replace(/\s/g,'');if(!v)return;const t=stages(cur())[pr.st];
@@ -357,6 +359,9 @@ else{a=x[1]+(x[5]?'（'+x[5]+'）':'');r=need(w,i)+full.slice(cs.length)+tbl(x[3
 return'<div class="rv"><b>正解は「'+a+'」</b><div>'+r+'</div><button class="go" id="nxq">次へ</button></div>'}
 function tblc(t,i,auto){if(!t)return'';if(auto)return tbl(t);const d=tb(t),o=opn.has(i),lab=d.n.split('　')[0]+'・'+(d.r.length>1?d.r[t[1]][0]+'の':'')+H[t[2]]+'形';
 return'<button class="tg" data-i="'+i+'">'+(o?'▾ ':'▸ ')+lab+(o?'（閉じる）':'（活用表を開く）')+'</button>'+(o?tbl(t).replace(/^<div class="tt">.*?<\/div>/,''):'')}
+const CH={su:'す',sasu:'さす',raru:'らる',ri:'り',tari:'たり'};
+const nm=i=>{const x=W()[i];return x[0].includes('／')?CH[x[3][0]]:ex(i).d?ex(i).d[0]:x[0].replace('、','')};
+function dec(i){const S=stages(i),ci=Math.max(S.indexOf('c'),S.indexOf('w'));return ci>=0&&pr.st>ci?'<span class="ar">→</span><span class="dc">'+nm(i)+'<small>に決定</small></span>':''}
 function hintC(i){const w=W(),x=w[i],u=w[i-1];if(x[0]==='り／たり')return'上は「'+u[0]+'」やで';if(hasU(i))return'未然形がａの音かどうかやで';return'上は「'+u[0]+'」。どっちでも未然形は「せ」「させ」やで'}
 function qhtml(i){const x=W()[i],t=stages(i)[pr.st],o=ex(i);let h=pr.conf.length?'<div class="cf">'+pr.conf.join(' ／ ')+'</div>':'';if(pr.rev)return h+reveal(i);const sp='<span class="sp">STEP '+(pr.st+1)+'／'+stages(i).length+'</span>';
 const btn=(v,l)=>'<button data-v="'+v+'"'+(pr.dis.includes(String(v))?' disabled':'')+'>'+l+'</button>';
@@ -364,8 +369,8 @@ if(t==='w')h+='<div class="ql">'+sp+'「'+o.m+'」にあたる古文単語は？
 if(t==='u'){const u=W()[i-1],[st]=split(i-1);h+='<div class="ql">'+sp+'上の「'+u[0]+'」の未然形は？<small>　「'+x[0]+'」を選ぶ前に確かめるで</small></div><div class="in"><span class="stem">'+st+'</span><input id="ai" autocomplete="off" autocapitalize="off"><button class="go" id="go">決定</button><button class="gu" id="gu">わからない</button></div><button class="pk" id="pk">活用表チラ見（押している間）</button><div class="pkp" id="pkp">'+tbl(u[3],1)+'</div>'}
 if(t==='c')h+='<div class="ql">'+sp+'どちらを使う？<small>　'+hintC(i)+'</small></div><div class="ch">'+x[0].split('／').map(v=>btn(v,v)).join('')+'</div>';
 if(t==='p')h+='<div class="ql">'+sp+'「ば」の上やで。可能性は何形と何形がある？<small>　2つ選んで決定</small></div><div class="ch">'+H.map((v,j)=>'<button data-t="'+j+'">'+v+'形</button>').join('')+'</div><div class="in" style="margin-top:6px"><button class="go" id="gp">決定</button><button class="gu" id="gu">わからない</button></div>';
-if(t==='f')h+='<div class="ql">'+sp+'何形にする？<small>　'+where(i)+'</small></div><div class="ch">'+H.map((v,j)=>aboveBa(i)&&j!==0&&j!==4?'':btn(j,v+'形')).join('')+'</div>';
-if(t==='e'){const[st]=split(i);h+='<div class="ql">'+sp+''+H[fidx(i)]+'形は？</div><div class="in"><span class="stem">'+st+'</span><input id="ai" autocomplete="off" autocapitalize="off"><button class="go" id="go">決定</button><button class="gu" id="gu">わからない</button></div><button class="pk" id="pk">活用表チラ見（押している間）</button><div class="pkp" id="pkp">'+tbl(x[3],1)+'</div>'}
+if(t==='f')h+='<div class="ql">'+sp+'「'+nm(i)+'」を何形にする？<small>　'+where(i)+'</small></div><div class="ch">'+H.map((v,j)=>aboveBa(i)&&j!==0&&j!==4?'':btn(j,v+'形')).join('')+'</div>';
+if(t==='e'){const[st]=split(i);h+='<div class="ql">'+sp+'「'+nm(i)+'」の'+H[fidx(i)]+'形は？</div><div class="in"><span class="stem">'+st+'</span><input id="ai" autocomplete="off" autocapitalize="off"><button class="go" id="go">決定</button><button class="gu" id="gu">わからない</button></div><button class="pk" id="pk">活用表チラ見（押している間）</button><div class="pkp" id="pkp">'+tbl(x[3],1)+'</div>'}
 return h+'<div class="fb">'+pr.fb+'</div>'}
 function stat(){$('stat').innerHTML='ミス <b>'+pr.miss+'</b>回・チラ見 <b>'+pr.peek+'</b>回'+(pr.k===N()?(pr.miss+pr.peek===0?'　<b>チラ見なし・ミスなし！</b>':'　クリア'):'')}
 function draw(noscroll){const q=P[s][p],w=q.w,n=w.length,pm=mode==='p',kk=pm?pr.k:k;
@@ -374,7 +379,7 @@ $('mE').className=pm?'':'on';$('mP').className=pm?'on':'';$('cE').style.display=
 $('yaku').textContent=MARU[p]+' '+q.y;$('gun').textContent='【'+w.map(x=>x[0].replace('、','')).join('／')+'】';
 let h='';w.forEach((x,i)=>{const shown=i>=n-kk,now=pm?i===n-1-kk:(i===n-kk&&kk>0);
 h+='<div class="rqw">'+(shown&&x[4]&&i>0&&(!pm||i-1>=n-kk)?'<span class="rq">↑ '+x[4]+'</span>':'')+'</div>';
-h+='<div class="rw'+(now?' now':'')+(now&&pm?' ask':'')+(shown||now?'':' wait')+'"><div class="no">'+(n-i)+'</div><div class="tl"><span class="a">'+x[0]+'</span>'+(shown?'<span class="ar">→</span><span class="b">'+x[1]+(x[5]?'<small>（'+x[5]+'）</small>':'')+'</span>':'')+'</div><div class="rs">'+(shown?(pm&&x[0].startsWith('ば')&&i-1<n-kk?'活用しない語。そのまま上に載せる。':need(w,i)+x[2]+tblc(x[3],i,i===n-kk)):now&&pm?qhtml(i):'')+'</div></div>'});
+h+='<div class="rw'+(now?' now':'')+(now&&pm?' ask':'')+(shown||now?'':' wait')+'"><div class="no">'+(n-i)+'</div><div class="tl"><span class="a">'+x[0]+'</span>'+(now&&pm?dec(i):'')+(shown?'<span class="ar">→</span><span class="b">'+x[1]+(x[5]?'<small>（'+x[5]+'）</small>':'')+'</span>':'')+'</div><div class="rs">'+(shown?(pm&&x[0].startsWith('ば')&&i-1<n-kk?'活用しない語。そのまま上に載せる。':need(w,i)+x[2]+tblc(x[3],i,i===n-kk)):now&&pm?qhtml(i):'')+'</div></div>'});
 $('rows').innerHTML=h;
 const done=w.slice(n-kk).map(x=>x[1]).join('');
 $('sofar').innerHTML=kk===0?'<i>ここまでで</i><span class="yet">（まだ何も置いていない）</span>':kk===n?'<i>答え</i><span class="ok">'+done+'。</span>':'<i>ここまでで</i><span class="yet">……</span>'+done+'。';
