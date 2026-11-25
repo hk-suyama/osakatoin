@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>古典 読解しながらの文法トレーニング 001・002</title>
+<style>
+:root{--bg:#f4f2ec;--card:#fff;--tx:#222220;--sub:#66655f;--mut:#9a988f;--line:#dedcd3;--cell:#f0eee7;--ac:#1a5fa8;--acbg:#e6f0fb;--acline:#9cc3ec;--now:#c8501e;--nowbg:#fff4ea;--ok:#2f7d4f;--okbg:#e4f3ea;--ng:#b3372f;--ngbg:#fbe9e7;--mid:#8a6a0a;--midbg:#fbf1d3;--fs:16px}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1b19;--card:#262624;--tx:#f0efe9;--sub:#b9b7ae;--mut:#85837b;--line:#3c3c38;--cell:#33332f;--ac:#8fc0f2;--acbg:#16324f;--acline:#2f5f8f;--now:#f0906a;--nowbg:#3a2a20;--ok:#7fcf9e;--okbg:#1d3a29;--ng:#f09a92;--ngbg:#45211e;--mid:#e6c35c;--midbg:#3f3413}}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",Meiryo,sans-serif;line-height:1.7;font-size:var(--fs);-webkit-text-size-adjust:100%;overflow:hidden}
+#app{height:100vh;height:100dvh;display:flex;flex-direction:column;max-width:1180px;margin:0 auto}
+/* header */
+#hd{flex:none;padding:8px 12px 6px}
+.r1{display:flex;gap:6px;align-items:center}
+.tabs{flex:1;display:flex;gap:4px;background:var(--cell);border-radius:10px;padding:3px}
+.tabs button{flex:1;min-height:36px;border-radius:8px;border:0;background:none;color:var(--sub);font-size:13px;cursor:pointer;padding:2px 6px;line-height:1.25}
+.tabs button.on{background:var(--card);color:var(--tx);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.ib{flex:none;width:36px;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--tx);cursor:pointer;font-weight:700;padding:0}
+.ib.s1{font-size:11px}.ib.s2{font-size:16px}
+#chips{display:flex;gap:5px;overflow-x:auto;padding:8px 0 2px;scrollbar-width:none}
+#chips::-webkit-scrollbar{display:none}
+#chips button{flex:none;min-width:34px;height:34px;border-radius:17px;border:1.5px solid var(--line);background:var(--card);color:var(--sub);font-size:13px;font-weight:700;cursor:pointer;padding:0 6px}
+#chips button.o{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+#chips button.t{background:var(--midbg);border-color:var(--mid);color:var(--mid)}
+#chips button.x{background:var(--ngbg);border-color:var(--ng);color:var(--ng)}
+#chips button.w{border-style:dashed;border-color:var(--now);color:var(--now)}
+#chips button.cur{outline:3px solid var(--tx);outline-offset:1px}
+/* panes */
+#wrap{flex:1;min-height:0;display:flex;flex-direction:column}
+#pp{flex:none;height:36%;display:flex;flex-direction:column;margin:0 12px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:height .2s}
+#app.big #pp{height:62%}
+#ph{flex:none;display:flex;align-items:center;gap:8px;padding:4px 10px;border-bottom:1px solid var(--line);font-size:12px;color:var(--sub);line-height:1.4}
+#ph span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#ph button{flex:none;height:30px;padding:0 10px;border-radius:15px;border:1px solid var(--line);background:var(--card);color:var(--tx);font-size:12px;cursor:pointer}
+#psg{flex:1;overflow:auto;padding:6px 14px 14px;font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;font-size:1.1em;line-height:2.45;-webkit-overflow-scrolling:touch}
+#psg p{margin:0 0 .3em;text-indent:1em}
+#psg rt{font-size:.5em;color:var(--sub)}
+.m{cursor:pointer;border-radius:3px;scroll-margin:40px}
+.m sup{font-family:"Hiragino Sans","Yu Gothic",sans-serif;font-size:.62em;color:var(--now);margin-right:1px;vertical-align:.9em;line-height:0}
+.m.u{border-bottom:2px solid var(--tx)}.m.d{border-bottom:2px dotted var(--tx)}
+.m.b{display:inline-block;font-family:"Hiragino Sans","Yu Gothic",sans-serif;font-size:.7em;line-height:1.5;border:1.5px solid var(--tx);padding:0 5px;margin:0 3px;vertical-align:.15em;text-indent:0}
+.m.hot{background:#ffe9a8;box-shadow:0 0 0 3px #ffe9a8}
+@media (prefers-color-scheme:dark){.m.hot{background:#6b5310;box-shadow:0 0 0 3px #6b5310}}
+.fig{margin-top:8px;background:#fff;border-radius:8px;padding:6px}.fig svg{width:100%;max-width:420px;display:block;margin:0 auto}
+#qp{flex:1;min-height:0;overflow:auto;padding:10px 12px 12px;-webkit-overflow-scrolling:touch}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.qh{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.qn{font-weight:700;font-size:.85em;color:var(--card);background:var(--tx);border-radius:6px;padding:0 9px}
+.qt{font-size:1em;font-weight:700;margin-bottom:10px;line-height:1.65}
+.pt{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0}
+.pt.il{display:inline-flex;margin:6px 14px 6px 0;flex-wrap:nowrap}.pt.il .pl{min-width:0}
+.rate button{font-size:.88em;padding:0 4px}
+.pl{font-size:.82em;color:var(--sub);min-width:2.4em}
+.pt input[type=text]{height:46px;font-size:1.15em;padding:0 10px;border-radius:10px;border:1.5px solid var(--acline);background:var(--card);color:var(--tx)}
+.pt textarea{width:100%;font:inherit;padding:10px;border-radius:10px;border:1.5px solid var(--acline);background:var(--card);color:var(--tx);resize:vertical}
+.pt input:focus,.pt textarea:focus,.pt select:focus{outline:3px solid var(--acbg);border-color:var(--ac)}
+.pt select{height:46px;font-size:1em;border-radius:10px;border:1.5px solid var(--acline);background:var(--card);color:var(--tx);padding:0 6px}
+.ch{display:flex;flex-wrap:wrap;gap:8px}
+.ch button{min-height:46px;padding:0 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--tx);font-size:1em;cursor:pointer}
+.ch button.sl{background:var(--acbg);border-color:var(--ac);color:var(--ac);font-weight:700}
+.seg{display:flex;flex-wrap:wrap;align-items:center;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:1.5em;font-weight:700}
+.seg i{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:30px;height:46px;cursor:pointer;color:var(--line);font-weight:400}
+.seg i.on{color:var(--now);font-weight:700}
+.mk{font-weight:700}.mk.o{color:var(--ok)}.mk.x{color:var(--ng)}
+.act{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.go{flex:1;min-height:50px;padding:0 18px;border-radius:10px;border:0;background:var(--ac);color:#fff;font-size:1.05em;font-weight:700;cursor:pointer}
+@media (prefers-color-scheme:dark){.go{color:#10202f}}
+.sb{min-height:50px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--sub);font-size:.82em;cursor:pointer}
+.bn{margin-top:12px;border-radius:10px;padding:8px 12px;font-weight:700;font-size:1.05em}
+.bn.o{background:var(--okbg);color:var(--ok)}.bn.x{background:var(--ngbg);color:var(--ng)}.bn.t{background:var(--midbg);color:var(--mid)}.bn.w{background:var(--nowbg);color:var(--now);font-size:.9em}
+.ans{margin-top:10px;border-left:4px solid var(--ac);background:var(--acbg);border-radius:0 10px 10px 0;padding:8px 12px}
+.ans>b{display:block;font-size:.75em;color:var(--ac)}
+.ans .a{font-size:1.05em;font-weight:700}
+.ans .n{font-size:.85em;color:var(--sub);margin-top:4px}
+.rate{margin-top:10px}
+.rate button{flex:1}
+.rate button.o.sl{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.rate button.t.sl{background:var(--midbg);border-color:var(--mid);color:var(--mid)}
+.rate button.x.sl{background:var(--ngbg);border-color:var(--ng);color:var(--ng)}
+/* result */
+.res h2{font-size:1.25em;margin:0 0 6px}
+.cnt{display:flex;gap:8px;margin:8px 0 12px}
+.cnt div{flex:1;border-radius:10px;padding:8px 4px;text-align:center;font-size:.8em;line-height:1.4}
+.cnt b{display:block;font-size:1.8em}
+.cnt .o{background:var(--okbg);color:var(--ok)}.cnt .t{background:var(--midbg);color:var(--mid)}.cnt .x{background:var(--ngbg);color:var(--ng)}.cnt .n{background:var(--cell);color:var(--sub)}
+.rl{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.rl button{min-width:58px;height:40px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--tx);font-size:.85em;cursor:pointer}
+.rl button.o{border-color:var(--ok);color:var(--ok)}.rl button.t{border-color:var(--mid);color:var(--mid)}.rl button.x{border-color:var(--ng);color:var(--ng)}
+/* nav */
+#nav{flex:none;display:flex;gap:8px;padding:8px 12px 10px;background:var(--card);border-top:1px solid var(--line);align-items:center}
+#nav button{flex:1;min-height:48px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--tx);font-size:.9em;font-weight:700;cursor:pointer}
+#nav button:disabled{opacity:.3}
+#nav span{flex:.7;text-align:center;font-size:.8em;color:var(--sub)}
+/* help */
+#ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10;padding:16px;overflow:auto}
+#ov.on{display:flex;align-items:center;justify-content:center}
+#help{max-width:460px;background:var(--card);border-radius:14px;padding:16px 18px;font-size:15px;line-height:1.8}
+#help h2{font-size:17px;margin:0 0 6px}
+#help ol{margin:0 0 12px;padding-left:1.4em}
+#help .go{width:100%}
+@media (min-width:900px){#wrap{flex-direction:row;gap:14px;padding:0 12px}#pp{flex:1;height:auto!important;margin:0 0 10px}#ph button{display:none}#rt{flex:1;min-width:0;display:flex;flex-direction:column}#qp{padding:0 0 10px}#nav{border:1px solid var(--line);border-radius:12px;margin-bottom:10px}}
+@media (max-width:899px){#rt{flex:1;min-height:0;display:flex;flex-direction:column}}
+</style>
+</head>
+<body>
+<div id="app">
+<div id="hd"><div class="r1"><div class="tabs"><button id="t0">001<br>喜ばない、悔やまない</button><button id="t1">002<br>ガイドさんがほしい！</button></div><button class="ib s1" id="fm" aria-label="文字を小さく">あ</button><button class="ib s2" id="fp" aria-label="文字を大きく">あ</button><button class="ib" id="hb" aria-label="使い方">？</button></div>
+<div id="chips"></div></div>
+<div id="wrap">
+<div id="pp"><div id="ph"><span id="src"></span><button id="pb">本文を広げる</button></div><div id="psg"></div></div>
+<div id="rt"><div id="qp"></div>
+<div id="nav"><button id="pv">← 前の問い</button><span id="pos"></span><button id="nx">次の問い →</button></div></div>
+</div></div>
+<div id="ov"><div id="help"><h2>使い方</h2><ol><li>上に本文、下に問いが1問ずつ出ます。いまの問いに関係するところは、本文で黄色く光ります。</li><li>答えたら【答え合わせ】を押すと、解答と注意点が出ます。</li><li>現代語訳や説明の問いは、解答と見比べて自分で ○・△・× を付けます。</li><li>上の数字で好きな問いに飛べます。本文の記号（Ⓐ・ⓐ・ア）を押しても飛べます。</li><li>本文が見えにくいときは【本文を広げる】、文字の大きさは右上の「あ」で変えられます。</li></ol><button class="go" id="hx">はじめる</button></div></div>
+<script>
+const U=(l,t)=>'<span class="m u" data-l="'+l+'"><sup>'+l+'</sup>\u2060'+t+'</span>';
+const Dt=(l,t)=>'<span class="m d" data-l="'+l+'"><sup>'+l+'</sup>\u2060'+t+'</span>';
+const K=(l,t)=>'<span class="m" data-l="'+l+'"><sup>'+l+'</sup>\u2060'+t+'</span>';
+const B=l=>'<span class="m b" data-l="'+l+'">'+l+'</span>';
+const R=(k,r)=>'<ruby>'+k+'<rt>'+r+'</rt></ruby>';
+const F6=['未然形','連用形','終止形','連体形','已然形','命令形'];
+const HIN=['動詞','形容詞','形容動詞','助動詞','助詞','副詞','名詞'];
+const GYO=['（行なし）','ア行','カ行','ガ行','サ行','ザ行','タ行','ダ行','ナ行','ハ行','バ行','マ行','ヤ行','ラ行','ワ行'];
+const SHU=['四段活用','上一段活用','上二段活用','下一段活用','下二段活用','カ行変格活用','サ行変格活用','ナ行変格活用','ラ行変格活用','ク活用','シク活用','ナリ活用','タリ活用'];
+const FIG='<div class="fig"><svg viewBox="0 0 420 200" role="img" aria-label="男山の山上に石清水（石清水八幡宮）があり、参道を下ったふもとに高良（高良神社）と極楽寺がある図"><path d="M20 180 Q60 60 150 50 Q210 46 250 110 Q280 160 300 180 Z" fill="#cfe0c8" stroke="#7d9a74"/><path d="M165 62 Q215 100 250 150 Q262 168 272 180" fill="none" stroke="#fff" stroke-width="5"/><g fill="none" stroke="#333" stroke-width="2"><path d="M128 50 h44 M134 50 v-14 h32 v14 M128 36 l22 -12 l22 12"/><path d="M318 180 v-26 M342 180 v-26 M312 158 h36 M314 152 h32"/><path d="M372 180 v-16 h30 v16 M368 164 l19 -10 l19 10"/></g><g font-family="sans-serif" fill="#222" text-anchor="middle"><text x="150" y="16" font-size="13" font-weight="700">石清水</text><text x="150" y="98" font-size="12">男山</text><text x="228" y="96" font-size="10">参道</text><text x="330" y="196" font-size="12" font-weight="700">高良</text><text x="387" y="196" font-size="12" font-weight="700">極楽寺</text><text x="62" y="30" font-size="10" fill="#666">［山上］</text><text x="358" y="140" font-size="10" fill="#666">［ふもと］</text></g><line x1="10" y1="180" x2="410" y2="180" stroke="#999"/></svg></div>';
+const D=[
+{id:'001',src:'中学トレーニングノート古文　6「喜ばない、悔やまない」(p.12)',
+psg:[
+R('唐土','もろこし')+'に'+R('北叟','ほくそう')+'といふ'+R('翁','おきな')+B('ア')+'ありけり。かしこく強き馬を'+Dt('ⓐ','なん')+'持ちたりける。これを、人'+Dt('ⓑ','に')+'も貸し、我も使ひつつ、世を渡る便り'+Dt('ⓒ','に')+'しけるほど'+Dt('ⓓ','に')+'、この馬'+B('イ')+'、いかがしたりけん、いづちともなく'+R('失','う')+'せ'+Dt('ⓔ','に')+'けり。聞きわたる人'+B('ウ')+'、いかばかり'+Dt('ⓕ','嘆くらん')+'と思ひて、つゆも'+U('Ⓐ','嘆かざりけり')+'。',
+'あやしと思ふほどに、この馬'+B('エ')+'、同じさまなる馬を、あまた具して来にけり。'+U('Ⓑ','いとありがたきことなれば')+'、親しき'+R('疎','うと')+'き、喜びを言ふ。かかれど、また'+U('Ⓒ','「喜ばず」')+'と言ひて、これも驚く'+R('気色','けしき')+'なし。',
+'かくて、この馬あまたを飼ひて、さまざまに使ふあひだに、翁が子、今出で来たる馬に乗りて、落ちて、'+U('Ⓓ','右の'+R('腕','かひな')+'を突き折りて')+'、聞く人、また'+U('Ⓔ','驚きとふ')+'にも、なほ、'+U('Ⓕ','「悔いず」')+'と言ひて、気色変はらず。',
+'さるほどに、'+Dt('ⓖ','にはかに')+'国に'+R('戦','いくさ')+B('オ')+'起こりて、'+U('Ⓖ',R('兵','つはもの')+'を集められけるに')+'、国の内にさもある者'+B('カ')+'、残りなく戦に出でて、皆死にけり。この翁が子'+B('キ')+'、'+U('Ⓗ','この中にもれにければ')+'、片手は【'+K('ⓗ','折る／たり／ども')+'】、命は【'+K('ⓘ',R('全','まった')+'し')+'】けり。'],
+q:[
+{m:['ア','イ','ウ','エ','オ','カ','キ'],t:'空欄ア〜キに、省略されている助詞を補え。',p:[{k:'in',l:'ア',ok:['が'],w:3},{k:'in',l:'イ',ok:['が','は'],w:3},{k:'in',l:'ウ',ok:['は','が'],w:3},{k:'in',l:'エ',ok:['が','は'],w:3},{k:'in',l:'オ',ok:['が'],w:3},{k:'in',l:'カ',ok:['は','が'],w:3},{k:'in',l:'キ',ok:['は'],w:3}],a:'ア が　イ が（は）　ウ は（が）　エ が（は）　オ が　カ は（が）　キ は'},
+{m:['ⓐ'],t:'点線部ⓐ「なむ」は、文末の形を変える力を持つ助詞である。何形に変える力を持っているか答えよ。',p:[{k:'pick',o:F6,ok:'連体形'}],a:'連体形',n:'※文末を見れば「ける」になっている'},
+{m:['ⓑ','ⓒ','ⓓ','ⓔ'],t:'点線部ⓑⓒⓓⓔの「に」のうち、助動詞であるものを一つ選び、記号で答えよ。',p:[{k:'pick',o:['ⓑ','ⓒ','ⓓ','ⓔ'],ok:'ⓔ'}],a:'ⓔ',n:'他は助詞'},
+{m:['ⓕ'],t:'点線部ⓕにおける「ら」は、存続の助動詞「り」の未然形かそうでないか。そう判断できる理由とともに答えよ。',p:[{k:'pick',o:['「り」の未然形である','「り」の未然形ではない'],ok:'「り」の未然形ではない'},{k:'self',l:'理由',r:2}],a:'存続「り」の未然形ではない。<br>上接している「嘆く」がサ未四已ではないため。'},
+{m:['ⓖ'],t:'点線部ⓖは、形容動詞「にはかなり」の連用形である。「国」という名詞が下接しているにもかかわらず連用形である理由を答えよ。',p:[{k:'self',r:2}],a:'「起こり」という動詞に係っていっているから'},
+{m:['ⓗ'],t:'【　】ⓗの単語を、このままの順番で、適切に活用させて、正しい古文にせよ。',p:[{k:'in',ok:['折れたれども'],w:10}],a:'折れたれども',n:'※「折りたれども」でないことに注意！'},
+{m:['ⓘ'],t:'【　】ⓘの「全し」を適切に活用させよ。',p:[{k:'in',ok:['全かり','まったかり'],w:8}],a:'全かり'},
+{m:['Ⓐ'],t:'傍線部Ⓐ「嘆かざりけり」とあるが、なぜか。説明せよ。',p:[{k:'self',r:3}],a:'翁は、起こった出来事のよしあしを、その瞬間だけでなく長期的な視点で考えていたから。',n:'※この時点ではその後の展開については翁はわかっていないことに注意。翁は未来予知はできない。'},
+{m:['Ⓑ'],t:'傍線部Ⓑ「いとありがたきことなれば」を現代語訳せよ。なお、「なれ」は、「…である」という意味の助動詞「なり」の已然形である。',p:[{k:'self',r:2}],a:'とてもめったにないことであるので',n:'※「ありがたし」の訳と、已然形＋ばの訳がポイント'},
+{m:['Ⓒ','Ⓓ','Ⓔ','Ⓕ'],fz:1,t:'傍線部ⒸⒹⒺⒻの主語をそれぞれ答えよ。',p:[{k:'in',l:'Ⓒ',ok:['翁','北叟','翁（北叟）'],w:7},{k:'in',l:'Ⓓ',ok:['翁が子','翁の子','翁の息子','子','息子'],w:7},{k:'in',l:'Ⓔ',ok:['聞く人','聞く人々','人','人々'],w:7},{k:'in',l:'Ⓕ',ok:['翁','北叟','翁（北叟）'],w:7}],a:'Ⓒ 翁　Ⓓ 翁が子　Ⓔ 聞く人　Ⓕ 翁'},
+{m:['Ⓖ'],t:'傍線部Ⓖ「兵を集められけるに」を、省略されている言葉に注意しながら現代語訳せよ。',p:[{k:'self',r:2}],a:'兵士を集めなさったときに',n:'※「ける」という連体形の下に省略されている体言を補う'},
+{m:['Ⓗ'],t:'傍線部Ⓗ「この中にもれにければ」を現代語訳せよ。',p:[{k:'self',r:2}],a:'この中にもれたので'}
+]},
+{id:'002',src:'中学トレーニングノート古文　18A「ガイドさんがほしい！」(p.36)',fig:FIG,
+psg:[
+'仁和寺にある法師'+B('ア')+'、年寄るまで石清水を'+Dt('ⓐ','拝まざりければ')+'、'+Dt('ⓑ','心うく')+'覚えて、あるとき'+U('Ⓐ','思ひたち')+'て、ただ一人、'+R('徒歩','かち')+U('Ⓑ','より')+Dt('ⓒ',R('詣','まう')+'で')+'けり。極楽寺・高良などを拝みて、かばかりと'+Dt('ⓓ','心得')+'て'+Dt('ⓔ','帰りにけり')+'。',
+'さて、かたへの人にあひて、'+Dt('ⓕ','年ごろ')+'思ひつること'+B('イ')+'、'+Dt('ⓖ','果たしはべりぬ')+'。'+Dt('ⓗ','聞きしにも')+'過ぎて、'+Dt('ⓘ','尊く')+Dt('ⓙ','こそ')+'おはしけれ。そも、'+U('Ⓒ','参りたる人ごとに山へ登りしは、何事かありけん')+'、'+Dt('ⓚ','ゆかしかりしかど')+'、神へ参るこそ本意なれ'+U('Ⓓ','と思ひて')+'、山までは見ず'+U('Ⓔ','とぞ言ひける')+'。',
+U('Ⓕ','少しのことにも、'+R('先達','せんだつ')+'はあらまほしきことなり')+'。'],
+q:[
+{m:['ア','イ'],t:'空欄ア・イに、省略されている助詞を補え。',p:[{k:'in',l:'ア',ok:['が','は'],w:3},{k:'in',l:'イ',ok:['を','は'],w:3}],a:'ア が（は）　イ を（は）'},
+{m:['ⓐ'],t:'点線部ⓐ「拝まざりければ」を、単語に区切った上で現代語訳せよ。',p:[{k:'seg',l:'区切り',s:'拝まざりければ',ok:[1,3,5]},{k:'self',l:'現代語訳',r:2}],a:'拝ま／ざり／けれ／ば　　拝まなかったので',n:'※已然形＋ばの訳がポイント'},
+{m:['ⓑ'],t:'点線部ⓑ「心うく」の品詞と活用形を答えよ。',p:[{k:'sel',l:'品詞',o:HIN,ok:'形容詞'},{k:'sel',l:'活用形',o:F6,ok:'連用形'}],a:'形容詞・連用形',n:'※動詞に係っていく形が「く」であることに着目する。自分が頭の中で考えるときは副詞化しているとみなしてよいが、古文でこういう品詞を問われたときにはもともとの品詞を答えるのが原則'},
+{m:['ⓒ','ⓓ'],t:'点線部ⓒⓓの品詞と活用の種類（行がある場合は行も）を答えよ。',p:[{k:'sel',l:'ⓒ 品詞',o:HIN,ok:'動詞'},{k:'sel',l:'行',o:GYO,ok:'ダ行'},{k:'sel',l:'種類',o:SHU,ok:'下二段活用',br:1},{k:'sel',l:'ⓓ 品詞',o:HIN,ok:'動詞'},{k:'sel',l:'行',o:GYO,ok:'ア行'},{k:'sel',l:'種類',o:SHU,ok:'下二段活用'}],a:'ⓒ 動詞（ダ行下二段活用）　ⓓ 動詞（ア行下二段活用）'},
+{m:['ⓔ'],t:'点線部ⓔ「帰りにけり」を、単語に区切った上で現代語訳せよ。',p:[{k:'seg',l:'区切り',s:'帰りにけり',ok:[1,2]},{k:'self',l:'現代語訳',r:2}],a:'帰り／に／けり　　帰った・帰ってしまった',n:'※「帰ってしまった」にすると、悪いことみたい。最後まで読めば悪いことだと分かるので「帰ってしまった」が適切だが、この時点ではわからないし、「帰った」でも減点対象にはならないはず。'},
+{m:['ⓕ'],fz:1,t:'点線部ⓕ「年ごろ」の意味を答えよ。',p:[{k:'in',ok:['長年','長い間','長年の間','何年も','何年もの間','数年来'],w:10}],a:'長年'},
+{m:['ⓖ'],t:'点線部ⓖ「果たしはべりぬ」を、単語に区切った上で現代語訳せよ。なお、「はべり」は動詞の下に接続して丁寧語を作る働きをする。',p:[{k:'seg',l:'区切り',s:'果たしはべりぬ',ok:[2,5]},{k:'self',l:'現代語訳',r:2}],a:'果たし／侍り／ぬ　　果たしました'},
+{m:['ⓗ'],t:'点線部ⓗの中にある助動詞を抜き出して、終止形に改めて答えよ。',p:[{k:'in',ok:['き'],w:5}],a:'き'},
+{m:['ⓘ'],t:'点線部ⓘの品詞と活用の種類（行がある場合は行も）を答えよ。',p:[{k:'sel',l:'品詞',o:HIN,ok:'形容詞'},{k:'sel',l:'行',o:GYO,ok:'（行なし）'},{k:'sel',l:'種類',o:SHU,ok:'ク活用'}],a:'形容詞（ク活用）'},
+{m:['ⓙ'],t:'点線部ⓙ「こそ」は、文末の形を変える力を持つ助詞である。何形に変える力を持っているか答えよ。複数の可能性があればすべて答えること。',p:[{k:'multi',o:F6,ok:['已然形','命令形']}],a:'已然形と命令形',n:'※実際には已然形だが、形からは命令形もありうる'},
+{m:['ⓚ'],t:'点線部ⓚ「ゆかしかりしかど」を、単語に区切った上で現代語訳せよ。',p:[{k:'seg',l:'区切り',s:'ゆかしかりしかど',ok:[4,6]},{k:'self',l:'現代語訳',r:2}],a:'ゆかしかり／しか／ど　　知りたかったけれど',n:'※分け方に注意。「ゆかし」の訳は広く許容。「気になった」などOK'},
+{m:['Ⓐ'],fz:1,t:'傍線部Ⓐ「思ひたち」の主語を答えよ。',p:[{k:'in',ok:['法師','仁和寺にある法師','仁和寺の法師'],w:10}],a:'法師'},
+{m:['Ⓑ'],t:'傍線部Ⓑ「より」には【①起点、②比較の対象、③手段】などの意味がある。ここでの意味は①〜③のどれか答えよ。',p:[{k:'pick',o:['①起点','②比較の対象','③手段'],ok:'③手段'}],a:'③'},
+{m:['Ⓒ'],t:'傍線部Ⓒ「参りたる人ごとに山へ登りしは、何事かありけん」とあるが、図も参考にしながら、「参りたる人」が「山を登」る理由を説明せよ。',p:[{k:'self',r:2}],a:'山の上に石清水があるから。'},
+{m:['Ⓓ'],t:'傍線部Ⓓ「と思ひて」とあるが、この心の中のセリフのはじめとおわりの3字ずつをそれぞれ答えよ。',p:[{k:'in',l:'はじめ',ok:['神へ参'],w:6},{k:'in',l:'おわり',ok:['意なれ'],w:6}],a:'神へ参 〜 意なれ'},
+{m:['Ⓔ'],t:'傍線部Ⓔ「とぞ言ひける」とあるが、このセリフのはじめとおわりの3字ずつをそれぞれ答えよ。',p:[{k:'in',l:'はじめ',ok:['年ごろ'],w:6},{k:'in',l:'おわり',ok:['は見ず'],w:6}],a:'年ごろ 〜 は見ず'},
+{m:['Ⓕ'],t:'傍線部Ⓕ「少しのことにも、先達はあらまほしきことなり」（▽少しのことにも、案内人はいてほしいことである）と筆者が言う理由を説明せよ。',p:[{k:'self',r:3}],a:'仁和寺の法師は石清水が山上にあることを知らず、拝まないまま帰ってきてしまったが、それは案内人がいれば防げたはずのことだから。'}
+]}
+];
+
+let cur=0,qi=0,S=[{},{}],ui={fsz:1,big:false,seen:false,qi:[0,0],cur:0};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const norm=s=>String(s||'').replace(/[\s　「」『』。、．，,.]/g,'');
+try{const v=JSON.parse(localStorage.getItem('dokkai_0102')||'null');if(v&&v.length===2)S=v;const u=JSON.parse(localStorage.getItem('dokkai_0102_ui')||'null');if(u)ui=Object.assign(ui,u)}catch(e){}
+cur=ui.cur||0;qi=ui.qi[cur]||0;
+const save=()=>{ui.cur=cur;ui.qi[cur]=qi;try{localStorage.setItem('dokkai_0102',JSON.stringify(S));localStorage.setItem('dokkai_0102_ui',JSON.stringify(ui))}catch(e){}};
+const qs=i=>{const s=S[cur];if(!s[i])s[i]={v:[],done:false,self:'',ov:false};return s[i]};
+function grade(p,v){if(p.k==='self')return null;if(p.k==='in')return p.ok.map(norm).includes(norm(v));if(p.k==='pick'||p.k==='sel')return v===p.ok;const a=(v||[]).slice().sort((x,y)=>x-y).join(),b=(p.k==='multi'?p.ok.map(x=>p.o.indexOf(x)):p.ok).slice().sort((x,y)=>x-y).join();return a===b}
+function status(i){const q=D[cur].q[i],s=qs(i);if(!s.done)return'';if(q.p.some(p=>p.k==='self'))return s.self||'w';return s.ov||q.p.every((p,j)=>grade(p,s.v[j]))?'o':'x'}
+function part(q,i,p,j){const s=qs(i),v=s.v[j],dis=s.done?' disabled':'',g=s.done?grade(p,v):null,mk=g===null?'':'<span class="mk '+(g?'o':'x')+'">'+(g?'○':'×')+'</span>';
+let h='<div class="pt'+(p.k==='in'&&p.l?' il':'')+'">'+(p.l?'<span class="pl">'+p.l+'</span>':'');
+if(p.k==='in')h+='<input type="text" data-q="'+i+'" data-p="'+j+'" style="width:'+(p.w+1.5)+'em" value="'+esc(v||'')+'" autocomplete="off" autocapitalize="off"'+dis+'>';
+if(p.k==='self')h+='<textarea data-q="'+i+'" data-p="'+j+'" rows="'+p.r+'" placeholder="ここに書く（ノートに書いてもよい）"'+dis+'>'+esc(v||'')+'</textarea>';
+if(p.k==='sel')h+='<select data-q="'+i+'" data-p="'+j+'"'+dis+'><option value="">選ぶ</option>'+p.o.map(o=>'<option'+(v===o?' selected':'')+'>'+o+'</option>').join('')+'</select>';
+if(p.k==='pick')h+='<div class="ch">'+p.o.map(o=>'<button data-q="'+i+'" data-p="'+j+'" data-v="'+esc(o)+'" class="'+(v===o?'sl':'')+'"'+dis+'>'+o+'</button>').join('')+'</div>';
+if(p.k==='multi')h+='<div class="ch">'+p.o.map((o,x)=>'<button data-q="'+i+'" data-p="'+j+'" data-x="'+x+'" class="'+((v||[]).includes(x)?'sl':'')+'"'+dis+'>'+o+'</button>').join('')+'</div>';
+if(p.k==='seg'){const c=[...p.s];h+='<div class="seg">'+c.map((ch,x)=>ch+(x<c.length-1?'<i data-q="'+i+'" data-p="'+j+'" data-c="'+x+'" class="'+((v||[]).includes(x)?'on':'')+'">'+((v||[]).includes(x)?'／':'・')+'</i>':'')).join('')+'</div>'+(s.done?'':'<span class="pl" style="min-width:0">字と字の間（・）を押して区切る</span>')}
+return h+mk+'</div>'+(p.br?'<div style="height:6px"></div>':'')}
+function card(i){const q=D[cur].q[i],s=qs(i),st=status(i),n=D[cur].q.length,hasSelf=q.p.some(p=>p.k==='self'),onlySelf=q.p.every(p=>p.k==='self');
+let h='<div class="q"><div class="qh"><span class="qn">問'+(i+1)+'</span></div><div class="qt">'+q.t+'</div>'+q.p.map((p,j)=>part(q,i,p,j)).join('');
+if(!s.done)h+='<div class="act"><button class="go" data-go="'+i+'">'+(onlySelf?'答えを見る':'答え合わせ')+'</button></div>';
+else{if(!hasSelf)h+='<div class="bn '+st+'">'+(st==='o'?'○　正解！':'×　ざんねん')+'</div>';
+h+='<div class="ans"><b>解答</b><div class="a">'+q.a+'</div>'+(q.n?'<div class="n">'+q.n+'</div>':'')+'</div>';
+if(hasSelf)h+='<div class="bn '+(st==='w'?'w':st)+'">'+(st==='w'?'解答と見比べて、自分で採点しよう':st==='o'?'○　できた':st==='t'?'△　おしい':'×　できなかった')+'</div><div class="rate ch">'+[['o','○ できた'],['t','△ おしい'],['x','× できなかった']].map(r=>'<button class="'+r[0]+(s.self===r[0]?' sl':'')+'" data-rate="'+i+'" data-r="'+r[0]+'">'+r[1]+'</button>').join('')+'</div>';
+h+='<div class="act"><button class="go" data-next="1">'+(i<n-1?'次の問いへ →':'結果を見る →')+'</button>'+(q.fz&&st==='x'?'<button class="sb" data-ov="'+i+'">意味は合っていた<br>（○にする）</button>':'')+'<button class="sb" data-re="'+i+'">やり直す</button></div>'}
+return h+'</div>'}
+function result(){const n=D[cur].q.length,c={o:0,t:0,x:0,n:0};const sts=[];for(let i=0;i<n;i++){const st=status(i);sts.push(st);if(st==='o'||st==='t'||st==='x')c[st]++;else c.n++}
+const todo=c.t+c.x;
+return'<div class="q res"><h2>'+(c.n?'ここまでの結果':c.o===n?'全問できた！':'おつかれさま！')+'</h2><div class="cnt"><div class="o"><b>'+c.o+'</b>○ できた</div><div class="t"><b>'+c.t+'</b>△ おしい</div><div class="x"><b>'+c.x+'</b>× できなかった</div>'+(c.n?'<div class="n"><b>'+c.n+'</b>まだ</div>':'')+'</div>'
++'<div class="pl">問いを押すと、その問いにもどれます</div><div class="rl">'+sts.map((st,i)=>'<button class="'+st+'" data-jump="'+i+'">問'+(i+1)+' '+({o:'○',t:'△',x:'×'}[st]||'―')+'</button>').join('')+'</div>'
++'<div class="act">'+(todo?'<button class="go" data-retry="1">△・×の'+todo+'問をもう一度</button>':'')+(cur===0?'<button class="'+(todo?'sb':'go')+'" data-set="1">002へ進む →</button>':'')+'<button class="sb" data-reset="1">この回を最初から</button></div></div>'}
+function chips(){const n=D[cur].q.length;$('chips').innerHTML=D[cur].q.map((q,i)=>'<button class="'+status(i)+(i===qi?' cur':'')+'" data-jump="'+i+'">'+(i+1)+'</button>').join('')+'<button class="'+(qi===n?'cur':'')+'" data-jump="'+n+'">結果</button>';
+const c=$('chips').querySelector('.cur');if(c)c.scrollIntoView({block:'nearest',inline:'center'})}
+let shown=-1;
+function draw(full){const d=D[cur],n=d.q.length;$('t0').className=cur?'':'on';$('t1').className=cur?'on':'';
+if(shown!==cur){$('psg').innerHTML=d.psg.map(x=>'<p>'+x+'</p>').join('')+(d.fig||'');$('src').textContent=d.id+'　'+d.src;shown=cur;$('psg').scrollTop=0}
+const ls=qi<n?d.q[qi].m:[];let first=null;$('psg').querySelectorAll('.m').forEach(e=>{const on=ls.includes(e.dataset.l);e.classList.toggle('hot',on);if(on&&!first)first=e});
+if(first&&full){const pane=$('psg'),r=first.getBoundingClientRect(),pr=pane.getBoundingClientRect();if(r.top<pr.top+8||r.bottom>pr.bottom-8)pane.scrollTop+=r.top-pr.top-pane.clientHeight/2+r.height/2}
+chips();$('qp').innerHTML=qi<n?card(qi):result();if(full)$('qp').scrollTop=0;
+$('pv').disabled=qi===0;$('nx').disabled=qi===n;$('nx').textContent=qi===n-1?'結果 →':'次の問い →';$('pos').textContent=qi<n?'問'+(qi+1)+' / '+n:'結果';
+$('app').classList.toggle('big',ui.big);$('pb').textContent=ui.big?'本文をたたむ':'本文を広げる';save()}
+const FS=[14,16,18,20];function setFs(){document.documentElement.style.setProperty('--fs',FS[ui.fsz]+'px')}setFs();
+function go(i){qi=Math.max(0,Math.min(D[cur].q.length,i));draw(true)}
+document.addEventListener('click',e=>{const t=e.target,m=t.closest('.m');
+if(m){const i=D[cur].q.findIndex(q=>q.m.includes(m.dataset.l));if(i>=0)go(i);return}
+const b=t.closest('button,i');if(!b)return;const ds=b.dataset;
+if(ds.jump!==undefined)return go(+ds.jump);
+if(ds.next)return go(qi+1);
+if(ds.go!==undefined){qs(+ds.go).done=true;draw(false);const bn=$('qp').querySelector('.bn,.ans');if(bn)bn.scrollIntoView({block:'nearest',behavior:'smooth'});return}
+if(ds.re!==undefined){S[cur][+ds.re]={v:[],done:false,self:'',ov:false};return draw(false)}
+if(ds.ov!==undefined){qs(+ds.ov).ov=true;return draw(false)}
+if(ds.rate!==undefined){qs(+ds.rate).self=ds.r;return draw(false)}
+if(ds.retry){let f=-1;D[cur].q.forEach((q,i)=>{const st=status(i);if(st==='t'||st==='x'){S[cur][i]={v:[],done:false,self:'',ov:false};if(f<0)f=i}});return go(f)}
+if(ds.reset){S[cur]={};return go(0)}
+if(ds.set){cur=1;qi=ui.qi[1]||0;return draw(true)}
+if(ds.q===undefined)return;const i=+ds.q,j=+ds.p,s=qs(i);if(s.done)return;
+if(ds.v!==undefined){s.v[j]=ds.v;b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('sl',x===b))}
+else if(ds.x!==undefined){const a=s.v[j]||(s.v[j]=[]),x=+ds.x,k=a.indexOf(x);k<0?a.push(x):a.splice(k,1);b.classList.toggle('sl',k<0)}
+else if(ds.c!==undefined){const a=s.v[j]||(s.v[j]=[]),x=+ds.c,k=a.indexOf(x);k<0?a.push(x):a.splice(k,1);b.classList.toggle('on',k<0);b.textContent=k<0?'／':'・'}
+save()});
+document.addEventListener('input',e=>{const d=e.target.dataset;if(d.q===undefined)return;qs(+d.q).v[+d.p]=e.target.value;save()});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing&&e.target.matches('input[type=text]')){const g=$('qp').querySelector('[data-go]');if(g)g.click()}});
+$('t0').onclick=()=>{ui.qi[cur]=qi;cur=0;qi=ui.qi[0]||0;draw(true)};$('t1').onclick=()=>{ui.qi[cur]=qi;cur=1;qi=ui.qi[1]||0;draw(true)};
+$('pv').onclick=()=>go(qi-1);$('nx').onclick=()=>go(qi+1);
+$('pb').onclick=()=>{ui.big=!ui.big;draw(false)};
+$('fm').onclick=()=>{if(ui.fsz>0){ui.fsz--;setFs();save()}};$('fp').onclick=()=>{if(ui.fsz<FS.length-1){ui.fsz++;setFs();save()}};
+$('hb').onclick=()=>$('ov').classList.add('on');$('hx').onclick=()=>{$('ov').classList.remove('on');ui.seen=true;save()};
+$('ov').onclick=e=>{if(e.target===$('ov')){$('ov').classList.remove('on');ui.seen=true;save()}};
+if(!ui.seen)$('ov').classList.add('on');
+draw(true);
+</script>
+</body>
+</html>
