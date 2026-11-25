@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>精確な読解につなげる古典文法</title>
+<style>
+:root{--bg:#f4f2ec;--card:#fff;--tx:#222220;--sub:#66655f;--mut:#9a988f;--line:#dedcd3;--cell:#f0eee7;--ac:#1a5fa8;--acbg:#e6f0fb;--now:#c8501e;--nowbg:#fff4ea;--r:#cf2030;--rbg:#fdecee;--c:#0086bd;--ok:#2f7d4f;--okbg:#e4f3ea;--fs:17px}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1b19;--card:#262624;--tx:#f0efe9;--sub:#b9b7ae;--mut:#85837b;--line:#3c3c38;--cell:#33332f;--ac:#8fc0f2;--acbg:#16324f;--now:#f0906a;--nowbg:#3a2a20;--r:#ff8f96;--rbg:#40222a;--c:#62c9ef;--ok:#7fcf9e;--okbg:#1d3a29}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",Meiryo,sans-serif;line-height:1.95;font-size:var(--fs);-webkit-text-size-adjust:100%}
+main{max-width:700px;margin:0 auto;padding:0 16px 110px}
+/* top bar */
+#top{position:sticky;top:0;z-index:6;background:var(--bg);margin:0 -16px;padding:8px 16px 6px;display:flex;align-items:center;gap:10px}
+#top .home{font-size:13px;font-weight:700;color:var(--tx);text-decoration:none;white-space:nowrap}
+#bar{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}#bar i{display:block;height:100%;background:var(--ok);border-radius:3px;transition:width .3s}
+#top button{width:38px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--tx);cursor:pointer;font-weight:700;padding:0}
+#top .s1{font-size:12px}#top .s2{font-size:17px}
+/* home */
+#home{padding-top:6px}
+.kicker{font-size:12px;color:var(--sub);line-height:1.5}
+h1{font-size:25px;margin:2px 0 12px;line-height:1.35;letter-spacing:.02em}
+.hero{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:6px}
+.hero p{margin:0 0 8px;font-size:14px;line-height:1.75;color:var(--sub)}
+.hero .pg{font-size:14px;font-weight:700;color:var(--ok);margin-bottom:8px}
+.hero .go small{color:inherit;opacity:.9}
+.hero .go{display:block;width:100%;min-height:50px;border-radius:10px;border:0;background:var(--ac);color:#fff;font-size:16px;font-weight:700;cursor:pointer;padding:6px 12px;line-height:1.4}
+@media (prefers-color-scheme:dark){.hero .go{color:#10202f}}
+.gh{font-size:14px;font-weight:700;color:var(--ac);margin:20px 2px 6px;display:flex;align-items:center;gap:8px}.gh:before{content:"";width:10px;height:10px;border-radius:50%;background:var(--ac)}
+.gl{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.card{display:flex;align-items:center;gap:12px;padding:12px 14px;text-decoration:none;color:var(--tx);border-top:1px solid var(--line);font-size:16px;line-height:1.5}
+.card:first-child{border-top:0}
+.card .no{flex:none;width:30px;height:30px;border-radius:50%;background:var(--cell);color:var(--sub);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.card .ti{flex:1;font-weight:700}
+.tg2{font-style:normal;font-size:11px;font-weight:400;color:var(--sub);border:1px solid var(--line);border-radius:10px;padding:0 7px;margin-left:6px;white-space:nowrap;vertical-align:2px}
+.tg2.pr{color:var(--now);border-color:var(--now)}
+.card .ck{flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);color:transparent;font-size:14px;display:flex;align-items:center;justify-content:center}
+.card.done .ck{background:var(--ok);border-color:var(--ok);color:#fff}.card.done .no{background:var(--okbg);color:var(--ok)}
+/* section view */
+section{display:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px 14px;margin-top:4px}
+section.on{display:block}
+body.rd #home{display:none}body:not(.rd) #top .rdo{display:none}body:not(.rd) #nav{display:none}
+.sh .pn{display:block;font-size:12px;color:var(--ac);font-weight:700;line-height:1.5}.sh .pn small{font-weight:400;color:var(--mut);font-size:11px}
+h2{font-size:1.3em;line-height:1.45;margin:2px 0 14px;padding-bottom:8px;border-bottom:3px solid var(--tx)}
+h2 .ref{display:block;font-size:12px;font-weight:400;color:var(--sub)}
+h3{font-size:1.08em;margin:22px 0 6px;padding:2px 10px;border-left:5px solid var(--ac);line-height:1.6}
+h3 small{font-weight:400}
+h3.sub{border-left:0;padding:14px 0 0;border-top:1px dashed var(--line);margin-top:20px}
+p{margin:0 0 1em}
+p.in1{margin:0 0 .3em 1em}p.in2{margin:0 0 .3em 2em}p.in3{margin:0 0 .3em 3em}
+p.key{background:var(--rbg);border-radius:10px;padding:10px 14px;line-height:1.8}
+p.nt,p.note{background:var(--cell);border-radius:10px;padding:8px 12px;font-size:.9em;line-height:1.7}
+em{font-style:normal;font-weight:700}
+em.r{color:var(--r)}em.c{color:var(--c)}
+small{font-size:.82em;color:var(--sub)}
+s{color:var(--mut)}
+rt{font-size:.5em;font-weight:400}
+a{color:var(--ac)}
+.kv{display:flex;gap:10px;margin:0 0 6px;line-height:1.7}
+.kv .lb{flex:none;width:3.2em;height:1.7em;font-size:.8em;font-weight:700;color:#fff;background:var(--r);border-radius:6px;text-align:center;line-height:1.7em;margin-top:.15em}
+@media (prefers-color-scheme:dark){.kv .lb{color:#2a1014}}
+.kv .lb.e{background:none}
+.kv .yk{color:var(--r);font-weight:700;font-size:.95em}.kv .yk i{font-style:normal;font-size:.75em;font-weight:400;color:var(--sub);border:1px solid var(--line);border-radius:4px;padding:0 4px;margin-right:6px}
+.grid3{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:2px 22px;margin:0 0 1em 1em;font-size:.95em;background:var(--cell);border-radius:10px;padding:10px 14px}
+ol.forms{margin:0 0 1em;padding-left:1.8em}ol.forms li{margin-bottom:.4em;line-height:2.2}
+.types{display:grid;gap:10px;margin:0 0 1em}
+.ty{background:var(--cell);border-radius:10px;padding:8px 14px}.ty ul{margin:2px 0 0;padding-left:1.3em}
+ul.gyo{list-style:none;padding:10px 14px;margin:0 0 1em;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:2px 12px;background:var(--cell);border-radius:10px}
+.tw{overflow-x:auto;margin:4px 0 6px}
+table{border-collapse:collapse;margin:0 auto;font-size:16px}
+th,td{border:1px solid var(--tx);padding:5px 8px;text-align:center;min-width:2.4em;line-height:1.5;background:var(--card)}
+th{background:var(--cell);font-size:13px;white-space:nowrap}
+.ct{direction:rtl}.ct th,.ct td{direction:ltr}
+td.k{font-size:12px;color:var(--sub);border-style:dashed;white-space:nowrap;min-width:0}
+.sf{font-size:.75em;color:var(--sub)}
+.ct.wide th,.ct.wide td{padding:3px 3px;min-width:1.7em;font-size:14px}.ct.wide th{font-size:11px;white-space:normal}
+.ct.mini{margin:6px 0 6px 2em}
+@media (max-width:480px){th,td{padding:4px 3px;min-width:1.9em;font-size:15px}th{font-size:12px}td.k{font-size:11px}.ct.wide th,.ct.wide td{padding:3px 1px;min-width:1.5em;font-size:13px}.ct.wide th{font-size:10px}}
+td.hit{outline:3px solid var(--r);outline-offset:-3px;border-radius:50%}
+.ht i{font-style:normal;color:var(--r);font-weight:700}
+.ht th,.ht td{font-size:13px;padding:3px 5px}
+.cap{font-size:12px;color:var(--sub);text-align:center;margin-bottom:1em;line-height:1.5}
+.tbar{text-align:center;margin:14px 0 0}
+.tbar button{min-height:38px;padding:0 16px;border-radius:19px;border:1.5px dashed var(--now);background:var(--nowbg);color:var(--now);font-size:13px;font-weight:700;cursor:pointer}
+.ct.hide td.v:not(.sh){color:transparent;background:var(--cell);cursor:pointer}
+.ct.hide td.v:not(.sh) *{color:transparent}
+.step{display:flex;gap:10px;align-items:flex-start;margin:8px 0;background:var(--cell);border-radius:10px;padding:10px 12px;line-height:1.75}
+.sp{flex:none;font-size:12px;font-weight:700;color:var(--card);background:var(--tx);border-radius:12px;padding:1px 12px;margin-top:3px}
+.step ul{margin:4px 0 0;padding-left:1.3em}
+.dn{color:var(--mut);margin:0 0 0 1.4em;line-height:1.1}
+.ex{border:2px solid var(--tx);border-radius:12px;padding:12px 14px;margin:14px 0;line-height:1.8}
+.ex p{margin-bottom:.5em}
+.exl{display:inline-block;font-size:12px;font-weight:700;color:var(--card);background:var(--tx);border-radius:5px;padding:0 6px;margin-right:8px;line-height:1.6;vertical-align:2px}
+p.exa small{margin-left:.6em}
+.fig{background:#fff;border-radius:10px;padding:8px;margin:10px 0;border:1px solid var(--line)}.fig svg{width:100%;max-width:460px;display:block;margin:0 auto}
+.prac{border:2px dashed var(--now);background:var(--nowbg);border-radius:14px;padding:14px 16px;margin:16px 0;line-height:1.7}
+.prac .pt{font-size:13px;font-weight:700;color:var(--now);margin-bottom:6px}
+.prac button{min-height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--tx);font-size:15px;cursor:pointer}
+.prac .go{background:var(--ac);border-color:var(--ac);color:var(--card);font-weight:700}
+.prac .ch{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.prac button:disabled{opacity:.35;text-decoration:line-through}
+.hw{font-size:30px;font-weight:700;margin:2px 0 6px}
+.hq{font-weight:700;margin-top:8px}.hl{font-size:13px;color:var(--sub)}
+.hf{font-size:14px;color:var(--now);min-height:22px}.ha{font-size:19px;font-weight:700;color:var(--ac);margin-top:6px}
+.dq{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;cursor:pointer}
+.dq .q{font-size:15px;font-weight:700}.dq .q b{display:inline-block;min-width:1.9em;color:var(--mut);font-weight:400}
+.dq .a{color:var(--r);font-weight:700;margin:2px 0 0 1.9em;line-height:2;font-size:.95em}
+.dq:not(.on) .a{color:transparent;background:var(--cell);border-radius:6px}.dq:not(.on) .a *{color:transparent}
+.nx{display:block;margin:18px 0 4px;padding:14px 16px;border-radius:12px;background:var(--ac);color:#fff;text-decoration:none;font-weight:700;line-height:1.5;text-align:center}
+@media (prefers-color-scheme:dark){.nx{color:#10202f}}
+.nx small{display:block;color:inherit;opacity:.85;font-weight:400;font-size:12px}
+#nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);z-index:6}
+#nav div{max-width:700px;margin:0 auto;display:flex;gap:8px;padding:8px 12px 10px}
+#nav a{flex:1;min-height:46px;border-radius:10px;border:1px solid var(--line);color:var(--tx);text-decoration:none;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3;padding:2px 6px}
+#nav a.mid{flex:.7;background:var(--cell)}
+#nav a.off{opacity:.3;pointer-events:none}
+</style>
+</head>
+<body>
+<main>
+<div id="top"><a class="home rdo" href="#home">目次</a><div id="bar"><i></i></div><button id="fm" class="s1" aria-label="文字を小さく">あ</button><button id="fp" class="s2" aria-label="文字を大きく">あ</button></div>
+<div id="home">
+<div class="kicker">大阪桐蔭中学校　国語（古典）授業プリント</div>
+<h1>精確な読解につなげる<br>古典文法</h1>
+<div class="hero"><div class="pg" id="pg"></div><p>読みたい項目を押すと、その項目だけが開きます。読みおわると ✓ が付きます。<br>右上の「あ」で文字の大きさを変えられます。「表」の項目は活用表をかくして練習でき、「練習」の項目には問題があります。</p><button class="go" id="cont"></button></div>
+<div class="gh">はじめに</div><div class="gl"><a class="card" href="#p001" data-i="0"><span class="no">1</span><span class="ti">はじめに</span><span class="ck">✓</span></a></div><div class="gh">動詞</div><div class="gl"><a class="card" href="#p002" data-i="1"><span class="no">2</span><span class="ti">「活用」という現象</span><span class="ck">✓</span></a><a class="card" href="#p003" data-i="2"><span class="no">3</span><span class="ti">下接語の整理と活用形</span><span class="ck">✓</span></a><a class="card" href="#p004" data-i="3"><span class="no">4</span><span class="ti">動詞の活用のタイプ・種類</span><span class="ck">✓</span></a><a class="card" href="#p005" data-i="4"><span class="no">5</span><span class="ti">母音交替タイプ<i class="tg2">表</i></span><span class="ck">✓</span></a><a class="card" href="#p006" data-i="5"><span class="no">6</span><span class="ti">接辞付加タイプ<i class="tg2">表</i></span><span class="ck">✓</span></a><a class="card" href="#p007" data-i="6"><span class="no">7</span><span class="ti">母音交替＋接辞付加タイプ<i class="tg2">表</i></span><span class="ck">✓</span></a><a class="card" href="#p009" data-i="7"><span class="no">8</span><span class="ti">活用の種類の判別法<i class="tg2 pr">練習</i></span><span class="ck">✓</span></a><a class="card" href="#p010" data-i="8"><span class="no">9</span><span class="ti">古典文法徹底反復練習<i class="tg2 pr">練習</i></span><span class="ck">✓</span></a><a class="card" href="#p011" data-i="9"><span class="no">10</span><span class="ti">実際に文の中で用いられている動詞の判別法<i class="tg2">表</i></span><span class="ck">✓</span></a></div><div class="gh">形容詞・形容動詞</div><div class="gl"><a class="card" href="#p013" data-i="10"><span class="no">11</span><span class="ti">形容詞とその活用<i class="tg2">表</i></span><span class="ck">✓</span></a><a class="card" href="#p014" data-i="11"><span class="no">12</span><span class="ti">形容動詞とその活用<i class="tg2">表</i></span><span class="ck">✓</span></a><a class="card" href="#p014b" data-i="12"><span class="no">13</span><span class="ti">語幹用法</span><span class="ck">✓</span></a></div><div class="gh">助動詞</div><div class="gl"><a class="card" href="#p015" data-i="13"><span class="no">14</span><span class="ti">助動詞とは何か</span><span class="ck">✓</span></a><a class="card" href="#p015b" data-i="14"><span class="no">15</span><span class="ti">助動詞の３点セット</span><span class="ck">✓</span></a><a class="card" href="#p016" data-i="15"><span class="no">16</span><span class="ti">「ず」<i class="tg2">表</i></span><span class="ck">✓</span></a><a class="card" href="#p017" data-i="16"><span class="no">17</span><span class="ti">「き」「けり」<i class="tg2">表</i></span><span class="ck">✓</span></a><a class="card" href="#p018" data-i="17"><span class="no">18</span><span class="ti">「つ」「ぬ」<i class="tg2">表</i></span><span class="ck">✓</span></a><a class="card" href="#p019" data-i="18"><span class="no">19</span><span class="ti">「り」「たり」<i class="tg2">表</i></span><span class="ck">✓</span></a><a class="card" href="#p021" data-i="19"><span class="no">20</span><span class="ti">「る」「らる」<i class="tg2">表</i></span><span class="ck">✓</span></a><a class="card" href="#p023" data-i="20"><span class="no">21</span><span class="ti">「す」「さす」「しむ」<i class="tg2">表</i></span><span class="ck">✓</span></a><a class="card" href="#p025" data-i="21"><span class="no">22</span><span class="ti">「む」「むず」「じ」<i class="tg2">表</i></span><span class="ck">✓</span></a></div>
+</div>
+<section id="p001" data-i="0"><div class="sh"><span class="pn">はじめに　1 / 22　<small>プリント p.001</small></span><h2>はじめに</h2></div>
+<p>文法というのはおもしろくない。<s>文法なんてものを喜んでやれるのは磯本先生ぐらいのものである。</s></p>
+<p>しかしながら、文法の学習というのは非常に重要である。</p>
+<p>みんなは、母語である日本語<small>（日本語が母語じゃない人、ごめん）</small>を、「文法」を介さずに身につけてきた。その背景には、<em class="c">圧倒的な量</em><strong>の力</strong>がある。</p>
+<p>まだ物心つかないころから、日本語でいっぱい話しかけてもらい、絵本を読み聞かせてもらってきた。身の回りには、とにかく日本語があふれている。そうやって圧倒的な量の日本語を浴び、そして自分自身も使ってきたからこそ、「文法」なんてものを必要とせずとも日本語を身につけることができたのである。</p>
+<p><ruby>翻<rt>ひるがえ</rt></ruby>って、古文を考えてみる。誰も古文で話しかけてはくれない<small>（古文で話している人を見るのなんて、「すゑひろがりず」ぐらいのものである）</small>。日常に古文はあふれていない。触れるのは、まあ、この授業のときぐらいである。そんな環境で、<strong>古文が母語と同じように身につくかと言われれば、まあ身につかない</strong>。</p>
+<p>そこで登場するのが「文法」である。文法というのは、言ってみればゲームの攻略本みたいなもんである<small>（今のみんなは攻略本ってわかるんか？）</small>。<strong>たくさんたくさんプレイして「あ、この道具ってこういうときに役に立つんか」って身につけていく知恵が、攻略本を見れば「この道具はこういうときに役立ちます！」と書いてある。それがわかれば時短になる</strong>。</p>
+<p>文法というのは、そういうもんである。がんばって身につけていけば、母語を学んだときよりも少ない量で、古文が読めるようになっていく。</p>
+<p>おもしろくないと思う。睡魔との戦いになると思う。そんな中でも、できるだけ「言葉っておもしろいな」と思ってもらえるように工夫するつもりなので、一緒にがんばろう。</p>
+
+<div class="end" data-i="0"></div></section>
+<section id="p002" data-i="1"><div class="sh"><span class="pn">動詞　2 / 22　<small>プリント p.002</small></span><h2>「活用」という現象</h2></div>
+<p>１年生のときに学習したことを思い出そう。</p>
+<p>日本語には、「活用」という現象がある。</p>
+<p class="key"><strong>「活用」とは、主に</strong><em class="r">後ろにくっつく言葉の影響で、語の形が変化すること</em><strong>である</strong>。</p>
+<p class="nt">※「後ろにくっつく言葉」のことを、「<em class="r">下接語</em>」とも言う。</p>
+<p>現代日本語で考えてみる。たとえば、「切る」「食べる」「サボる」という動詞は、後ろに「ない」「ます」「とき」「ば」「う／よう」がくっつくと、次のように語の形が変化する<small>（１年生のときに授業で全く同じことをやったから、下のスライドを見て「あーそういえばそんなんやったなー」って思ってほしい）</small>。</p>
+<div class="grid3"><span>切ら―ない</span><span>食べ―ない</span><span>サボら―ない</span><span>切り―ます</span><span>食べ―ます</span><span>サボり―ます</span><span>切る―とき</span><span>食べる―とき</span><span>サボる―とき</span><span>切れ―ば</span><span>食べれ―ば</span><span>サボれ―ば</span><span>切ろ―う</span><span>食べ―よう</span><span>サボろ―う</span></div>
+<p>このとき、「切る」と「サボる」は同じように活用しているが、「食べる」はなんか違う。</p>
+<p>ということで、「切る」と「サボる」は同じ種類と考える。「食べる」は別の種類である。</p>
+<p class="key">こうして、<strong>下接語をいろいろつけてみたときの活用のしかたによって、動詞の種類を分けることにした</strong>。</p>
+<p><em class="r">古文（古典文法）では、動詞は９種類に分かれる</em>ことになっている。</p>
+<div class="tw"><table class="ht"><tr><th></th><th>切る</th><th>見る</th><th>食べる</th><th>する</th><th>サボる</th></tr><tr><th>～ない</th><td class="v">切<i>a</i>ない</td><td class="v"><i>i</i>ない</td><td class="v">食<i>e</i>ない</td><td class="v"><i>i</i>ない</td><td class="v">サボ<i>a</i>ない</td></tr><tr><th>～ます</th><td class="v">切<i>i</i>ます</td><td class="v"><i>i</i>ます</td><td class="v">食<i>e</i>ます</td><td class="v"><i>i</i>ます</td><td class="v">サボ<i>i</i>ます</td></tr><tr><th>～。</th><td class="v">切<i>u</i>。</td><td class="v"><i>i</i>る。</td><td class="v">食<i>e</i>る。</td><td class="v"><i>u</i>る。</td><td class="v">サボ<i>u</i>。</td></tr><tr><th>～とき</th><td class="v">切<i>u</i>とき。</td><td class="v"><i>i</i>るとき</td><td class="v">食<i>e</i>るとき</td><td class="v"><i>u</i>るとき</td><td class="v">サボ<i>u</i>とき</td></tr><tr><th>～ば</th><td class="v">切<i>e</i>ば</td><td class="v"><i>i</i>れば</td><td class="v">食<i>e</i>れば</td><td class="v"><i>u</i>れば</td><td class="v">サボ<i>e</i>ば</td></tr><tr><th>～！</th><td class="v">切<i>e</i>！</td><td class="v"><i>i</i>ろ！</td><td class="v">食<i>e</i>ろ！</td><td class="v"><i>i</i>ろ！</td><td class="v">サボ<i>e</i>！</td></tr><tr><th>～う/よう</th><td class="v">切<i>o</i>う</td><td class="v"><i>i</i>よう</td><td class="v">食<i>e</i>よう</td><td class="v"><i>i</i>よう</td><td class="v">サボ<i>o</i>う</td></tr></table></div><div class="cap">スライド「§03 活用」（日本語の分析 第Ⅰ期）　活用語尾がどうなっているかと言えば……</div>
+
+<div class="end" data-i="1"></div></section>
+<section id="p003" data-i="2"><div class="sh"><span class="pn">動詞　3 / 22　<small>プリント p.003</small></span><h2>下接語の整理と活用形</h2></div>
+<p>動詞の種類の前に、下接語を整理しておく必要がある。</p>
+<p>古文では、<strong>「～ない」（打消）を表すのは、「～ず」</strong>である。例えば、<strong>「書かない」は「</strong><em class="r">書かず</em><strong>」</strong>となる。</p>
+<p>同様に、<strong>「～だろう」（推量）を表すのは、「～む」</strong>である。例えば、<strong>「書くだろう」は「</strong><em class="r">書かむ</em><strong>」</strong>となる。</p>
+<p>次に、<strong>「～た」（過去）を表すのは、「～けり」</strong>である。例えば、<strong>「書いた」は「</strong><em class="r">書きけり</em><strong>」</strong>となる。</p>
+<p>また、<strong>「～ている」（存続）を表すのは「～たり」</strong>である。例えば、<strong>「書いている」は「</strong><em class="r">書きたり</em><strong>」</strong>となる。</p>
+<p>こう見ると、「～ず」が下接するときの形と、「～む」が下接するときの形は同じっぽい。</p>
+<p>「～けり」が下接するときの形と、「～つ」が下接するときの形は同じっぽい。</p>
+<p>どんな動詞でも「～ず」が下接するときと「～む」が下接するときの形は同じだと、膨大な量の古文を読んだ昔の偉い人は判断した。同様に、「～けり」が下接するときと「～たり」が下接するときの形も同じだと、昔の偉い人は判断した。</p>
+<p class="key">そして、<strong>「～ず」や「～む」が下接するときの形を未然形って呼ぶことにした</strong>。</p>
+<p class="key">また、<strong>「～けり」や「～たり」が下接するときの形を連用形って呼ぶことにした</strong>。</p>
+<p>こうやって、常に同じ形になる下接語をグループ分けしていった結果、６つの「○○形」が生まれた。この「○○形」のことを「<em class="r">活用形</em>」と呼ぶ。</p>
+<p>活用形は、次の６つである。</p>
+<ol class="forms"><li><ruby><em class="r">未然形</em><rt>みぜん</rt></ruby>――<em class="c">「～ず」「～む」</em>などが下接するときの形</li><li><ruby><em class="r">連用形</em><rt>れんよう</rt></ruby>――<em class="c">「～けり」「～たり」</em>などが下接するときの形</li><li><ruby><em class="r">終止形</em><rt>しゅうし</rt></ruby>――<em class="c">「～。（句点）」</em>などが下接するときの形（※辞書に載っている形で、<strong>基本形</strong>とも呼ぶ）</li><li><ruby><em class="r">連体形</em><rt>れんたい</rt></ruby>――<em class="c">「～とき」「～こと」</em>などの体言が下接するときの形</li><li><ruby><em class="r">已然形</em><rt>いぜん</rt></ruby>――<em class="c">「～ど」「～ども」</em>などが下接するときの形</li><li><ruby><em class="r">命令形</em><rt>めいれい</rt></ruby>――<em class="c">命令するとき</em>の形</li></ol>
+
+<div class="end" data-i="2"></div></section>
+<section id="p004" data-i="3"><div class="sh"><span class="pn">動詞　4 / 22　<small>プリント p.004</small></span><h2>動詞の活用のタイプ・種類</h2></div>
+<p class="key"><strong>古文における動詞は、活用によって</strong><em class="c">３タイプ</em><em class="r">９種類</em><strong>に分けられる</strong>。</p>
+<p>３つのタイプ・９つの種類は、以下の通りである。</p>
+<div class="types">
+<div class="ty"><em class="c">❶ 母音交替タイプ</em><ul><li><em class="r">四段活用</em></li><li><em class="r">ラ行変格活用</em>――※</li></ul></div>
+<div class="ty"><em class="c">❷ 接辞付加タイプ</em><ul><li><em class="r">上一段活用</em>――※</li><li><em class="r">下一段活用</em>――※</li></ul></div>
+<div class="ty"><em class="c">❸ 母音交替＋接辞付加タイプ</em><ul><li><em class="r">上二段活用</em></li><li><em class="r">下二段活用</em></li><li><em class="r">カ行変格活用</em>――※</li><li><em class="r">サ行変格活用</em>――※</li><li><em class="r">ナ行変格活用</em>――※</li></ul></div></div>
+<p>なお、※がついているものは、所属する動詞が少ないため、個別に覚えることになる。</p>
+
+<div class="end" data-i="3"></div></section>
+<section id="p005" data-i="4"><div class="sh"><span class="pn">動詞　5 / 22　<small>プリント p.005</small></span><h2>母音交替タイプ（四段活用・ラ行変格活用）</h2></div>
+<p>動詞活用の第１のタイプは、次のような母音交替によるものである。</p>
+<div class="tw"><table class="ct"><tr><th>基本形</th><th>咲く</th><th>散る</th><th rowspan="2">主な下接語</th></tr><tr><th>語幹</th><td class="v">咲</td><td class="v">散</td></tr><tr><th>未然形</th><td class="v">か</td><td class="v">ら</td><td class="k">～ず</td></tr><tr><th>連用形</th><td class="v">き</td><td class="v">り</td><td class="k">～けり</td></tr><tr><th>終止形</th><td class="v">く</td><td class="v">る</td><td class="k">～。</td></tr><tr><th>連体形</th><td class="v">く</td><td class="v">る</td><td class="k">～とき</td></tr><tr><th>已然形</th><td class="v">け</td><td class="v">れ</td><td class="k">～ども</td></tr><tr><th>命令形</th><td class="v">け</td><td class="v">れ</td><td class="k">～！</td></tr></table></div>
+<p>ここに挙げた「咲く」と「散る」は<strong>活用語尾が</strong><em class="c">ａ・ｉ・ｕ・ｅの四段</em><strong>にわたって活用されている</strong>。</p>
+<p>そのため、<strong>この種類を「</strong><em class="r">四段活用</em><strong>」と呼ぶ</strong>。</p>
+<p>また、例えば「咲く」の場合には、<strong>活用する部分が「か」「き」「く」「け」と</strong><em class="c">カ行</em><strong>であるから、この語は「</strong><em class="r">カ行四段活用</em><strong>の動詞」のように呼ぶ</strong>。同様に考えて、「散る」は「ラ行四段活用の動詞」となる。</p>
+<p class="key"><strong>四段活用の動詞は非常に多く、すべての動詞の過半数を占める</strong>。</p>
+<p>また、「あり」も母音交替によって活用するが、四段活用とは少し異なる。</p>
+<div class="tw"><table class="ct"><tr><th>基本形</th><th>あり</th><th rowspan="2">主な下接語</th></tr><tr><th>語幹</th><td class="v">あ</td></tr><tr><th>未然形</th><td class="v">ら</td><td class="k">～ず</td></tr><tr><th>連用形</th><td class="v">り</td><td class="k">～けり</td></tr><tr><th>終止形</th><td class="v">り</td><td class="k">～。</td></tr><tr><th>連体形</th><td class="v">る</td><td class="k">～とき</td></tr><tr><th>已然形</th><td class="v">れ</td><td class="k">～ども</td></tr><tr><th>命令形</th><td class="v">れ</td><td class="k">～！</td></tr></table></div>
+<p>「あり」も四段にわたって活用されているものの、<em class="r">終止形が「ある」ではなく「あり」とｉ段</em>になっており、四段活用とは異なっている。<strong>この種類は変則的な活用であるとみなされ、「</strong><em class="r">ラ行変格活用</em><strong>」と呼ばれる</strong>。</p>
+<p class="key"><strong>すべての活用の種類の中で、</strong><em class="r">終止形がｕ段ではないのはラ行変格活用だけ</em><strong>である</strong>。</p>
+<p class="key"><strong>ラ行変格活用の動詞は、</strong><em class="c">「あり」「<ruby>居<rt>を</rt></ruby>り」「<ruby>侍<rt>はべ</rt></ruby>り」「いまそがり」</em><strong>の４つだけである</strong>。</p>
+
+<div class="end" data-i="4"></div></section>
+<section id="p006" data-i="5"><div class="sh"><span class="pn">動詞　6 / 22　<small>プリント p.006</small></span><h2>接辞付加タイプ（上一段活用・下一段活用）</h2></div>
+<p>動詞活用の第２のタイプは、次のような接辞付加によるものである。</p>
+<div class="tw"><table class="ct"><tr><th>基本形</th><th>見る</th><th>蹴る</th><th rowspan="2">主な下接語</th></tr><tr><th>語幹</th><td class="v">○</td><td class="v">○</td></tr><tr><th>未然形</th><td class="v">見</td><td class="v">蹴</td><td class="k">～ず</td></tr><tr><th>連用形</th><td class="v">見</td><td class="v">蹴</td><td class="k">～けり</td></tr><tr><th>終止形</th><td class="v">見<span class="sf">‐る</span></td><td class="v">蹴<span class="sf">‐る</span></td><td class="k">～。</td></tr><tr><th>連体形</th><td class="v">見<span class="sf">‐る</span></td><td class="v">蹴<span class="sf">‐る</span></td><td class="k">～とき</td></tr><tr><th>已然形</th><td class="v">見<span class="sf">‐れ</span></td><td class="v">蹴<span class="sf">‐れ</span></td><td class="k">～ども</td></tr><tr><th>命令形</th><td class="v">見<span class="sf">‐よ</span></td><td class="v">蹴<span class="sf">‐よ</span></td><td class="k">～！</td></tr></table></div>
+<p><strong>表の中の</strong><em class="c">「○」はその部分に入るものがない</em><strong>ことを表す</strong>。すなわち、語幹がないということである。</p>
+<p>これらの活用では、<strong>行に関係なく、終止形以下に</strong><em class="r">「る」「れ」「よ」</em><strong>という接辞が付加されながら活用していく</strong>。</p>
+<p>接辞ではない部分を見たとき、<strong>「見る」は</strong><em class="c">ｉ段のみ</em><strong>、「蹴る」は</strong><em class="c">ｅ段のみ</em><strong>（</strong><em class="c">段は１つだけ</em><strong>）が使われている</strong>。</p>
+<p class="key">よって、<strong>「見る」のような種類を「</strong><em class="r">上一段活用</em><strong>」と呼び、「蹴る」のような種類を「</strong><em class="r">下一段活用</em><strong>」と呼ぶ</strong>。</p>
+<p>また、<strong>接辞ではない部分を活用する部分とみなせば</strong>、「見る」の場合はその部分が「み」というマ行である。</p>
+<p>「蹴る」の場合はその部分が「け」というカ行である。</p>
+<p>よって、<strong>「見る」は「マ行上一段活用の動詞」である</strong>。また、<strong>「蹴る」は「カ行下一段活用の動詞」</strong>である。</p>
+<p class="key"><em class="r">上一段・下一段の動詞はいずれも少なく、覚えなければならない</em>。</p>
+<p><strong>上一段の動詞</strong>は、行の順に次の通りである。</p>
+<ul class="gyo"><li><strong>ア行</strong>――なし</li><li><strong>カ行</strong>――「<em class="c">着る</em>」</li><li><strong>サ行</strong>――なし</li><li><strong>ナ行</strong>――「<em class="c">煮る</em>」「<em class="c">似る</em>」</li><li><strong>ハ行</strong>――「<em class="c"><ruby>干<rt>ひ</rt></ruby>る</em>」</li><li><strong>マ行</strong>――「<em class="c">見る</em>」</li><li><strong>ヤ行</strong>――「<em class="c"><ruby>射<rt>い</rt></ruby>る</em>」「<em class="c"><ruby>鋳<rt>い</rt></ruby>る</em>」</li><li><strong>ラ行</strong>――なし</li><li><strong>ワ行</strong>――「<em class="c"><ruby>居<rt>ゐ</rt></ruby>る</em>」「<em class="c"><ruby>率<rt>ゐ</rt></ruby>る</em>」</li></ul>
+<p><strong>下一段の動詞は、「</strong><em class="c">蹴る</em><strong>」のみ</strong>である。</p>
+
+<div class="end" data-i="5"></div></section>
+<section id="p007" data-i="6"><div class="sh"><span class="pn">動詞　7 / 22　<small>プリント p.007</small></span><h2>母音交替＋接辞付加タイプ（上二段活用・下二段活用・カ行変格活用・サ行変格活用・ナ行変格活用）</h2></div>
+<p>動詞活用の第３のタイプは、これまでに述べた母音交替と接辞付加とが混合したものである。</p>
+<div class="tw"><table class="ct"><tr><th>基本形</th><th>来</th><th>す</th><th>往ぬ</th><th rowspan="2">主な下接語</th></tr><tr><th>語幹</th><td class="v">○</td><td class="v">○</td><td class="v">往</td></tr><tr><th>未然形</th><td class="v">来</td><td class="v">せ</td><td class="v">な</td><td class="k">～ず</td></tr><tr><th>連用形</th><td class="v">来</td><td class="v">し</td><td class="v">に</td><td class="k">～けり</td></tr><tr><th>終止形</th><td class="v">来</td><td class="v">す</td><td class="v">ぬ</td><td class="k">～。</td></tr><tr><th>連体形</th><td class="v">来<span class="sf">‐る</span></td><td class="v">す<span class="sf">‐る</span></td><td class="v">ぬ<span class="sf">‐る</span></td><td class="k">～とき</td></tr><tr><th>已然形</th><td class="v">来<span class="sf">‐れ</span></td><td class="v">す<span class="sf">‐れ</span></td><td class="v">ぬ<span class="sf">‐れ</span></td><td class="k">～ども</td></tr><tr><th>命令形</th><td class="v">来<span class="sf">‐よ</span></td><td class="v">せ<span class="sf">‐よ</span></td><td class="v">ね</td><td class="k">～！</td></tr></table></div>
+<p>この表に見られるように、<strong>母音交替が起こり、なおかつ連体形と已然形（と一部の命令形）においては接辞「―る」「―れ」「―よ」が付加されている</strong>。</p>
+<p>この表にある３つの動詞は、いずれも同じ種類に所属する動詞が少なく、変則的な活用とみなされており、<strong>接辞でない部分（活用する部分）の行により、それぞれ「</strong><em class="r">カ行変格活用</em><strong>」「</strong><em class="r">サ行変格活用</em><strong>」「</strong><em class="r">ナ行変格活用</em><strong>」と呼ばれる</strong>。</p>
+<p>いずれも、所属する動詞を覚える必要がある。</p>
+<p><strong>カ行変格活用</strong>――「<em class="c">来</em>」とその複合語</p>
+<p><strong>サ行変格活用</strong>――「<em class="c">おはす</em>」「<em class="c">す</em>」とその複合語（※<strong>「す」の複合語はいっぱいある</strong>）</p>
+<p><strong>ナ行変格活用</strong>――「<em class="c">死ぬ</em>」「<em class="c">往ぬ（去ぬ）</em>」</p>
+<p>母音交替＋接辞付加タイプには、次のようなものもある。</p>
+<div class="tw"><table class="ct"><tr><th>基本形</th><th>落つ</th><th>棄つ</th><th rowspan="2">主な下接語</th></tr><tr><th>語幹</th><td class="v">落</td><td class="v">棄</td></tr><tr><th>未然形</th><td class="v">ち</td><td class="v">て</td><td class="k">～ず</td></tr><tr><th>連用形</th><td class="v">ち</td><td class="v">て</td><td class="k">～けり</td></tr><tr><th>終止形</th><td class="v">つ</td><td class="v">つ</td><td class="k">～。</td></tr><tr><th>連体形</th><td class="v">つ<span class="sf">‐る</span></td><td class="v">つ<span class="sf">‐る</span></td><td class="k">～とき</td></tr><tr><th>已然形</th><td class="v">つ<span class="sf">‐れ</span></td><td class="v">つ<span class="sf">‐れ</span></td><td class="k">～ども</td></tr><tr><th>命令形</th><td class="v">ち<span class="sf">‐よ</span></td><td class="v">て<span class="sf">‐よ</span></td><td class="k">～！</td></tr></table></div>
+<p class="key"><strong>「落つ」の場合には「つ」「ち」という</strong><em class="c">ｕ段とｉ段</em><strong>、「棄つ」の場合には「つ」「て」という</strong><em class="c">ｕ段とｅ段</em><strong>の母音交替が起こっている</strong>ことに加え、連体形以下では<strong>「―る」「―れ」「―よ」という接辞付加も見られる</strong>。</p>
+<p class="key"><strong>「落つ」は、接辞ではない部分に</strong><em class="c">ｕ段とｉ段</em><strong>が使われているので「</strong><em class="r">上二段活用</em><strong>」と呼ばれる</strong>。<strong>「棄つ」は、接辞ではない部分に</strong><em class="c">ｕ段とｅ段</em><strong>が使われているので「</strong><em class="r">下二段活用</em><strong>」と呼ばれる</strong>。</p>
+
+<p>「落つ」も「棄つ」も<strong>活用する部分がタ行</strong>なので、それぞれ「<em class="r">タ行上二段活用</em>の動詞」「<em class="r">タ行下二段活用</em>の動詞」である。</p>
+<p>下二段活用の動詞は、四段活用の動詞についで数が多く、全体の３割程度を占めると言われる。</p>
+<p class="key"><strong>下二段活用の動詞では、</strong><em class="c">基本形が１音節の動詞</em><strong>である「</strong><em class="r"><ruby>得<rt>う</rt></ruby></em><strong>」「</strong><em class="r"><ruby>寝<rt>ぬ</rt></ruby></em><strong>」「</strong><em class="r"><ruby>経<rt>ふ</rt></ruby></em><strong>」に注意する</strong>。</p>
+<p>なお、<em class="r">すべての動詞の中で、ア行活用なのは「得」とその複合語のみ</em>である。</p>
+<p>動詞の活用の３タイプ９種類をまとめると、次のようになる。</p>
+<div class="tw"><table class="ct wide"><tr><th>タイプ</th><th colspan="2">❶ 母音交替</th><th colspan="2">❷ 接辞付加</th><th colspan="5">❸ 母音交替＋接辞付加</th><th rowspan="3">主な下接語</th></tr><tr><th>種類</th><th>四段</th><th>ラ変</th><th>上一段</th><th>下一段</th><th>カ変</th><th>サ変</th><th>ナ変</th><th>上二段</th><th>下二段</th></tr><tr><th>語例</th><td class="v">咲く</td><td class="v">あり</td><td class="v">見る</td><td class="v">蹴る</td><td class="v">来</td><td class="v">す</td><td class="v">往ぬ</td><td class="v">落つ</td><td class="v">棄つ</td></tr><tr><th>未然形</th><td class="v">a</td><td class="v">ら</td><td class="v">i</td><td class="v">e</td><td class="v">こ</td><td class="v">せ</td><td class="v">な</td><td class="v">i</td><td class="v">e</td><td class="k">～ず</td></tr><tr><th>連用形</th><td class="v">i</td><td class="v">り</td><td class="v">i</td><td class="v">e</td><td class="v">き</td><td class="v">し</td><td class="v">に</td><td class="v">i</td><td class="v">e</td><td class="k">～けり</td></tr><tr><th>終止形</th><td class="v">u</td><td class="v">り</td><td class="v">i<span class="sf">‐る</span></td><td class="v">e<span class="sf">‐る</span></td><td class="v">く</td><td class="v">す</td><td class="v">ぬ</td><td class="v" colspan="2">u</td><td class="k">～。</td></tr><tr><th>連体形</th><td class="v">u</td><td class="v">る</td><td class="v">i<span class="sf">‐る</span></td><td class="v">e<span class="sf">‐る</span></td><td class="v">く<span class="sf">‐る</span></td><td class="v">す<span class="sf">‐る</span></td><td class="v">ぬ<span class="sf">‐る</span></td><td class="v" colspan="2">u<span class="sf">‐る</span></td><td class="k">～とき</td></tr><tr><th>已然形</th><td class="v">e</td><td class="v">れ</td><td class="v">i<span class="sf">‐れ</span></td><td class="v">e<span class="sf">‐れ</span></td><td class="v">く<span class="sf">‐れ</span></td><td class="v">す<span class="sf">‐れ</span></td><td class="v">ぬ<span class="sf">‐れ</span></td><td class="v" colspan="2">u<span class="sf">‐れ</span></td><td class="k">～ども</td></tr><tr><th>命令形</th><td class="v">e</td><td class="v">れ</td><td class="v">i<span class="sf">‐よ</span></td><td class="v">e<span class="sf">‐よ</span></td><td class="v">こ<span class="sf">‐よ</span></td><td class="v">せ<span class="sf">‐よ</span></td><td class="v">ね</td><td class="v">i<span class="sf">‐よ</span></td><td class="v">e<span class="sf">‐よ</span></td><td class="k">～！</td></tr></table></div>
+<p class="key"><em class="r">この表をすぐに書けるようになっておくことが必須である</em>。</p>
+
+<div class="end" data-i="6"></div></section>
+<section id="p009" data-i="7"><div class="sh"><span class="pn">動詞　8 / 22　<small>プリント p.009</small></span><h2>活用の種類の判別法</h2></div>
+<div class="step"><span class="sp">Step1</span><div><strong>覚えておくべき種類に属する語でないかを確認する</strong><br>（<strong>覚えておくべきなのは、</strong><em class="r">ラ変・上一段・下一段・カ変・サ変・ナ変</em>）</div></div>
+<div class="dn">▼</div>
+<div class="step"><span class="sp">Step2</span><div><strong>残っているのは</strong><em class="r">四段・上二段・下二段</em><br>ここで、<strong>「</strong><em class="r">ず</em><strong>」（「</strong><em class="c">ない</em><strong>」でもよい）</strong><em class="r">が下接するときの形</em><strong>を考える</strong>
+<ul><li><em class="r">ａず……四段</em></li><li><em class="r">ｉず……上二段</em></li><li><em class="r">ｅず……下二段</em></li></ul></div></div>
+<div class="step"><span class="sp">Step2+</span><div><strong>自信が持てない場合は、</strong><em class="c">命令するときの形</em><strong>も考える</strong>
+<ul><li><em class="c">ｅ！……四段</em></li><li><em class="c">ｉよ！……上二段</em></li><li><em class="c">ｅよ！……下二段</em></li></ul></div></div>
+<p class="nt"><em class="r">※もちろん、文章の中の動詞を判別するときには、そのときそのときの下接語との整合性を優先する。</em></p>
+<div class="ex"><p class="key"><span class="exl">例</span><strong>「過ぐ」の活用の種類は？</strong></p>
+<p class="in1"><strong>❶ 覚えておくべき種類</strong><em class="r">ではない</em></p><div class="dn">▼</div>
+<p class="in1"><strong>❷ 「</strong><em class="c">過がず（過がない）</em><strong>」or「</strong><em class="r">過ぎず（過ぎない）</em><strong>」or「</strong><em class="c">過げず（過げない）</em><strong>」</strong></p>
+<p class="in1"><strong>❷＋「</strong><em class="c">過げ！</em><strong>」or「</strong><em class="r">過ぎよ！</em><strong>」or「</strong><em class="c">過げよ！</em><strong>」</strong></p>
+<p class="in1"><span class="exl">答</span><strong>上二段活用</strong></p></div>
+<div class="prac" id="hanbetsu"></div>
+
+<div class="end" data-i="7"></div></section>
+<section id="p010" data-i="8"><div class="sh"><span class="pn">動詞　9 / 22　<small>プリント p.010</small></span><h2>古典文法（動詞）徹底反復練習</h2></div>
+<p class="key"><em class="c">とにかく何度も問いと答えを声に出して読む！</em></p><div class="prac" id="drill"></div>
+
+<div class="end" data-i="8"></div></section>
+<section id="p011" data-i="9"><div class="sh"><span class="pn">動詞　10 / 22　<small>プリント p.011</small></span><h2>実際に文の中で用いられている動詞の判別法</h2></div>
+<div class="step"><span class="sp">Step1</span><div><strong><a href="#p009">p.009</a>の判別法で、活用の種類を特定する（行は「ず」をつけた時の１文字前を見る）</strong></div></div>
+<div class="dn">▼</div>
+<div class="step"><span class="sp">Step2</span><div><strong>あとは</strong><em class="r">活用形（何形か）</em><strong>がわかるとよい</strong></div></div>
+<h3>ⓐ 下接語の知識があるとき</h3>
+<p class="in1"><em class="r">何形に下接する語か</em><strong>考え、その活用形を答える</strong></p>
+<p class="in1"><em class="c">※必ず活用表と照合して、活用表での形と文の中での形に矛盾がないかチェックする</em></p>
+<div class="ex"><p><em class="r">こんなときのためだよ</em></p>
+<p class="key"><span class="exl">例</span><strong>「くねくねしく恨むる人」は？</strong></p>
+<p class="in1"><strong>❶ 覚えておくべき種類</strong><em class="r">ではない　→　「恨まず（恨まない）」だからマ行四段活用</em></p><div class="dn">▼</div>
+<p class="in1"><strong>❷ 下接語が「人」という体言だから</strong><em class="r">連体形</em></p>
+<p class="in1"><strong>※活用表と照合</strong></p><div class="tw"><table class="ct mini"><tr><th>種類</th><th>四段</th></tr><tr><th>語例</th><td>咲く</td></tr><tr><th>未然形</th><td>a</td></tr><tr><th>連用形</th><td>i</td></tr><tr><th>終止形</th><td>u</td></tr><tr><th>連体形</th><td class="hit">u</td></tr><tr><th>已然形</th><td>e</td></tr><tr><th>命令形</th><td>e</td></tr></table></div>
+<p class="in1"><em class="r">矛盾してる！　ということはなんかおかしい</em><br><em class="c">矛盾してるときは文の中での形を優先する</em></p>
+<p class="in1"><em class="r">実際には「恨む」は四段ではなく上二段</em><br><strong>（こういうなんとなくの感覚とズレる動詞はそんなに多くないので覚えていく）</strong></p>
+<p class="in1"><span class="exl">答</span><strong>マ行上二段活用　連体形</strong></p></div>
+<h3>ⓑ 下接語の知識がないとき</h3>
+<p class="in1"><em class="r">活用表と照合して、文の中での形と一致するのは何形か</em><strong>考え、その活用形を答える</strong></p>
+<div class="ex"><p class="key"><span class="exl">例</span><strong>「『これなむ都鳥』と言ふを聞きて」は？</strong></p>
+<p class="in1"><strong>❶ 覚えておくべき種類</strong><em class="r">ではない　→　「言はず」だからハ行四段活用</em><strong>（ハ行だよ～）</strong></p><div class="dn">▼</div>
+<p class="in1"><strong>❷ 下接語が「を」だから知識がないので、活用表を考える</strong></p>
+
+<div class="tw"><table class="ct mini"><tr><th>種類</th><th>四段</th></tr><tr><th>語例</th><td>咲く</td></tr><tr><th>未然形</th><td>a</td></tr><tr><th>連用形</th><td>i</td></tr><tr><th>終止形</th><td class="hit">u</td></tr><tr><th>連体形</th><td class="hit">u</td></tr><tr><th>已然形</th><td>e</td></tr><tr><th>命令形</th><td>e</td></tr></table></div>
+<p class="in1"><strong>「言ふを聞きて」の形と一致するのは</strong><em class="r">終止形か連体形</em></p>
+<p class="in1"><em class="c">※二択になったら「神様お願い！」と祈りながら、どっちかテキトーに選ぶ</em></p></div>
+
+<div class="end" data-i="9"></div></section>
+<section id="p013" data-i="10"><div class="sh"><span class="pn">形容詞・形容動詞　11 / 22　<small>プリント p.013</small></span><h2>形容詞とその活用</h2></div>
+<p class="key"><strong>用言のうち、基本形（辞書に載っている形・終止形）が</strong><em class="r">「し」「じ」で終わる</em><strong>語の品詞を形容詞と呼ぶ</strong>。</p>
+<p>形容詞も用言である以上、動詞と同じように<em class="r">活用がある</em>。</p>
+<p>形容詞の活用の種類は、<em class="r">ク活用とシク活用の２種類</em>である。</p>
+<div class="tw"><table class="ct"><tr><th>種類</th><th colspan="2">ク</th><th colspan="2">シク</th><th colspan="2" rowspan="3">主な下接語</th></tr><tr><th>語例</th><td class="v" colspan="2">めでたし</td><td class="v" colspan="2">うつくし</td></tr><tr><th>語幹</th><td class="v" colspan="2">めでた</td><td class="v" colspan="2">うつくし</td></tr><tr><th>未然形</th><td class="v">く</td><td class="v">から</td><td class="v">く</td><td class="v">から</td><td class="k">～ば</td><td class="k">～ず</td></tr><tr><th>連用形</th><td class="v">く</td><td class="v">かり</td><td class="v">く</td><td class="v">かり</td><td class="k">～て</td><td class="k">～けり</td></tr><tr><th>終止形</th><td class="v">し</td><td class="v">○</td><td class="v">Φ</td><td class="v">○</td><td class="k">～。</td><td class="k"></td></tr><tr><th>連体形</th><td class="v">き</td><td class="v">かる</td><td class="v">き</td><td class="v">かる</td><td class="k">～とき</td><td class="k">～べし</td></tr><tr><th>已然形</th><td class="v">けれ</td><td class="v">○</td><td class="v">けれ</td><td class="v">○</td><td class="k">～ども</td><td class="k"></td></tr><tr><th>命令形</th><td class="v">○</td><td class="v">かれ</td><td class="v">○</td><td class="v">かれ</td><td class="k"></td><td class="k">～！</td></tr></table></div>
+<p class="note"><small>活用表の中の「○」は、存在しないことを表す。例えば、本活用の命令形は存在しない。<br>活用表の中の「Φ」は、活用語尾なしを表す。つまり、シク活用は語幹だけで終止形になる。</small></p>
+<p>この表からわかるように、動詞と違う特徴として、活用表が２列になっていることが挙げられる。</p>
+<p>右側の活用（ク活用であれば「く・く・し・き・けれ・○」を<em class="r">本活用</em>と呼ぶ。</p>
+<p>左側の活用（ク活用であれば「から・かり・○・かる・○・かれ」を<em class="r">補助活用</em>と呼ぶ。</p>
+<p>補助活用は、形容詞を<em class="c">助動詞に接続させるために「あり」を挟んだ</em>ものが、約まって<s>（磯本現象が生じて）</s>生じたとされている。</p>
+<p>たとえば、「うつくし」に打消の助動詞「ず」を下接させたい場合、本活用の未然形に「ず」をつけると「うつくしくず」となる。しかし、どうやらこれには違和感があったようである。そこで、この違和感を解消するために「あり」を挟んだ。これにより、「<em class="c">うつくしくあらず</em>」となる。この「<em class="c">くあ</em>」の部分が約まって<s>（磯本現象が生じて）</s>「<em class="c">うつくしからず</em>」となったわけである。</p>
+<p>この成立背景を踏まえた上で<em class="r">補助活用をよく見れば、ラ行変格活用と同じ活用のしかたをしている</em>ことがわかるはずである。</p>
+<p class="nt"><small><em class="r">※これから先、こういうことが出てくるから、動詞の理解が不可欠なのである。</em></small></p>
+<p>ク活用とシク活用の差異は、<em class="c">本活用の終止形が「し」か「Φ」か</em>だけである。</p>
+<p>この両者を区別する方法は、<em class="r">下に「～なる」「～て」をつける</em>という方法がある。</p>
+<p>「うつくシクなる」「うつくシクて」のように<em class="r">「～シクなる」となるのがシク活用</em>である。</p>
+
+<div class="end" data-i="10"></div></section>
+<section id="p014" data-i="11"><div class="sh"><span class="pn">形容詞・形容動詞　12 / 22　<small>プリント p.014</small></span><h2>形容動詞とその活用</h2></div>
+<p class="key"><strong>用言のうち、終止形が</strong><em class="r">「なり」「たり」で終わる</em><strong>語の品詞を形容動詞と呼ぶ</strong>。</p>
+<p>形容動詞も用言である以上、動詞や形容詞と同じように<em class="r">活用がある</em>。</p>
+<p>形容動詞の活用の種類は、<em class="r">ナリ活用とタリ活用の２種類</em>である。</p>
+<div class="tw"><table class="ct"><tr><th>種類</th><th colspan="2">ナリ</th><th colspan="2">タリ</th><th colspan="2" rowspan="3">主な下接語</th></tr><tr><th>語例</th><td class="v" colspan="2">あはれなり</td><td class="v" colspan="2">堂々たり</td></tr><tr><th>語幹</th><td class="v" colspan="2">あはれ</td><td class="v" colspan="2">堂々</td></tr><tr><th>未然形</th><td class="v">○</td><td class="v">なら</td><td class="v">○</td><td class="v">たら</td><td class="k"></td><td class="k">～ず</td></tr><tr><th>連用形</th><td class="v">に</td><td class="v">なり</td><td class="v">と</td><td class="v">たり</td><td class="k">～動詞</td><td class="k">～けり</td></tr><tr><th>終止形</th><td class="v">○</td><td class="v">なり</td><td class="v">○</td><td class="v">たり</td><td class="k"></td><td class="k">～。</td></tr><tr><th>連体形</th><td class="v">○</td><td class="v">なる</td><td class="v">○</td><td class="v">たる</td><td class="k"></td><td class="k">～べし</td></tr><tr><th>已然形</th><td class="v">○</td><td class="v">なれ</td><td class="v">○</td><td class="v">たれ</td><td class="k"></td><td class="k">～ども</td></tr><tr><th>命令形</th><td class="v">○</td><td class="v">なれ</td><td class="v">○</td><td class="v">たれ</td><td class="k"></td><td class="k">～！</td></tr></table></div>
+<p>もともと、形容動詞は<em class="r">「○○＋に＋あり」「○○＋と＋あり」</em>であったものが約まって<s>（磯本現象が生じて）</s>生じたとされている。</p>
+<p>この成立背景を踏まえて<em class="r">活用表をよく見れば、ラ行変格活用と同じ活用のしかたをしている</em>ことがわかるはずである。</p>
+<p>なお、ナリ活用連用形の「に」、タリ活用連用形の「と」は、<em class="c">「あり」の代わりに後ろに動詞が続くときの形</em>である。（例　堂々＋と＋歩く）</p>
+<div class="end" data-i="11"></div></section>
+<section id="p014b" data-i="12"><div class="sh"><span class="pn">形容詞・形容動詞　13 / 22　<small>プリント p.014</small></span><h2>語幹用法</h2></div>
+<p>形容詞・形容動詞には、次のように語幹が独立して使われる用法がある。</p>
+<p class="in1"><strong>①語幹単独で感動などを表す</strong><small>（現代でも「さっむ」とか「あっつ」とか言うことがある。それと同じである。）</small></p>
+<p class="in2"><span class="exl">例</span>あな、めでた。（訳：ああ、すばらし）</p>
+<p class="in2"><span class="exl">例</span>あな、おそろし。（訳：ああ、おそろし）</p>
+<p class="in1"><strong>②接尾辞がついて他の品詞になる</strong></p>
+<p class="in2"><strong>・「～さ」「～み」で名詞化</strong></p>
+<p class="in2"><span class="exl">例</span>めでたさ・おそろしさ・かなしみ</p>
+<p class="in2"><strong>・「～がる」で動詞化</strong></p>
+<p class="in2"><span class="exl">例</span>めでたがる・寒がる・をかしがる</p>
+
+<div class="end" data-i="12"></div></section>
+<section id="p015" data-i="13"><div class="sh"><span class="pn">助動詞　14 / 22　<small>プリント p.015</small></span><h2>助動詞とは何か</h2></div>
+<p>彼は歌わ<em class="c">せられたくないらしい</em>。――この文では、「<em class="c">せ</em>」（使役）、「<em class="c">られ</em>」（受身）、「<em class="c">たく</em>」（願望）、「<em class="c">ない</em>」（否定）、「<em class="c">らしい</em>」（推定）という、５つの助動詞が使われている。<strong>助動詞は、文に様々な意味合いを加え、表現を豊かにする</strong>力がある。逆に言えば、助動詞がなければ、文が表せる意味内容は非常に狭くなってしまう。この文で言えば、助動詞がなければ「<strong>彼は歌う</strong>」というだけの文になる。助動詞がなければ、否定することすら難しくなってしまうのである。このように、助動詞があることによってわれわれは実に様々な意味内容を表現することができる。それはつまり、<em class="r">読解の際に助動詞がわからなければ意味内容が理解できない</em>ことを表してもいる。<em class="r">古文を精確に読んでいくためには、助動詞を理解することは避けて通れない</em>のである。</p>
+<p>※同じ「助動詞」という名称でも、英語の助動詞と日本語の助動詞とは大きく異なっている。表す意味の範囲も違うし、文法上の機能も全く違う。<em class="r">英語の助動詞と混同しないようにしよう</em>。</p>
+<div class="end" data-i="13"></div></section>
+<section id="p015b" data-i="14"><div class="sh"><span class="pn">助動詞　15 / 22　<small>プリント p.015</small></span><h2>助動詞の３点セット</h2></div>
+<p>世の中ではよく、<em class="r">助動詞の３点セット</em>と言われる。<em class="r">活用（活用表）・接続（上接）・意味</em>である。この３つをしっかり押さえていくことを意識しよう。</p>
+
+<div class="end" data-i="14"></div></section>
+<section id="p016" data-i="15"><div class="sh"><span class="pn">助動詞　16 / 22　<small>プリント p.016</small></span><h2>「ず」<small class="ref">（体系古典文法 p.52）</small></h2></div>
+<div class="tw"><table class="ct"><tr><th>上接</th><td class="k" colspan="3">未然形</td><th colspan="2" rowspan="2">主な下接語</th></tr><tr><th>基本形</th><th colspan="3">ず</th></tr><tr><th>未然形</th><td class="v">(な)</td><td class="v">ず</td><td class="v">ざら</td><td class="k">～ば</td><td class="k">～む</td></tr><tr><th>連用形</th><td class="v">(に)</td><td class="v">ず</td><td class="v">ざり</td><td class="k">～して</td><td class="k">～けり</td></tr><tr><th>終止形</th><td class="v">(ぬ)</td><td class="v">ず</td><td class="v">(ざり)</td><td class="k">～。</td><td class="k"></td></tr><tr><th>連体形</th><td class="v">ぬ</td><td class="v">○</td><td class="v">ざる</td><td class="k">～とき</td><td class="k">～べし</td></tr><tr><th>已然形</th><td class="v">ね</td><td class="v">○</td><td class="v">ざれ</td><td class="k">～ども</td><td class="k"></td></tr><tr><th>命令形</th><td class="v">(ね)</td><td class="v">○</td><td class="v">ざれ</td><td class="k"></td><td class="k">～！</td></tr></table></div>
+<div class="kv"><span class="lb">上接</span><span><em class="r">未然形</em></span></div>
+<div class="kv"><span class="lb">意味</span><span><em class="r">打消《…（し）ない／…（で）ない》</em></span></div>
+<p>古文における<strong>基本的な否定の形式は</strong><em class="r">未然形＋ず</em>である。</p>
+<p>「ず」の活用表は、上のように３列にわたっている。このうち、最も古いのは右端の（な）・（に）・（ぬ）・ぬ・ね・（ね）の列とされ、これが祖であると言われている。真ん中の「ず」の列は、その古い連用形「に」に「す」がついた「にす」から成立したとされる。</p>
+<p>最後に生まれたのが左端の列である。これは、<strong>形容詞と同様（<a href="#p013">p.013</a>を参照）に、</strong><em class="r">他の助動詞に接続させるために「あり」を挟んだ</em><strong>ものが、約まって生じた</strong>とされている。</p>
+<p>たとえば、助動詞「ず」に過去を表す助動詞「けり」を下接させたい場合、連用形「ず」に「けり」をつけると「<strong>（咲か）ずけり</strong>」となる。どうやらこれには違和感があったようである。そこで、この違和感を解消するために「あり」を挟んだ。これにより、「<em class="c">（咲か）ずありけり</em>」となる。この「<em class="c">ずあ</em>」の部分が約まって<s>（磯本現象が生じて）</s>「<em class="c">（咲か）ざりけり</em>」のようになるわけである。</p>
+
+<div class="end" data-i="15"></div></section>
+<section id="p017" data-i="16"><div class="sh"><span class="pn">助動詞　17 / 22　<small>プリント p.017</small></span><h2>「き」「けり」<small class="ref">（体系古典文法 p.53）</small></h2></div>
+<div class="tw"><table class="ct"><tr><th>上接</th><td class="k">連用形</td><td class="k">連用形</td></tr><tr><th>基本形</th><th>き</th><th>けり</th></tr><tr><th>未然形</th><td class="v">せ</td><td class="v">(けら)</td></tr><tr><th>連用形</th><td class="v">○</td><td class="v">○</td></tr><tr><th>終止形</th><td class="v">き</td><td class="v">けり</td></tr><tr><th>連体形</th><td class="v">し</td><td class="v">ける</td></tr><tr><th>已然形</th><td class="v">しか</td><td class="v">けれ</td></tr><tr><th>命令形</th><td class="v">○</td><td class="v">○</td></tr></table></div>
+<h3><strong>「き」</strong></h3>
+<div class="kv"><span class="lb">上接</span><span><em class="r">連用形</em>　<small><strong>（※カ変とサ変は例外的に特殊な接続をする）</strong></small></span></div>
+<div class="kv"><span class="lb">意味</span><span><em class="r">過去</em>　確実に記憶にあること、多くは自分の過去の体験を回想する。</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…だった／…た》</span></div>
+<h3><strong>「けり」</strong></h3>
+<div class="kv"><span class="lb">上接</span><span><em class="r">連用形</em></span></div>
+<div class="kv"><span class="lb">意味</span><span><em class="r">①過去</em>　他者から伝え聞いた話などについて、そうだったのだと改めて確認する。</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…だったそうだ／…とかいうことだ／…だとさ》</span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">②詠嘆</em>　今まで意識していなかったことに気づき、驚き感動する気持ちを表す。</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…だったのだなあ／…ていたのだなあ／…だったよ》</span></div>
+<p>「き」と「けり」はどちらも<em class="c">過去のアスペクトを表す</em>、<em class="c">連用形に下接する</em>助動詞である。</p>
+<p>「き」は主に自ら経験した過去を、「けり」は主に伝え聞いた過去を表すとされる。</p>
+<p>「き」の語源についてはよく分かっていないが、<em class="r">「けり」は「来あり」が約まって生じたもの</em>とされている。このことは、<em class="r">「あり」と同じ活用の仕方をする</em>こととも整合性がとれる。また、意味の面でも、「<em class="c">外から自分の中に入って</em><em class="r">来</em><em class="c">て、今自分の中に</em><em class="r">ある</em>」というところで理解しやすい。</p>
+<p>①の過去についていえば、<strong>他者から聞いて自分の中にその話が入って来て、だから今自分が知っている</strong>ということであるし、②の詠嘆についていえば、<strong>それまで意識の外にあったものが自分の中に入って来て、いま自分の意識にある</strong>ということである。</p>
+
+<div class="end" data-i="16"></div></section>
+<section id="p018" data-i="17"><div class="sh"><span class="pn">助動詞　18 / 22　<small>プリント p.018</small></span><h2>「つ」「ぬ」<small class="ref">（体系古典文法 p.56）</small></h2></div>
+<div class="tw"><table class="ct"><tr><th>上接</th><td class="k">連用形</td><td class="k">連用形</td></tr><tr><th>基本形</th><th>つ</th><th>ぬ</th></tr><tr><th>未然形</th><td class="v">て</td><td class="v">な</td></tr><tr><th>連用形</th><td class="v">て</td><td class="v">に</td></tr><tr><th>終止形</th><td class="v">つ</td><td class="v">ぬ</td></tr><tr><th>連体形</th><td class="v">つる</td><td class="v">ぬる</td></tr><tr><th>已然形</th><td class="v">つれ</td><td class="v">ぬれ</td></tr><tr><th>命令形</th><td class="v">てよ</td><td class="v">ね</td></tr></table></div>
+<h3><strong>「つ」</strong></h3>
+<div class="kv"><span class="lb">上接</span><span><em class="r">連用形</em></span></div>
+<div class="kv"><span class="lb">意味</span><span><em class="r">①完了</em>　過去・現在・未来に関係なく、動作・作用・状態が完了することを表す。</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…た／…てしまった／…てしまう》</span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">②強意</em>　推量の助動詞を伴って、動作が完了することを確信して言う。</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《きっと…する／たしかに…する》</span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">③並列</em>　「…つ…つ」の形で、二つの動作や作用が並列して行われることを表す。</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…たり…たり》</span></div>
+<h3><strong>「ぬ」</strong></h3>
+<div class="kv"><span class="lb">上接</span><span><em class="r">連用形</em></span></div>
+<div class="kv"><span class="lb">意味</span><span><em class="r">①完了</em>　過去・現在・未来に関係なく、動作・作用・状態の変化が実現したことを表す。</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…た／…てしまった／…てしまう／…しはじめた》</span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">②強意</em>　推量の助動詞を伴って、動作が完了することを確信して言う。</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《きっと…する／たしかに…する》</span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">③並列</em>　「…ぬ…ぬ」の形で、二つの動作や作用が並列して行われることを表す。</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…たり…たり》</span></div>
+<p>「つ」と「ぬ」はどちらも<em class="c">完了のアスペクトを表す、連用形に下接する</em>助動詞である。</p>
+<p>「つ」と「ぬ」との差異については諸説あるが、<em class="r">「つ」が完了を表す</em>のに対して、<em class="r">「ぬ」はもう少し広く変化の実現</em>を表すと考えるとよい。変化の実現とはすなわち、下のアスペクト図でいう<em class="r">開始と完了</em>である。</p>
+<div class="fig"><svg viewBox="0 0 440 150" role="img" aria-label="テンスは過去・現在・未来。アスペクトは開始前、開始、途中、完了、完了後（結果継続）、終了。"><g font-family="sans-serif" font-size="12">
+<text x="6" y="30" font-weight="700" fill="#222">テンス</text><line x1="90" y1="26" x2="420" y2="26" stroke="#333" stroke-width="2"/><path d="M420 26l-9 -5v10z" fill="#333"/>
+<g fill="#a9c3ee"><circle cx="120" cy="26" r="9"/><circle cx="245" cy="26" r="9"/><circle cx="370" cy="26" r="9"/></g>
+<g fill="#1a5fa8" font-weight="700" text-anchor="middle"><text x="120" y="52">過去</text><text x="245" y="52">現在</text><text x="370" y="52">未来</text></g>
+<text x="6" y="105" font-weight="700" fill="#222">アスペクト</text>
+<rect x="92" y="84" width="62" height="32" fill="none" stroke="#1a5fa8" stroke-dasharray="4 3"/><text x="123" y="105" text-anchor="middle" fill="#1a5fa8" font-weight="700">開始前</text>
+<path d="M158 82h150v-10l34 28l-34 28v-10h-150z" fill="#b9cdf0"/><text x="232" y="105" text-anchor="middle" fill="#1a5fa8" font-weight="700">途中</text>
+<rect x="346" y="84" width="74" height="32" fill="#e3e8f2" stroke="#1a5fa8" stroke-dasharray="4 3"/><text x="383" y="98" text-anchor="middle" fill="#1a5fa8" font-weight="700" font-size="11">完了後</text><text x="383" y="111" text-anchor="middle" fill="#1a5fa8" font-size="9">（結果継続）</text>
+<g fill="#1a5fa8" font-weight="700" text-anchor="middle"><text x="158" y="138">開始</text><text x="344" y="138">完了</text><text x="420" y="138">終了</text></g></g></svg></div>
+
+<div class="end" data-i="17"></div></section>
+<section id="p019" data-i="18"><div class="sh"><span class="pn">助動詞　19 / 22　<small>プリント p.019</small></span><h2>「り」「たり」<small class="ref">（体系古典文法 p.53）</small></h2></div>
+<div class="tw"><table class="ct"><tr><th>上接</th><td class="k">＊特殊</td><td class="k">連用形</td></tr><tr><th>基本形</th><th>り</th><th>たり</th></tr><tr><th>未然形</th><td class="v">ら</td><td class="v">たら</td></tr><tr><th>連用形</th><td class="v">り</td><td class="v">たり</td></tr><tr><th>終止形</th><td class="v">り</td><td class="v">たり</td></tr><tr><th>連体形</th><td class="v">る</td><td class="v">たる</td></tr><tr><th>已然形</th><td class="v">れ</td><td class="v">たれ</td></tr><tr><th>命令形</th><td class="v">れ</td><td class="v">たれ</td></tr></table></div>
+<h3><strong>「り」</strong></h3>
+<div class="kv"><span class="lb">上接</span><span><em class="r">サ変の未然形・四段の已然形 or 命令形</em>　<small><strong>（※已然形と答えても命令形と答えてもよい）</strong></small></span></div>
+<div class="kv"><span class="lb">意味</span><span><em class="r">①存続</em>　完了した動作・作用・状態の結果が続いている状態を言う。</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…ている／…てある》</span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">②完了</em>　動作・作用が完了した意を表す。</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…た／…てしまう》</span></div>
+<h3><strong>「たり」</strong></h3>
+<div class="kv"><span class="lb">上接</span><span><em class="r">連用形</em></span></div>
+<div class="kv"><span class="lb">意味</span><span><em class="r">①存続</em>　完了した動作・作用・状態の結果が続いている状態を言う。</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…ている／…てある》</span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">②完了</em>　動作・作用が完了した意を表す。</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…た／…てしまう》</span></div>
+<p><strong>「り」は、もともと「</strong><em class="r">あり</em><strong>」である</strong>。動詞の連用形に「あり」がついたものを想像するとよい。例えば四段動詞「咲く」であれば「咲きあり」となるし、サ変動詞「す」であれば「しあり」となる。</p>
+<p>この「咲きあり」や「しあり」が約まって「<em class="c">咲きあり→咲けり</em>」「<em class="c">しあり→せり</em>」と変化する。</p>
+<p>ここで、<strong>たまたま</strong>四段動詞「咲く」には<strong>已然形と命令形</strong>に「咲け」という形が存在するし、サ変動詞「す」には<strong>未然形</strong>に「せ」という形が存在するので、<strong>見かけ上</strong>、「動詞＋り」と分析することができる。</p>
+<p>こうして、結果として助動詞とみなされるようになったのが「り」である。「り」の上接が特殊なのは、このような事情による。</p>
+<p>意味を考える際にも、この「あり」を根底に考えるとよい。<em class="r">「咲き」、「ある」</em>のである。</p>
+
+<p><strong>「たり」は、</strong><em class="c">なんらかの事情によって動詞の連用形に直接「あり」をつけることができず、間に「て」を挟んだ形である</em>とする説がある。「て」はもともと完了の助動詞「つ」の連用形であるため、この完了のニュアンスを汲むと理解の助けになる。とはいえ、<em class="r">意味は「り」と同じ</em>だと考えてよい。</p>
+
+<div class="end" data-i="18"></div></section>
+<section id="p021" data-i="19"><div class="sh"><span class="pn">助動詞　20 / 22　<small>プリント p.021</small></span><h2>「る」「らる」<small class="ref">（体系古典文法 p.48）</small></h2></div>
+<div class="tw"><table class="ct"><tr><th>上接</th><td class="k">未然形</td><td class="k">未然形</td></tr><tr><th>基本形</th><th>る</th><th>らる</th></tr><tr><th>未然形</th><td class="v">れ</td><td class="v">られ</td></tr><tr><th>連用形</th><td class="v">れ</td><td class="v">られ</td></tr><tr><th>終止形</th><td class="v">る</td><td class="v">らる</td></tr><tr><th>連体形</th><td class="v">るる</td><td class="v">らるる</td></tr><tr><th>已然形</th><td class="v">るれ</td><td class="v">らるれ</td></tr><tr><th>命令形</th><td class="v">れよ</td><td class="v">られよ</td></tr></table></div>
+<h3><strong>「る」</strong></h3>
+<div class="kv"><span class="lb">上接</span><span><em class="r">四段・ラ変・ナ変の未然形</em></span></div>
+<div class="kv"><span class="lb">意味</span><span><em class="r">①自発</em>　（心情などが）自然に発生する意を表す。</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《自然に…れる／…せずにはいられない》</span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">②可能</em>　<em class="c">原則として打消を伴って用いる。</em>（中世以降は単独で用いられることもある）</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…することができる》<small><em class="r">※理解をアピールするためにも、曖昧な「…れる」は原則として用いないようにしよう</em></small></span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">③受身</em></span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《〔～に〕…れる》</span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">④尊敬</em>　特に中古では、敬意を表す動詞の下につくことが多い</span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…なさる》</span></div>
+<h3><strong>「らる」</strong></h3>
+<div class="kv"><span class="lb">上接</span><span><em class="r">四段・ラ変・ナ変以外の未然形</em></span></div>
+<div class="kv"><span class="lb">意味</span><span><em class="r">「る」と同じ</em></span></div>
+<p><strong>「る」「らる」の語源</strong>ははっきりとわかっていないが、<em class="r">「<ruby>生<rt>あ</rt></ruby>る」</em>という動詞なのではないかとする説がある。「<ruby>生<rt>あ</rt></ruby>る」は、「自然に発生する」という意味である。</p>
+<p>これは、<em class="c">「る」「らる」の根源的意味が「自発」にある</em>とする理解とも整合する。<em class="c">「自発」というのは、自然のなりゆきでそうなること</em>を表す。</p>
+<p>また、<strong>日本語では可能を「…できる」と言う</strong>。この<em class="c">「できる」の語源は「<ruby>出<rt>い</rt></ruby>で<ruby>来<rt>く</rt></ruby>（る）」</em>だとされている。<em class="c">つまり、「でてくる」</em>である。<em class="c">日本では、何かが可能になるというのは</em>、個人の努力や奮闘の末に獲得するものではなく、<em class="c">あくまで</em><em class="r">自然のなりゆきでそういう「できる」状況が「でてくる」</em>のだという意識があったのだとされる。</p>
+
+<p>なお、これは<strong>英語で「できる」を表すcanの語源が古代ゲルマン語のkanninght（力）である</strong>こととは対照的である。これは、<strong>「できる」状況はその「力」を得ること</strong>だと考える意識の表れであるとされる。</p>
+<p>もはや文化論の範疇であるが、このような<strong>日本の意識は、稲作文化と結びついている</strong>とされる。豊作になるかどうかは、人間の努力ではどうしようもない天候の影響を強く受ける。<em class="c">自然のなりゆきの結果</em>なのである。</p>
+<p>次に<em class="c">受身</em>の意味であるが、これも<em class="c">自然のなりゆきの影響を受け入れる</em>ことが根本である。日本語の受身と英語の受身との大きな違いと言われるのは、日本語では自動詞も受身にできることである。たとえば、「雨に降られた」とか「恋人に逃げられた」とかいう言い方である。「降る」「逃げる」は自動詞であり、英語ではそのまま受身にはできない。日本ではこれを受身の形にできるのである。</p>
+<p>この「雨に降られる」というのは、「雨が降る」という行為が自然のなりゆきで起こり、自分はそれに関与していないが、その影響を受けているということを表しているのである。また、「恋人に逃げられた」というのも、「恋人が逃げる」という行為が自然のなりゆきで起こり、自分はその影響を受けているということを表している<small>（なんか無責任というか他責思考ですね）</small>。</p>
+<p>いずれにせよ、<em class="r">日本においては、受身は自然のなりゆきを影響として受けるイメージが根底にある</em>のである。</p>
+<p>最後に尊敬の意味であるが、これも「尊敬」というネーミングが悪い。敬語にも「尊敬語」というのがあり、よく「動作の行為主に対して敬意を表す」とか言われたりするが、よく考えてみてほしい。<strong>「尊敬語」は、本当に敬意の対象に用いているのか</strong>。たとえば、道で裸で踊っているオッサンがいたとする。「なにして<strong>はる</strong>んやろ」と思い、場合によっては「なにして<strong>はる</strong>ん<strong>です</strong>か」と本人に聞く。では、このオッサンは敬意の対象なのか。尊敬しているのか。明らかに違う。<em class="r">敬語というのは</em>、敬意を表するときに用いるだけでなく、<em class="r">距離をとるときに用いる</em>のである。敬語というものに対する理解として、<em class="c">ウチかソトか</em>ということも意識しておくとよい。<em class="c">自分のコミュニティのウチにいる近しい存在か、ソトにいる遠い存在かによって敬語を用いるか用いないかが変わる</em>。</p>
+<p><em class="r">遠い存在の行為については</em>、自分が何か関与することはできない。<em class="r">自然のなりゆきと同じように受け入れるしかない</em>のである。</p>
+<p>以上のように考えれば、<em class="r">「る」「らる」</em>という助動詞に<em class="r">①自発②可能③受身④尊敬</em>という、一見まったく関係のなさそうな４つの意味があることも、つながりをもって理解できよう。</p>
+
+<div class="end" data-i="19"></div></section>
+<section id="p023" data-i="20"><div class="sh"><span class="pn">助動詞　21 / 22　<small>プリント p.023</small></span><h2>「す」「さす」「しむ」<small class="ref">（体系古典文法 p.48）</small></h2></div>
+<div class="tw"><table class="ct"><tr><th>上接</th><td class="k">未然形</td><td class="k">未然形</td><td class="k">未然形</td></tr><tr><th>基本形</th><th>す</th><th>さす</th><th>しむ</th></tr><tr><th>未然形</th><td class="v">せ</td><td class="v">させ</td><td class="v">しめ</td></tr><tr><th>連用形</th><td class="v">せ</td><td class="v">させ</td><td class="v">しめ</td></tr><tr><th>終止形</th><td class="v">す</td><td class="v">さす</td><td class="v">しむ</td></tr><tr><th>連体形</th><td class="v">する</td><td class="v">さする</td><td class="v">しむる</td></tr><tr><th>已然形</th><td class="v">すれ</td><td class="v">さすれ</td><td class="v">しむれ</td></tr><tr><th>命令形</th><td class="v">せよ</td><td class="v">させよ</td><td class="v">しめよ</td></tr></table></div>
+<h3><strong>「す」</strong></h3>
+<div class="kv"><span class="lb">上接</span><span><em class="r">四段・ラ変・ナ変の未然形</em></span></div>
+<div class="kv"><span class="lb">意味</span><span><em class="r">①使役</em>　<em class="c">尊敬を表す表現とセットになっていない場合は絶対に使役</em></span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…せる／…させる》</span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">②尊敬</em>　<em class="c">尊敬を表す語とともに用いる。</em><small>（尊敬語を伴っていても絶対に尊敬であるとは限らない）</small></span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…なさる》</span></div>
+<h3><strong>「さす」</strong></h3>
+<div class="kv"><span class="lb">上接</span><span><em class="r">四段・ラ変・ナ変以外の未然形</em></span></div>
+<div class="kv"><span class="lb">意味</span><span><em class="r">「る」と同じ</em></span></div>
+<h3><strong>「しむ」</strong>（中古の和文ではほとんど用いられない）</h3>
+<div class="kv"><span class="lb">上接</span><span><em class="r">未然形</em></span></div>
+<div class="kv"><span class="lb">意味</span><span><em class="r">「る」と同じ</em></span></div>
+<p>「す」「さす」「しむ」の語源についてはよくわかっていないが、<em class="r">いずれも下二段型の活用</em>をする。</p>
+<p><em class="c">「しむ」は</em>上代に用いられた使役の助動詞で、<em class="c">中古の和文ではほとんど用いられることがない</em>。しかし<strong>漢文訓読の世界に残り</strong>、中世以降の<ruby>和漢混淆<rt>わかんこんこう</rt></ruby>文で再び用いられることとなった。</p>
+<p>なお、<em class="r">「それっぽいけど使役の助動詞が使われているわけではない」動詞がある</em>ということも知っておこう。例えば、<em class="r">「散らす」は、「散ら＋す」なのか</em>。もし<strong>「散ら＋す」であれば、「ず」が下接するときの形は「散らせず」になるはず</strong>だが、<em class="c">実際には「散らさず」になる</em>。とすれば、「す」の未然形が「せ」であることと矛盾するので、これは「散ら＋す」ではない。<em class="r">「散らす」という一つのサ行四段動詞</em>である。</p>
+
+<h3 class="sub">【使役についてのちょい詳説】</h3>
+<p>主語に立つものが、他者に動作・作用が起きるように仕向ける意を表す文を使役文と呼ぶ。</p>
+<p class="key"><em class="r">使役は、他者に動作を行わせる意を表す点で、他動詞とは異なる</em>。</p>
+<p>例えば、次のa1とa2を比べてみてほしい。</p>
+<p class="in1 exa"><span class="exl">a1</span>太郎は次郎に服を着せた<small>――他動詞の文</small></p>
+<p class="in1 exa"><span class="exl">a2</span>太郎は次郎に服を着させた<small>――使役文</small></p>
+<p>これは、意味は異なるが、どちらも成立する。では、b1とb2ではどうか。</p>
+<p class="in1 exa"><span class="exl">b1</span>太郎は人形に服を着せた<small>――他動詞の文</small></p>
+<p class="in1 exa"><span class="exl">b2</span>太郎は人形に服を着させた<small>――使役文</small></p>
+<p>b2は意味的に成立しない。<strong>人形が服を着るという行為をすることはない</strong>からである。これが、他動詞の文と使役文との違いを表している。</p>
+<p>つまり、使役文とは、次のような構造になっている文のことである。</p>
+<p class="in1"><em class="c">太郎が</em><em class="r">［次郎が服を着る］</em>　<em class="c">させた</em>。<strong>（※太郎が［人形が服を着る］させた。にはできない）</strong></p>
+<p>これは、<strong>漢文で学習した兼語文</strong>をイメージするとわかりやすいと思う。漢文にすると次のようになる。</p>
+<p class="in1">太郎使次郎着服。</p>
+<p>これは、「太郎使次郎」（太郎が次郎を使う）という文と、<em class="r">「次郎着服」（次郎が服を着る）</em>という文が「次郎」を兼語として一つになっているわけで、<em class="c">「次郎が服を着る」という要素が含まれている</em>のである。</p>
+<p>ちなみに、使役文では、被使役者（させられる人）は、<em class="c">動詞が他動詞であれば「～に」で表され、動詞が自動詞であれば「～を」で表される</em>のが基本である。現代の日本語で例を挙げると次のようになる。</p>
+<p class="in1">長尾<em class="r">に</em>　本を読ま<em class="r">せ</em>　た。（「読む」は他動詞なので、<strong>「長尾</strong><em class="r">に</em><strong>」</strong>）</p>
+<p class="in1">長尾<em class="r">を</em>　帰ら<em class="r">せ</em>　た。（「帰る」は自動詞なので、<strong>「長尾</strong><em class="r">を</em><strong>」</strong>）</p>
+<p>使役は、自分の意志で第三者に何らかの動作をさせる意を表す用法のほか、<em class="c">積極的に働きかけていないが、放っておいた結果そうなる状況を作ってしまったというような意を表す用法などもある</em>。現代の日本語での例を挙げるならば「野菜を腐ら<em class="r">せ</em>てしまった」などである。</p>
+
+<div class="end" data-i="20"></div></section>
+<section id="p025" data-i="21"><div class="sh"><span class="pn">助動詞　22 / 22　<small>プリント p.025</small></span><h2>「む」「むず」「じ」<small class="ref">（体系古典文法 p.60）</small></h2></div>
+<div class="tw"><table class="ct"><tr><th>上接</th><td class="k">未然形</td><td class="k">未然形</td><td class="k">未然形</td></tr><tr><th>基本形</th><th>む</th><th>むず</th><th>じ</th></tr><tr><th>未然形</th><td class="v">○</td><td class="v">○</td><td class="v">○</td></tr><tr><th>連用形</th><td class="v">○</td><td class="v">○</td><td class="v">○</td></tr><tr><th>終止形</th><td class="v">む</td><td class="v">むず</td><td class="v">じ</td></tr><tr><th>連体形</th><td class="v">む</td><td class="v">むずる</td><td class="v">じ</td></tr><tr><th>已然形</th><td class="v">め</td><td class="v">むずれ</td><td class="v">じ</td></tr><tr><th>命令形</th><td class="v">○</td><td class="v">○</td><td class="v">○</td></tr></table></div>
+<h3><strong>「む」「むず」</strong><small><strong>（「むず」は「むとす」が約まったものとされる）</strong></small></h3>
+<div class="kv"><span class="lb">上接</span><span><em class="r">未然形</em></span></div>
+<div class="kv"><span class="lb">意味</span><span><em class="r">①推量</em>　<em class="c">疑問語とともに用いられることも多い</em></span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…だろう》</span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">②意志</em>　<em class="c">主として一人称の行為を表す動詞につく</em></span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…う／…よう／…するつもりだ／…したい》</span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">③適当・勧誘</em></span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…するのがよい／…してください》</span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">④仮定・婉曲</em>　<em class="c">連体形で用いられる（体言が下接する or 体言が省略されて助詞が下接する）</em></span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…としたら、その（それ）／…ような》</span></div>
+<p class="in3"><span class="exl">例</span>己すぐれたりと思は<strong>む</strong>こと、大きなる誤りなり。</p>
+<p class="in3">自分が優れていると思う<strong>としたら、その</strong>ことは、大きな誤りである。</p>
+<p class="in3">自分が優れていると思う<strong>ような</strong>ことは、大きな誤りである。</p>
+<h3><strong>「じ」※「む」の否定と考えるとよい</strong></h3>
+<div class="kv"><span class="lb">上接</span><span><em class="r">未然形</em></span></div>
+<div class="kv"><span class="lb">意味</span><span><em class="r">①打消推量</em></span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…ないだろう》</span></div>
+<div class="kv"><span class="lb e"></span><span><em class="r">②打消意志</em></span></div>
+<div class="kv"><span class="lb e"></span><span class="yk"><i>訳</i>《…ないつもりだ》</span></div>
+
+<p>「む」の語源はよくわかっていないが、四段活用と同じ活用の仕方をすると考えればよい。まあ、現実的には「○○むむめ○」という呪文が耳に残りやすいとは思う。</p>
+<p>「む」の複雑な意味と、それに伴う煩雑な説明は、ある書籍では「古典文法教育が苦痛である」理由としても挙げられるほどである。ここでは、できるだけ核となるイメージをつかんでもらいたい。</p>
+<p>よく、<em class="c">英語で言うwillのようなもの</em>だと説明させることもあるが、<em class="r">「む」の意味の本質は〈非現実〉</em>である。根本はつながっている。例えば、<strong>「明日雨が降るだろう」というのは、時制を考えれば〈未来〉であるが、〈現実〉か〈非現実〉かの観点で見れば、まだ起こっていないことだから〈非現実〉である</strong>。よって、〈未来〉は〈非現実〉の一部であり、<em class="c">〈未来〉の出来事を示す際には〈非現実〉を表す「む」「むず」を用いる</em>というわけである。</p>
+<p>文法的意味として挙げた４つはすべて〈非現実〉を表している。</p>
+<p>①の推量は「明日雨が降る<strong>だろう</strong>」で示した通りである。</p>
+<p>②の意志は「古典の勉強を頑張る<strong>つもりだ</strong>」の例文を考えればよい。<em class="c">現在の時点ではまだ頑張っていない（</em><em class="r">〈非現実〉</em><em class="c">）</em>のである。</p>
+<p>③の適当・勧誘は「古典の期末考査対策は今から始める<strong>のがよい</strong>」の例文を考えればよい。これも<em class="c">現在の時点でまだ始めていない（</em><em class="r">〈非現実〉</em><em class="c">）からこそ、そうするのがよいと勧めている</em>のである。</p>
+<p>④の仮定・婉曲は、「自分が優れていると思う<strong>としたら、その</strong>ことは、大きな誤りである」の例文で考えてみる。<em class="c">あくまで想定・仮定の話として述べている（</em><em class="r">〈非現実〉</em><em class="c">）</em>のである。これを「婉曲」（遠まわしに言うこと）という謎の用語を持ち込むからややこしいし、<em class="c">「仮定」と「婉曲」を区別しようとする人もいるが、根本的に誤っている</em>（そのようなことはできない）。<strong>とある書籍には、「『〈仮定〉と〈婉曲〉の違いがよく分かりました』と言っている生徒がいたら、そちらのほうが不安である」とまで書かれている</strong>。</p>
+<p>ここで、現代日本語と古代日本語との大きな言語的差異を考える必要がある。</p>
+<p><em class="c">現代日本語では、動詞の原形が未来（</em><em class="r">〈非現実〉</em><em class="c">）を表すことがある</em>。「海賊王に俺はなる！」と言えるし、「弟が住む家を探す」と言ったときには、「今住んでいる家」ではなく、「将来住むはずの家」の意味になる。一方の<em class="c">古代日本語では、動詞の原形は現在（</em><em class="r">〈現実〉</em><em class="c">）を表す</em>。先ほどの例で言えば、「弟が住む家を探す」は、古代日本語では「弟が住んでいる家を探す」の意味になる。</p>
+<p>つまり、<em class="r">古代日本語では、〈現実〉を表す場合には動詞の原形を用い、〈非現実〉を表す場合にはそれを示す目印として「む」などをつける</em>が、これは現代日本語とは異なっていて、だからこそ混乱が生じるのである。</p>
+<p>ちなみに、ここまで読んで思った人もいるだろうが、現代日本語では動詞の原形が〈非現実〉を表す以上、④の例などは、いちいち「…としたら、その」とか「…ような」とか言わず、そのまま「優れている<strong>と思うことは</strong>、大きな誤りである」としても、本来はまったく誤りではない。</p><div class="end" data-i="21"></div></section>
+</main>
+<div id="nav"><div><a id="np" href="#">← 前へ</a><a class="mid" href="#home">目次</a><a id="nn" href="#">次へ →</a></div></div>
+<script>
+const $=id=>document.getElementById(id);
+const META=[{"id": "p001", "t": "はじめに"}, {"id": "p002", "t": "「活用」という現象"}, {"id": "p003", "t": "下接語の整理と活用形"}, {"id": "p004", "t": "動詞の活用のタイプ・種類"}, {"id": "p005", "t": "母音交替タイプ"}, {"id": "p006", "t": "接辞付加タイプ"}, {"id": "p007", "t": "母音交替＋接辞付加タイプ"}, {"id": "p009", "t": "活用の種類の判別法"}, {"id": "p010", "t": "古典文法徹底反復練習"}, {"id": "p011", "t": "実際に文の中で用いられている動詞の判別法"}, {"id": "p013", "t": "形容詞とその活用"}, {"id": "p014", "t": "形容動詞とその活用"}, {"id": "p014b", "t": "語幹用法"}, {"id": "p015", "t": "助動詞とは何か"}, {"id": "p015b", "t": "助動詞の３点セット"}, {"id": "p016", "t": "「ず」"}, {"id": "p017", "t": "「き」「けり」"}, {"id": "p018", "t": "「つ」「ぬ」"}, {"id": "p019", "t": "「り」「たり」"}, {"id": "p021", "t": "「る」「らる」"}, {"id": "p023", "t": "「す」「さす」「しむ」"}, {"id": "p025", "t": "「む」「むず」「じ」"}],secs=[...document.querySelectorAll('section')];
+let done=[],last=-1,fsz=1;
+try{const v=JSON.parse(localStorage.getItem('seikaku_print')||'{}');done=v.done||[];last=v.last===undefined?-1:v.last;fsz=v.fsz===undefined?1:v.fsz}catch(e){}
+const save=()=>{try{localStorage.setItem('seikaku_print',JSON.stringify({done,last,fsz}))}catch(e){}};
+const FS=[15,17,19,21];function setFs(){document.documentElement.style.setProperty('--fs',FS[fsz]+'px')}setFs();
+$('fm').onclick=()=>{if(fsz>0){fsz--;setFs();save()}};$('fp').onclick=()=>{if(fsz<FS.length-1){fsz++;setFs();save()}};
+function home(){const n=META.length,d=done.length;$('pg').textContent=d===0?'全'+n+'項目':d===n?'全'+n+'項目を読みました':'全'+n+'項目中 '+d+'項目を読みました';
+const nx=last>=0?last:0;$('cont').innerHTML=(last>=0?'つづきから読む':'はじめから読む')+'<br><small style="font-weight:400;font-size:12px">'+(nx+1)+'　'+META[nx].t+'</small>';$('cont').onclick=()=>{location.hash='#'+META[nx].id};
+document.querySelectorAll('.card').forEach(c=>c.classList.toggle('done',done.includes(+c.dataset.i)));$('bar').firstChild.style.width=(100*d/n)+'%'}
+function mark(i){if(!done.includes(i)){done.push(i);save();$('bar').firstChild.style.width=(100*done.length/META.length)+'%'}}
+function route(){const id=location.hash.slice(1),i=META.findIndex(m=>m.id===id);
+secs.forEach((s,j)=>s.classList.toggle('on',j===i));document.body.classList.toggle('rd',i>=0);
+if(i>=0){last=i;save();const p=$('np'),n=$('nn');p.className=i>0?'':'off';p.href=i>0?'#'+META[i-1].id:'#';n.className=i<META.length-1?'':'off';n.href=i<META.length-1?'#'+META[i+1].id:'#home'}else home();
+scrollTo(0,0)}
+secs.forEach((s,i)=>{const e=s.querySelector('.end'),nx=META[i+1];e.outerHTML='<a class="nx" href="#'+(nx?nx.id:'home')+'" data-done="'+i+'">'+(nx?'<small>読みおわったら　次へ</small>'+(i+2)+'　'+nx.t+' →':'<small>おつかれさま！　これで全部です</small>目次にもどる')+'</a>'});
+document.addEventListener('click',e=>{const a=e.target.closest('[data-done]');if(a)mark(+a.dataset.done)});
+$('nn').addEventListener('click',()=>{const i=META.findIndex(m=>m.id===location.hash.slice(1));if(i>=0)mark(i)});
+addEventListener('hashchange',route);route();
+document.querySelectorAll('table.ct:not(.mini)').forEach(t=>{const bar=document.createElement('div');bar.className='tbar';const b=document.createElement('button');b.textContent='表をかくして練習する';bar.appendChild(b);t.parentNode.before(bar);
+b.onclick=()=>{const h=t.classList.toggle('hide');t.querySelectorAll('td.v').forEach(c=>c.classList.remove('sh'));b.textContent=h?'全部見せる':'表をかくして練習する'};
+t.onclick=e=>{const c=e.target.closest('td.v');if(c&&t.classList.contains('hide'))c.classList.add('sh')}});
+const DR=[["活用形の６つは？（順番通りに）", "未然・連用・終止・連体・已然・命令"], ["未然形の主な下接語は？", "「ず」「む」"], ["連用形の主な下接語は？", "「けり」「たり」"], ["終止形の主な下接語は？", "「。（句点）」"], ["連体形の主な下接語は？", "「とき」「こと」（体言）"], ["已然形の主な下接語は？", "「ど」「ども」"], ["活用形の３タイプは？", "母音交替・接辞付加・母音交替＋接辞付加"], ["母音交替タイプに属する活用の種類は？", "四段・ラ変"], ["接辞付加タイプに属する活用の種類は？", "上一段・下一段"], ["接辞付加で付加される接辞は？", "「る」「れ」「よ」"], ["母音交替＋接辞付加タイプに属する活用の種類は？", "カ変・サ変・ナ変・上二段・下二段"], ["四段動詞「咲く」の活用表は？", "咲かず・咲きけり・咲く。・咲くとき・咲けども・咲け！"], ["ラ変動詞「あり」の活用表は？", "あらず・ありけり・あり。・あるとき・あれども・あれ！"], ["ラ変に属する動詞は？", "あり・<ruby>居<rt>を</rt></ruby>り・<ruby>侍<rt>はべ</rt></ruby>り・いまそがり"], ["上一段動詞「見る」の活用表は？", "見ず・見けり・見る。・見るとき・見れども・見よ！"], ["上一段に属する動詞は？", "着る・煮る・似る・<ruby>干<rt>ひ</rt></ruby>る・見る・<ruby>射<rt>い</rt></ruby>る・<ruby>鋳<rt>い</rt></ruby>る・<ruby>居<rt>ゐ</rt></ruby>る・<ruby>率<rt>ゐ</rt></ruby>る"], ["下一段動詞「蹴る」の活用表は？", "蹴ず・蹴けり・蹴る。・蹴るとき・蹴れども・蹴よ！"], ["カ変動詞「来」の活用表は？", "<ruby>来<rt>こ</rt></ruby>ず・<ruby>来<rt>き</rt></ruby>けり・<ruby>来<rt>く</rt></ruby>。・<ruby>来<rt>く</rt></ruby>るとき・<ruby>来<rt>く</rt></ruby>れども・<ruby>来<rt>こ</rt></ruby>よ！"], ["サ変動詞「す」の活用表は？", "せず・しけり・す。・するとき・すれども・せよ！"], ["サ変に属する動詞は？", "おはす・す（とその複合語）"], ["ナ変動詞「往ぬ」の活用表は？", "<ruby>往<rt>い</rt></ruby>なず・<ruby>往<rt>い</rt></ruby>にけり・<ruby>往<rt>い</rt></ruby>ぬ。・<ruby>往<rt>い</rt></ruby>ぬるとき・<ruby>往<rt>い</rt></ruby>ぬれども・<ruby>往<rt>い</rt></ruby>ね！"], ["上二段動詞「落つ」の活用表は？", "落ちず・落ちけり・落つ。・落つるとき・落つれども・落ちよ！"], ["下二段動詞「棄つ」の活用表は？", "棄てず・棄てけり・棄つ。・棄つるとき・棄つれども・棄てよ！"]];
+(function(){const el=$('drill');let order=DR.map((_,i)=>i);
+function draw(){el.innerHTML='<div class="pt">声に出して答えてから、カードを押して確かめる</div><div class="ch"><button id="dh">全部かくす</button><button id="ds">全部見せる</button><button id="dx">シャッフル</button><button id="do">番号順</button></div>'+order.map(i=>'<div class="dq"><div class="q"><b>'+(i+1)+'</b>'+DR[i][0]+'</div><div class="a">'+DR[i][1]+'</div></div>').join('');
+el.querySelectorAll('.dq').forEach(d=>d.onclick=()=>d.classList.toggle('on'));
+$('dh').onclick=()=>el.querySelectorAll('.dq').forEach(d=>d.classList.remove('on'));$('ds').onclick=()=>el.querySelectorAll('.dq').forEach(d=>d.classList.add('on'));
+$('dx').onclick=()=>{for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]]}draw()};$('do').onclick=()=>{order=DR.map((_,i)=>i);draw()}}
+draw()})();
+const KN={カ:'かきけ',ガ:'がぎげ',タ:'たちて',ハ:'はひへ',マ:'まみめ',ラ:'らりれ'},K3=['四段','上二段','下二段'],M6=['ラ変','上一段','下一段','カ変','サ変','ナ変'];
+const VB=[{w:'過ぐ',st:'過',g:'ガ',k:1},{w:'咲く',st:'咲',g:'カ',k:0},{w:'受く',st:'受',g:'カ',k:2},{w:'あり',m:0,n:'ラ行変格活用'},{w:'思ふ',st:'思',g:'ハ',k:0},{w:'見る',m:1,n:'マ行上一段活用'},{w:'起く',st:'起',g:'カ',k:1},{w:'棄つ',st:'棄',g:'タ',k:2},{w:'来',m:3,n:'カ行変格活用'},{w:'読む',st:'読',g:'マ',k:0},{w:'蹴る',m:2,n:'カ行下一段活用'},{w:'落つ',st:'落',g:'タ',k:1},{w:'す',m:4,n:'サ行変格活用'},{w:'求む',st:'求',g:'マ',k:2},{w:'死ぬ',m:5,n:'ナ行変格活用'},{w:'散る',st:'散',g:'ラ',k:0},{w:'着る',m:1,n:'カ行上一段活用'},{w:'往ぬ',m:5,n:'ナ行変格活用'},{w:'居り',m:0,n:'ラ行変格活用'}];
+(function(){const el=$('hanbetsu');let i=0,st=0,fb='',dis=[];
+function draw(){const v=VB[i],mem=v.m!==undefined;let h='<div class="pt">判別の練習　'+(i+1)+' / '+VB.length+'</div><div class="hw">「'+v.w+'」</div>';
+if(st===0)h+='<div class="hq">Step1　覚えておくべき種類に属する語？</div><div class="hl">（ラ変・上一段・下一段・カ変・サ変・ナ変）</div><div class="ch"><button data-a="y">属する</button><button data-a="n">属さない</button></div>';
+if(st===1)h+='<div class="hq">Step1　どの種類？</div><div class="ch">'+M6.map((m,j)=>'<button data-m="'+j+'"'+(dis.includes(j)?' disabled':'')+'>'+m+'</button>').join('')+'</div>';
+if(st===2)h+='<div class="hq">Step2　「ず」が下接するときの形は？</div><div class="hl">残っているのは四段・上二段・下二段（「ない」で考えてもよい）</div><div class="ch">'+[0,1,2].map(j=>'<button data-k="'+j+'"'+(dis.includes(j)?' disabled':'')+'>'+v.st+KN[v.g][j]+'ず</button>').join('')+'</div>';
+if(st===3)h+='<div class="ha">答　'+(mem?v.n:v.g+'行'+K3[v.k]+'活用')+'</div><div class="hl">'+(mem?'覚えておくべき種類（'+M6[v.m]+'）':'「'+v.st+KN[v.g][v.k]+'ず」＝'+'ａｉｅ'[v.k]+'ず……'+K3[v.k]+'。行は「ず」の１文字前「'+KN[v.g][v.k]+'」を見て'+v.g+'行')+'</div><div class="ch"><button class="go" data-next="1">次の語へ</button></div>';
+el.innerHTML=h+'<div class="hf">'+fb+'</div>'}
+el.onclick=e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset,v=VB[i],mem=v.m!==undefined;fb='';
+if(d.a){if((d.a==='y')===mem){st=mem?1:2}else fb=mem?'ちがいます。「'+v.w+'」は覚えておくべき種類に属する語。':'ちがいます。「'+v.w+'」は覚えておくべき種類ではない。';if(fb)st=mem?1:2;dis=[]}
+else if(d.m!==undefined){if(+d.m===v.m)st=3;else{dis.push(+d.m);fb='ちがいます。もう一度。'}}
+else if(d.k!==undefined){if(+d.k===v.k)st=3;else{dis.push(+d.k);fb='ちがいます。もう一度。'}}
+else if(d.next){i=(i+1)%VB.length;st=0;dis=[]}
+draw()};draw()})();
+</script>
+</body>
+</html>
